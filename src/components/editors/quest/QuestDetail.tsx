@@ -2,6 +2,7 @@ import { Tabs, Box, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import { IconTarget, IconPuzzle, IconScript } from '@tabler/icons-react';
 import { ObjectiveRegistry } from '../../../registry/quest-objectives';
 import { FormSelect, FormCheckbox, FormInput, FormTextarea, FormSection, FormAddon, FormScript } from '../../ui';
+import { AgentEditor } from './AgentEditor';
 
 interface QuestDetailProps {
     taskId: string;
@@ -363,32 +364,11 @@ export function QuestDetail({ taskId, taskData, onUpdate }: QuestDetailProps) {
 
                     <Tabs.Panel value="agent">
                         <Stack gap="md">
-                            <FormSection>
-                                <FormScript
-                                    label="接受任务时 (Accepted)"
-                                    value={taskData.agent?.accepted || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...taskData, 
-                                        agent: { ...taskData.agent, accepted: val } 
-                                    })}
-                                />
-                                <FormScript
-                                    label="完成任务时 (Completed)"
-                                    value={taskData.agent?.completed || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...taskData, 
-                                        agent: { ...taskData.agent, completed: val } 
-                                    })}
-                                />
-                                <FormScript
-                                    label="放弃任务时 (Abandoned)"
-                                    value={taskData.agent?.abandoned || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...taskData, 
-                                        agent: { ...taskData.agent, abandoned: val } 
-                                    })}
-                                />
-                            </FormSection>
+                            <AgentEditor 
+                                data={taskData.agent} 
+                                onUpdate={(newAgent) => onUpdate({ ...taskData, agent: newAgent })}
+                                types={['task_continued', 'task_restarted', 'task_completed']}
+                            />
                         </Stack>
                     </Tabs.Panel>
                 </Box>
@@ -396,3 +376,4 @@ export function QuestDetail({ taskId, taskData, onUpdate }: QuestDetailProps) {
         </Tabs>
     );
 }
+

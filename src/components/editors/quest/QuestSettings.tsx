@@ -1,6 +1,7 @@
 import { Tabs, ScrollArea, Box, Stack, Title } from '@mantine/core';
 import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler/icons-react';
-import { FormInput, FormSelect, FormCheckbox, FormTextarea, FormSection, FormScript, FormAddon } from '../../ui';
+import { FormInput, FormSelect, FormCheckbox, FormTextarea, FormSection, FormAddon } from '../../ui';
+import { AgentEditor } from './AgentEditor';
 
 interface QuestSettingsProps {
     questId: string;
@@ -19,7 +20,7 @@ export function QuestSettings({ questId, questData, onUpdate }: QuestSettingsPro
             </Tabs.List>
 
             <ScrollArea style={{ flex: 1 }}>
-                <Box p="xl" maw={800}>
+                <Box p="xl">
                     <Tabs.Panel value="basic">
                         <Stack gap="md">
                             <Title order={4}>基本信息</Title>
@@ -227,32 +228,21 @@ export function QuestSettings({ questId, questData, onUpdate }: QuestSettingsPro
                     <Tabs.Panel value="agent">
                         <Stack gap="md">
                             <Title order={4}>脚本代理</Title>
-                            <FormSection>
-                                <FormScript
-                                    label="接受任务时 (Accepted)"
-                                    value={questData.agent?.accepted || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...questData, 
-                                        agent: { ...questData.agent, accepted: val } 
-                                    })}
-                                />
-                                <FormScript
-                                    label="完成任务时 (Completed)"
-                                    value={questData.agent?.completed || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...questData, 
-                                        agent: { ...questData.agent, completed: val } 
-                                    })}
-                                />
-                                <FormScript
-                                    label="放弃任务时 (Abandoned)"
-                                    value={questData.agent?.abandoned || ''}
-                                    onChange={(val) => onUpdate({ 
-                                        ...questData, 
-                                        agent: { ...questData.agent, abandoned: val } 
-                                    })}
-                                />
-                            </FormSection>
+                            <AgentEditor 
+                                data={questData.agent} 
+                                onUpdate={(newAgent) => onUpdate({ ...questData, agent: newAgent })}
+                                types={[
+                                    'quest_accept', 
+                                    'quest_accepted', 
+                                    'quest_accept_cancelled',
+                                    'quest_fail',
+                                    'quest_failed',
+                                    'quest_complete',
+                                    'quest_completed',
+                                    'quest_restart',
+                                    'quest_restarted'
+                                ]}
+                            />
                         </Stack>
                     </Tabs.Panel>
                 </Box>

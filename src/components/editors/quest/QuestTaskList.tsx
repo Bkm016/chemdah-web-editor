@@ -89,7 +89,6 @@ export function QuestTaskList({ tasks, activeTaskId, onSelect, onAdd, onDelete, 
                                                             }
                                                             active={activeTaskId === taskId}
                                                             onClick={() => onSelect(taskId)}
-                                                            onDoubleClick={() => startEditing(taskId)}
                                                             variant="light"
                                                             rightSection={
                                                                 <Menu shadow="md" width={200}>

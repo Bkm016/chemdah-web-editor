@@ -2,7 +2,7 @@ import { Switch, Paper, Stack, Collapse, Group, Text, Box } from '@mantine/core'
 import { useUncontrolled } from '@mantine/hooks';
 
 interface FormAddonProps {
-    label: string;
+    label: React.ReactNode;
     description?: string;
     checked?: boolean;
     defaultChecked?: boolean;
@@ -19,7 +19,10 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
     });
 
     return (
-        <Paper withBorder p="md">
+        <Paper withBorder p="md" style={{ 
+            borderColor: _checked ? 'var(--mantine-color-blue-8)' : undefined,
+            backgroundColor: _checked ? 'rgba(25, 113, 194, 0.05)' : undefined
+        }}>
             <Group justify="space-between" mb={_checked && children ? 'md' : 0}>
                 <Box>
                     <Text fw={500}>{label}</Text>

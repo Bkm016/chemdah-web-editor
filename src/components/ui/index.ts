@@ -6,3 +6,4 @@ export * from './FormSection';
 export * from './FormScript';
 export * from './FormAddon';
 export * from './ContextMenu';
+export * from './FileTree';
