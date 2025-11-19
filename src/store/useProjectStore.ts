@@ -44,42 +44,15 @@ interface ProjectState {
   importFiles: (files: VirtualFile[]) => void;
 }
 
-const DEFAULT_QUEST = `
-example_quest:
-  meta:
-    name: "Example Quest"
-    type: "L1"
-  task:
-    0:
-      objective: "block break"
-      condition:
-        material: "stone"
-      goal:
-        amount: 10
-`;
-
-const DEFAULT_CONVERSATION = `
-conversation_0:
-  npc:
-    - "Hello, traveler!"
-  player:
-    - reply: "Hello!"
-      then: "goto conversation_1"
-`;
-
 export const useProjectStore = create<ProjectState>()(
   persist(
     (set, get) => ({
-      questFiles: {
-        '1': { id: '1', name: 'example_quest.yml', type: 'quest', path: '', content: DEFAULT_QUEST },
-      },
+      questFiles: {},
       questFolders: {},
-      conversationFiles: {
-        '2': { id: '2', name: 'example_conversation.yml', type: 'conversation', path: '', content: DEFAULT_CONVERSATION },
-      },
+      conversationFiles: {},
       conversationFolders: {},
-      activeFileId: '1',
-      activeFileType: 'quest',
+      activeFileId: null,
+      activeFileType: null,
 
       createFile: (name, type, path, initialContent = '') => set((state) => {
         const id = uuidv4();

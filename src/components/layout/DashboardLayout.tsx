@@ -1,4 +1,4 @@
-import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl } from '@mantine/core';
+import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge } from '@mantine/core';
 import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus } from '@tabler/icons-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useProjectStore, FileType, VirtualFile } from '../../store/useProjectStore';
@@ -297,16 +297,28 @@ export default function DashboardLayout() {
                         defaultExpanded={[]}
                         renderLabel={(item) => {
                             const isEmpty = !item.isFolder && item.data && (!item.data.content || item.data.content.trim() === '');
+                            const match = item.label.match(/^(.*?)\s*\((.*?)\)$/);
+                            const mainLabel = match ? match[1] : item.label;
+                            const tag = match ? match[2] : null;
+
                             return (
-                                <Highlight 
-                                    highlight={searchQuery} 
-                                    size="sm" 
-                                    fw={500} 
-                                    truncate="end"
-                                    c={isEmpty ? 'dimmed' : undefined}
-                                >
-                                    {item.label}
-                                </Highlight>
+                                <Group gap={6} wrap="nowrap" style={{ width: '100%' }}>
+                                    <Highlight 
+                                        highlight={searchQuery} 
+                                        size="sm" 
+                                        fw={500} 
+                                        truncate="end"
+                                        c={isEmpty ? 'dimmed' : undefined}
+                                        style={{ flex: 1, minWidth: 0 }}
+                                    >
+                                        {mainLabel}
+                                    </Highlight>
+                                    {tag && (
+                                        <Badge size="xs" variant="light" color="gray" style={{ textTransform: 'none', flexShrink: 0 }}>
+                                            {tag}
+                                        </Badge>
+                                    )}
+                                </Group>
                             );
                         }}
                         renderActions={(item) => (

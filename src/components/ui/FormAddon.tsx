@@ -1,4 +1,4 @@
-import { Switch, Paper, Stack, Collapse, Group, Text, Box } from '@mantine/core';
+import { Switch, Paper, Stack, Collapse, Group, Text, Box, Badge } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
 
 interface FormAddonProps {
@@ -18,6 +18,23 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
         onChange,
     });
 
+    const renderLabel = () => {
+        if (typeof label === 'string') {
+            const match = label.match(/^(.*?)\s*\((.*?)\)$/);
+            if (match) {
+                return (
+                    <Group gap={8}>
+                        <Text fw={500}>{match[1]}</Text>
+                        <Badge size="sm" variant="light" color="gray" style={{ textTransform: 'none' }}>
+                            {match[2]}
+                        </Badge>
+                    </Group>
+                );
+            }
+        }
+        return <Text fw={500}>{label}</Text>;
+    };
+
     return (
         <Paper withBorder p="md" style={{ 
             borderColor: _checked ? 'var(--mantine-color-blue-8)' : undefined,
@@ -25,7 +42,7 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
         }}>
             <Group justify="space-between" mb={_checked && children ? 'md' : 0}>
                 <Box>
-                    <Text fw={500}>{label}</Text>
+                    {renderLabel()}
                     {description && <Text size="xs" c="dimmed">{description}</Text>}
                 </Box>
                 <Switch checked={_checked} onChange={(event) => handleChange(event.currentTarget.checked)} />
