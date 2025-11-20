@@ -35,7 +35,7 @@ export function FormScript({ label, description, height = "200px", value, onChan
                     height={height}
                     defaultLanguage="ruby"
                     theme="vs-dark"
-                    value={value}
+                    value={value === undefined || value === null ? '' : String(value)}
                     onChange={onChange}
                     options={{
                         minimap: { enabled: false },

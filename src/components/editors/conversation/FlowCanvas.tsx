@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, useNodesState, useEdgesState, addEdge, Connection, Edge, Panel, Node, reconnectEdge } from 'reactflow';
 import { Paper, Button, Group } from '@mantine/core';
 import { useProjectStore } from '../../../store/useProjectStore';
-import { IconPlus, IconLayoutDashboard } from '@tabler/icons-react';
+import { IconPlus, IconLayoutDashboard, IconGitBranch } from '@tabler/icons-react';
 import AgentNode, { AgentNodeData } from './nodes/AgentNode';
+import SwitchNode, { SwitchNodeData } from './nodes/SwitchNode';
 import { parseConversationToFlow, generateYamlFromFlow, autoLayout } from './conversation-utils';
 import { ConversationNodeEditor } from './ConversationNodeEditor';
 
@@ -13,7 +14,7 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
   const { conversationFiles, updateFileContent } = useProjectStore();
   const file = conversationFiles[fileId];
 
-  const nodeTypes = useMemo(() => ({ agent: AgentNode }), []);
+  const nodeTypes = useMemo(() => ({ agent: AgentNode, switch: SwitchNode }), []);
   
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -75,7 +76,23 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
     setNodes((nds) => nds.concat(newNode));
   };
 
-  const handleNodeUpdate = (newData: AgentNodeData) => {
+  const handleAddSwitchNode = () => {
+    const id = `switch_${Date.now()}`;
+    const newNode: Node<SwitchNodeData> = {
+        id,
+        type: 'switch',
+        position: { x: 100 + Math.random() * 200, y: 100 + Math.random() * 200 },
+        data: {
+            label: id,
+            branches: [
+                { id: `${id}-branch-1`, condition: 'true', actionType: 'run', actionValue: 'tell Hello' }
+            ]
+        }
+    };
+    setNodes((nds) => nds.concat(newNode));
+  };
+
+  const handleNodeUpdate = (newData: any) => {
     if (!editingNodeId) return;
     setNodes((nds) => nds.map((node) => {
         if (node.id === editingNodeId) {
@@ -115,7 +132,10 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
                         <Button size="xs" variant="filled" color="blue" leftSection={<IconPlus size={12} />} onClick={handleAddNode}>
                             添加节点
                         </Button>
-                        <Button size="xs" variant="light" color="violet" leftSection={<IconLayoutDashboard size={12} />} onClick={handleAutoLayout}>
+                        <Button size="xs" variant="filled" color="violet" leftSection={<IconGitBranch size={12} />} onClick={handleAddSwitchNode}>
+                            添加 Switch
+                        </Button>
+                        <Button size="xs" variant="light" color="gray" leftSection={<IconLayoutDashboard size={12} />} onClick={handleAutoLayout}>
                             智能重排
                         </Button>
                     </Group>
@@ -128,6 +148,7 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
                 opened={!!editingNode}
                 onClose={() => setEditingNodeId(null)}
                 data={editingNode.data}
+                type={editingNode.type as 'agent' | 'switch'}
                 onUpdate={handleNodeUpdate}
             />
         )}

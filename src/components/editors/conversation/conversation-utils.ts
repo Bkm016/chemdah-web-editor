@@ -1,6 +1,7 @@
 import { Edge, Node } from 'reactflow';
 import { parseYaml, toYaml } from '../../../utils/yaml-utils';
 import { AgentNodeData } from './nodes/AgentNode';
+import { SwitchNodeData } from './nodes/SwitchNode';
 
 export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     const nodeWidth = 320;
@@ -118,8 +119,13 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     // 4. Assign positions (Horizontal Layout)
     // Calculate dynamic height for each node to stack them properly
     const getNodeHeight = (node: Node) => {
-        const npcLines = node.data.npcLines?.length || 0;
-        const options = node.data.playerOptions?.length || 0;
+        if (node.type === 'switch') {
+            const branches = (node.data as SwitchNodeData).branches?.length || 0;
+            // Header ~50, Branches ~40 each, Padding ~20
+            return 50 + (branches * 40) + 20;
+        }
+        const npcLines = (node.data as AgentNodeData).npcLines?.length || 0;
+        const options = (node.data as AgentNodeData).playerOptions?.length || 0;
         // Header ~50, NPC lines ~30 each, Options ~40 each, Padding ~20
         return 50 + (Math.max(1, npcLines) * 30) + (options * 40) + 20;
     };
@@ -158,9 +164,62 @@ export const parseConversationToFlow = (yamlContent: string) => {
 
     const section = data[key];
     
-    // Check if it's a valid conversation node
-    // It should have at least one of these properties
-    if (section.npc || section.player || section.agent || section.condition || section['npc id']) {
+    // Determine position
+    let position = { x: 0, y: 0 };
+    if (section.canvas) {
+        position = { x: section.canvas.x, y: section.canvas.y };
+        hasCanvasData = true;
+    }
+
+    // Check for Switch Node (when property)
+    if (section.when && Array.isArray(section.when)) {
+        const branches = section.when.map((branch: any, index: number) => {
+            let actionType: 'open' | 'run' = 'run';
+            let actionValue = '';
+
+            if (branch.open) {
+                actionType = 'open';
+                actionValue = branch.open;
+            } else if (branch.run) {
+                actionType = 'run';
+                actionValue = branch.run;
+            }
+
+            return {
+                id: `${key}-branch-${index}`,
+                condition: branch.if || 'true',
+                actionType,
+                actionValue
+            };
+        });
+
+        nodes.push({
+            id: key,
+            type: 'switch',
+            position,
+            data: {
+                label: key,
+                npcId: section['npc id'],
+                branches
+            }
+        });
+
+        // Parse Edges for Switch
+        branches.forEach((branch: any) => {
+            if (branch.actionType === 'open') {
+                edges.push({
+                    id: `e-${branch.id}-${branch.actionValue}`,
+                    source: key,
+                    sourceHandle: branch.id,
+                    target: branch.actionValue,
+                    type: 'default',
+                    animated: true,
+                });
+            }
+        });
+
+    } else if (section.npc || section.player || section.agent || section.condition || section['npc id']) {
+        // Agent Node
         const npcLines = Array.isArray(section.npc) ? section.npc : (section.npc ? [section.npc] : []);
         const playerOptions = Array.isArray(section.player) ? section.player : [];
         
@@ -185,13 +244,6 @@ export const parseConversationToFlow = (yamlContent: string) => {
                 target: target
             };
         });
-
-        // Determine position
-        let position = { x: 0, y: 0 };
-        if (section.canvas) {
-            position = { x: section.canvas.x, y: section.canvas.y };
-            hasCanvasData = true;
-        }
 
         nodes.push({
             id: key,
@@ -234,7 +286,7 @@ export const parseConversationToFlow = (yamlContent: string) => {
   return { nodes, edges };
 };
 
-export const generateYamlFromFlow = (nodes: Node<AgentNodeData>[], edges: Edge[]) => {
+export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
     const conversationObj: any = {
         '__option__': {
             theme: 'chat',
@@ -243,8 +295,45 @@ export const generateYamlFromFlow = (nodes: Node<AgentNodeData>[], edges: Edge[]
     };
 
     nodes.forEach(node => {
-        if (node.type === 'agent') {
-            const { label, npcLines, playerOptions, npcId, condition, agent } = node.data;
+        if (node.type === 'switch') {
+            const { label, npcId, branches } = node.data as SwitchNodeData;
+            
+            const whenSection = branches.map(branch => {
+                const edge = edges.find(e => e.source === node.id && e.sourceHandle === branch.id);
+                let actionValue = branch.actionValue;
+                
+                // If connected, use the connection target
+                if (branch.actionType === 'open' && edge) {
+                    const targetNode = nodes.find(n => n.id === edge.target);
+                    if (targetNode) {
+                        actionValue = targetNode.data.label;
+                    }
+                }
+
+                const branchObj: any = {
+                    if: branch.condition
+                };
+                
+                if (branch.actionType === 'open') {
+                    branchObj.open = actionValue;
+                } else {
+                    branchObj.run = actionValue;
+                }
+                
+                return branchObj;
+            });
+
+            const nodeObj: any = {
+                when: whenSection,
+                canvas: { x: Math.round(node.position.x), y: Math.round(node.position.y) }
+            };
+
+            if (npcId) nodeObj['npc id'] = npcId;
+            
+            conversationObj[label] = nodeObj;
+
+        } else if (node.type === 'agent') {
+            const { label, npcLines, playerOptions, npcId, condition, agent } = node.data as AgentNodeData;
             
             const playerSection = playerOptions.map(opt => {
                 const edge = edges.find(e => e.source === node.id && e.sourceHandle === opt.id);

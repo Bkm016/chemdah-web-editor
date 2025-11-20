@@ -33,7 +33,7 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
       style={{ 
         width: 280,
         borderColor: selected ? 'var(--mantine-color-blue-5)' : (isEntry ? 'var(--mantine-color-orange-6)' : 'var(--mantine-color-dark-4)'),
-        borderWidth: selected || isEntry ? 2 : 1,
+        borderWidth: 2,
         overflow: 'visible',
         backgroundColor: 'var(--mantine-color-dark-7)',
         transition: 'all 0.2s ease'
@@ -86,7 +86,7 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
             </ThemeIcon>
             <Stack gap={0}>
                 <Text fw={700} size="sm" c="white" lineClamp={1}>{data.label}</Text>
-                {isEntry && <Text size="xs" c="orange.3" style={{ lineHeight: 1, fontSize: 10 }}>NPC: {data.npcId}</Text>}
+                {isEntry && <Text size="xs" c="orange.3" style={{ lineHeight: 1, fontSize: 10 }}>入口: {data.npcId}</Text>}
             </Stack>
         </Group>
         {isEntry && <Badge size="xs" variant="light" color="orange">ENTRY</Badge>}
