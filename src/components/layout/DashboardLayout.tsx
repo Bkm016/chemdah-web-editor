@@ -3,6 +3,7 @@ import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertic
 import { useState, useEffect, useMemo } from 'react';
 import { useProjectStore, FileType, VirtualFile } from '../../store/useProjectStore';
 import { useApiStore } from '../../store/useApiStore';
+import { parseYaml } from '../../utils/yaml-utils';
 import { FileTree, TreeItem } from '../ui';
 import QuestEditor from '../editors/quest/QuestEditor';
 import ConversationEditor from '../editors/conversation/ConversationEditor';
@@ -56,11 +57,34 @@ export default function DashboardLayout() {
   const treeItems: TreeItem[] = useMemo(() => {
     const fileItems = currentFiles.map(file => {
         const isEmpty = !file.content || file.content.trim() === '';
+        
+        let questTypes: string[] = [];
+        if (activeTab === 'quest' && file.content) {
+            try {
+                const data = parseYaml(file.content);
+                if (data && typeof data === 'object') {
+                    Object.entries(data).forEach(([key, quest]: [string, any]) => {
+                        if (key === '__option__') return;
+                        if (quest?.meta?.type) {
+                            if (Array.isArray(quest.meta.type)) {
+                                quest.meta.type.forEach((t: string) => {
+                                    if (!questTypes.includes(String(t))) questTypes.push(String(t));
+                                });
+                            } else {
+                                const t = String(quest.meta.type);
+                                if (!questTypes.includes(t)) questTypes.push(t);
+                            }
+                        }
+                    });
+                }
+            } catch (e) {}
+        }
+
         return {
             id: file.id,
             path: file.path ? `${file.path}/${file.name}` : file.name,
             label: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
-            data: file,
+            data: { ...file, questTypes },
             icon: <IconFileText size={16} style={{ marginRight: 8, opacity: isEmpty ? 0.5 : 1 }} />
         };
     });
@@ -340,6 +364,10 @@ export default function DashboardLayout() {
                             const match = item.label.match(/^(.*?)\s*\((.*?)\)$/);
                             const mainLabel = match ? match[1] : item.label;
                             const tag = match ? match[2] : null;
+                            const questTypes = item.data?.questTypes as string[] | undefined;
+                            const maxTags = 2;
+                            const displayTypes = questTypes?.slice(0, maxTags);
+                            const remainingCount = (questTypes?.length || 0) - maxTags;
 
                             return (
                                 <Group gap={6} wrap="nowrap" style={{ width: '100%' }}>
@@ -349,7 +377,7 @@ export default function DashboardLayout() {
                                         fw={500} 
                                         truncate="end"
                                         c={isEmpty ? 'dimmed' : undefined}
-                                        style={{ flex: 1, minWidth: 0 }}
+                                        style={{ flex: 1, minWidth: '40px' }}
                                     >
                                         {mainLabel}
                                     </Highlight>
@@ -358,13 +386,48 @@ export default function DashboardLayout() {
                                             {tag}
                                         </Badge>
                                     )}
+                                    {displayTypes && displayTypes.map(type => (
+                                        <Badge 
+                                            key={type}
+                                            size="xs" 
+                                            variant="light" 
+                                            color="blue" 
+                                            radius="sm"
+                                            style={{ 
+                                                textTransform: 'none', 
+                                                flexShrink: 0,
+                                                backgroundColor: 'rgba(34, 139, 230, 0.15)',
+                                                color: '#74c0fc',
+                                                fontWeight: 500
+                                            }}
+                                        >
+                                            {type}
+                                        </Badge>
+                                    ))}
+                                    {remainingCount > 0 && (
+                                        <Badge 
+                                            size="xs" 
+                                            variant="light" 
+                                            color="blue" 
+                                            radius="sm"
+                                            style={{ 
+                                                textTransform: 'none', 
+                                                flexShrink: 0,
+                                                backgroundColor: 'rgba(34, 139, 230, 0.15)',
+                                                color: '#74c0fc',
+                                                fontWeight: 500
+                                            }}
+                                        >
+                                            +{remainingCount}
+                                        </Badge>
+                                    )}
                                 </Group>
                             );
                         }}
                         renderActions={(item) => (
                             <Menu position="bottom-end" withinPortal>
                                 <Menu.Target>
-                                    <ActionIcon variant="transparent" size="sm" color="gray" onClick={(e) => e.stopPropagation()}>
+                                    <ActionIcon variant="subtle" size="xs" c="dimmed" onClick={(e) => e.stopPropagation()}>
                                         <IconDotsVertical size={14} />
                                     </ActionIcon>
                                 </Menu.Target>

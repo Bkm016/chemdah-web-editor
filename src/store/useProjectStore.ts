@@ -156,6 +156,12 @@ export const useProjectStore = create<ProjectState>()(
             return { success: false, message: `File is already in '${normalizedNewPath || 'root'}'` };
         }
 
+        // Check if file with same name exists in destination
+        const exists = Object.values(files).some(f => f.id !== id && f.name === file.name && f.path === normalizedNewPath);
+        if (exists) {
+            return { success: false, message: `File '${file.name}' already exists in '${normalizedNewPath || 'root'}'` };
+        }
+
         set((state) => {
           if (type === 'quest') {
             return {

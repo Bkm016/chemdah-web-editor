@@ -8,3 +8,64 @@ html, body, #root {
   color: #c1c2c5;
 }
 
+.file-tree-item {
+  transition: background-color 0.2s ease;
+  border-radius: 0.2rem;
+}
+
+.file-tree-item:hover {
+  background-color: var(--mantine-color-dark-6);
+}
+
+.file-tree-item.selected {
+  background-color: rgba(34, 139, 230, 0.15);
+}
+
+.file-tree-item.selected:hover {
+  background-color: rgba(34, 139, 230, 0.25);
+}
+
+.file-tree-item.drop-target {
+  background-color: rgba(34, 139, 230, 0.15);
+  box-shadow: inset 0 0 0 1px #228be6;
+}
+
+.file-tree-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background-color: var(--mantine-color-dark-6);
+}
+
+.file-tree-item:hover .file-tree-actions,
+.file-tree-actions:focus-within {
+  opacity: 1;
+}
+
+.task-list-item {
+  transition: background-color 0.2s ease;
+  margin: 2px 0;
+}
+
+.task-list-item:hover {
+  background-color: var(--mantine-color-dark-6) !important;
+}
+
+.task-list-item[data-active="true"] {
+  background-color: rgba(34, 139, 230, 0.15) !important;
+  color: #74c0fc !important;
+}
+
+.task-list-item[data-active="true"]:hover {
+  background-color: rgba(34, 139, 230, 0.25) !important;
+}
+
+.task-list-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.task-list-item:hover .task-list-actions,
+.task-list-actions[aria-expanded="true"] {
+  opacity: 1;
+}
+

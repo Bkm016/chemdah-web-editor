@@ -108,12 +108,12 @@ const TreeNodeComponent = ({
         paddingLeft: `${level * 16 + 8}px`,
     };
 
-    let bgClass = "bg-transparent hover:bg-white/5";
+    let bgClass = "";
     if (isOver && isDroppable) {
         // Strong highlight for valid drop target
-        bgClass = "bg-blue-500/20 ring-1 ring-inset ring-blue-500";
+        bgClass = "drop-target";
     } else if (isSelected) {
-        bgClass = "bg-white/10";
+        bgClass = "selected";
     }
 
     return (
@@ -124,7 +124,7 @@ const TreeNodeComponent = ({
                     if (node.isFolder) setDropRef(el);
                 }}
                 style={style}
-                className={`group flex items-center py-1.5 pr-2 cursor-pointer transition-all select-none text-gray-400 hover:text-gray-200 ${bgClass}`}
+                className={`group relative flex items-center py-1.5 pr-2 cursor-pointer select-none text-gray-400 hover:text-gray-200 file-tree-item ${bgClass}`}
                 onClick={handleClick}
                 {...attributes}
                 {...listeners}
@@ -151,12 +151,12 @@ const TreeNodeComponent = ({
                 </div>
 
                 {/* Column 3: Label */}
-                <div className="flex-1 min-w-0 truncate">
+                <div className="flex-1 min-w-0 truncate pr-8">
                     {node.originalItem && renderLabel ? renderLabel(node.originalItem) : <Text size="sm" truncate>{node.label}</Text>}
                 </div>
 
                 {/* Actions */}
-                <div className={`flex items-center transition-opacity opacity-0 group-hover:opacity-100`}>
+                <div className={`absolute right-2 z-10 flex items-center rounded file-tree-actions`}>
                     {node.originalItem && (
                         renderActions ? renderActions(node.originalItem) : (
                             onDelete && (

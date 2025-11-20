@@ -35,7 +35,7 @@ export function QuestTaskList({ tasks, activeTaskId, onSelect, onAdd, onDelete, 
     return (
         <div style={{ width, borderRight: '1px solid var(--mantine-color-dark-6)', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--mantine-color-dark-8)' }}>
             <Group p="xs" justify="space-between" bg="var(--mantine-color-dark-7)">
-                <Text size="xs" fw={700} tt="uppercase" c="dimmed">任务列表</Text>
+                <Text size="xs" fw={700} tt="uppercase" c="dimmed">条目列表</Text>
                 <ActionIcon variant="subtle" size="xs" onClick={onAdd}><IconPlus size={14} /></ActionIcon>
             </Group>
             <DragDropContext onDragEnd={onReorder}>
@@ -82,7 +82,7 @@ export function QuestTaskList({ tasks, activeTaskId, onSelect, onAdd, onDelete, 
                                                     >
                                                         <NavLink
                                                             label={taskId}
-                                                            className="hover:bg-white/5 transition-colors"
+                                                            className="task-list-item"
                                                             leftSection={
                                                                 <div {...provided.dragHandleProps} style={{ cursor: 'grab', display: 'flex', alignItems: 'center', opacity: 0.5 }}>
                                                                     <IconGripVertical size={14} />
@@ -90,11 +90,11 @@ export function QuestTaskList({ tasks, activeTaskId, onSelect, onAdd, onDelete, 
                                                             }
                                                             active={activeTaskId === taskId}
                                                             onClick={() => onSelect(taskId)}
-                                                            variant="light"
+                                                            variant="subtle"
                                                             rightSection={
                                                                 <Menu shadow="md" width={200}>
                                                                     <Menu.Target>
-                                                                        <ActionIcon variant="subtle" size="xs" color="gray" onClick={(e) => e.stopPropagation()}>
+                                                                        <ActionIcon className="task-list-actions" variant="subtle" size="xs" c="dimmed" onClick={(e) => e.stopPropagation()}>
                                                                             <IconDotsVertical size={14} />
                                                                         </ActionIcon>
                                                                     </Menu.Target>
