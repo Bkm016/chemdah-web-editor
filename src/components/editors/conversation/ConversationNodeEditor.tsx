@@ -4,6 +4,7 @@ import { FormSection, FormInput, FormTextarea, AnimatedTabs, FormScript } from '
 import { AgentEditor } from '../quest/AgentEditor';
 import { AgentNodeData } from './nodes/AgentNode';
 import { SwitchNodeData } from './nodes/SwitchNode';
+import { useGlobalIdCheck } from './useGlobalIdCheck';
 
 interface ConversationNodeEditorProps {
     opened: boolean;
@@ -11,10 +12,19 @@ interface ConversationNodeEditorProps {
     data: any; // AgentNodeData | SwitchNodeData
     type?: 'agent' | 'switch';
     onUpdate: (newData: any) => void;
+    fileId: string;
+    existingIds?: string[];
 }
 
-export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', onUpdate }: ConversationNodeEditorProps) {
+export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', onUpdate, fileId, existingIds = [] }: ConversationNodeEditorProps) {
+    const { checkDuplicate } = useGlobalIdCheck(fileId);
+    const globalDuplicates = checkDuplicate(data.label);
+    const isDuplicateInCurrentFile = existingIds.includes(data.label);
     
+    const error = globalDuplicates 
+        ? `此 ID 已在以下文件中使用: ${globalDuplicates.join(', ')}` 
+        : (isDuplicateInCurrentFile ? '此 ID 已在当前文件中使用' : undefined);
+
     // --- Agent Node Handlers ---
     const handleOptionChange = (idx: number, field: keyof AgentNodeData['playerOptions'][0], val: string) => {
         const newOptions = [...data.playerOptions];
@@ -80,6 +90,7 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                                     description="对话节点的唯一标识符"
                                     value={data.label} 
                                     onChange={(e) => onUpdate({ ...data, label: e.currentTarget.value })} 
+                                    error={error}
                                 />
                             </FormSection>
                             <FormSection>
@@ -209,6 +220,7 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                                     description="对话节点的唯一标识符"
                                     value={data.label} 
                                     onChange={(e) => onUpdate({ ...data, label: e.currentTarget.value })} 
+                                    error={error}
                                 />
                             </FormSection>
                             <FormSection>
