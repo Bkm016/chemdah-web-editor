@@ -6,7 +6,7 @@ import { useApiStore } from '../../store/useApiStore';
 import { FileTree, TreeItem } from '../ui';
 import QuestEditor from '../editors/quest/QuestEditor';
 import ConversationEditor from '../editors/conversation/ConversationEditor';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -26,7 +26,8 @@ export default function DashboardLayout() {
   const folders = activeTab === 'quest' ? questFolders : conversationFolders;
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [sidebarOpened, { toggle: toggleSidebar }] = useDisclosure(true);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const [sidebarOpened, { toggle: toggleSidebar, close: closeSidebar }] = useDisclosure(true);
   
   // Rename Modal State
   const [renameModalOpened, { open: openRenameModal, close: closeRenameModal }] = useDisclosure(false);
@@ -302,7 +303,12 @@ export default function DashboardLayout() {
                     <FileTree
                         items={treeItems}
                         activeId={activeFileId}
-                        onSelect={setActiveFile}
+                        onSelect={(file) => {
+                            setActiveFile(file);
+                            if (isMobile) {
+                                closeSidebar();
+                            }
+                        }}
                         onDelete={(id) => { 
                             if(confirm('确定删除吗?')) {
                                 if (files[id]) {

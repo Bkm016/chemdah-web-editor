@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Group, TextInput, ActionIcon, Stack, Text, Button, Popover, Badge } from '@mantine/core';
+import { Group, TextInput, ActionIcon, Stack, Text, Button, Popover, Badge, Select } from '@mantine/core';
 import { IconPlus, IconTrash, IconSettings } from '@tabler/icons-react';
+import { FormTagsInput } from '../../../../ui/FormTagsInput';
 
 interface InferFieldProps {
     value: string;
@@ -11,8 +12,20 @@ interface InferFieldProps {
 
 interface Property {
     key: string;
+    operator: string;
     value: string;
 }
+
+const OPERATORS = [
+    { value: '=', label: '=' },
+    { value: '!=', label: '!=' },
+    { value: '>', label: '>' },
+    { value: '>=', label: '>=' },
+    { value: '<', label: '<' },
+    { value: '<=', label: '<=' },
+    { value: 'contains', label: 'Contains' },
+    { value: 'in', label: 'In' },
+];
 
 export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeholder, label }) => {
     const [mainValue, setMainValue] = useState('');
@@ -33,8 +46,36 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
             setMainValue(match[1]);
             if (match[2]) {
                 const props = match[2].split(/,(?![^\[]*\])/).map(p => {
-                    const [k, ...v] = p.split('=');
-                    return { key: k.trim(), value: v.join('=').trim() };
+                    // Parse property string
+                    const pStr = p.trim();
+                    
+                    // Check for contains: key(val)
+                    const containsMatch = pStr.match(/^([^(]+)\((.*)\)$/);
+                    if (containsMatch) {
+                        const key = containsMatch[1].trim();
+                        const val = containsMatch[2];
+                        // Simple heuristic: if it has | or /, it's likely IN, otherwise CONTAINS
+                        if (val.includes('|') || val.includes('/')) {
+                             return { key, operator: 'in', value: val };
+                        }
+                        return { key, operator: 'contains', value: val };
+                    }
+
+                    // Check for other operators
+                    const operators = ['!=', '>=', '<=', '>', '<', '='];
+                    for (const op of operators) {
+                        const idx = pStr.indexOf(op);
+                        if (idx !== -1) {
+                            return {
+                                key: pStr.substring(0, idx).trim(),
+                                operator: op,
+                                value: pStr.substring(idx + op.length).trim()
+                            };
+                        }
+                    }
+
+                    // Fallback
+                    return { key: pStr, operator: '=', value: '' };
                 });
                 setProperties(props);
             } else {
@@ -54,13 +95,18 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
         if (newProps.length === 0) {
             onChange(newMain);
         } else {
-            const propsStr = newProps.map(p => `${p.key}=${p.value}`).join(',');
+            const propsStr = newProps.map(p => {
+                if (p.operator === 'contains' || p.operator === 'in') {
+                    return `${p.key}(${p.value})`;
+                }
+                return `${p.key}${p.operator}${p.value}`;
+            }).join(',');
             onChange(`${newMain}[${propsStr}]`);
         }
     };
 
     const handleAddProperty = () => {
-        const newProps = [...properties, { key: '', value: '' }];
+        const newProps = [...properties, { key: '', operator: '=', value: '' }];
         setProperties(newProps);
         updateValue(mainValue, newProps);
     };
@@ -71,7 +117,7 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
         updateValue(mainValue, newProps);
     };
 
-    const handlePropertyChange = (index: number, field: 'key' | 'value', val: string) => {
+    const handlePropertyChange = (index: number, field: keyof Property, val: string) => {
         const newProps = [...properties];
         newProps[index] = { ...newProps[index], [field]: val };
         setProperties(newProps);
@@ -79,7 +125,7 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
     };
 
     return (
-        <Popover opened={opened} onChange={setOpened} width={300} position="bottom-end" withArrow trapFocus>
+        <Popover opened={opened} onChange={setOpened} width={450} position="bottom-end" withArrow trapFocus>
             <Popover.Target>
                 <TextInput
                     placeholder={placeholder || "Value"}
@@ -105,7 +151,7 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
                             <Badge size="xs" variant="light">Properties</Badge>
                         </Group>
                         {properties.map((prop, index) => (
-                            <Group key={index} gap="xs">
+                            <Group key={index} gap="xs" align="flex-start">
                                 <TextInput
                                     placeholder="Key"
                                     value={prop.key}
@@ -113,15 +159,36 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
                                     size="xs"
                                     style={{ flex: 1 }}
                                 />
-                                <Text size="xs">=</Text>
-                                <TextInput
-                                    placeholder="Value"
-                                    value={prop.value}
-                                    onChange={(e) => handlePropertyChange(index, 'value', e.target.value)}
+                                <Select
+                                    data={OPERATORS}
+                                    value={prop.operator}
+                                    onChange={(val) => handlePropertyChange(index, 'operator', val || '=')}
                                     size="xs"
-                                    style={{ flex: 1 }}
+                                    style={{ width: 100 }}
+                                    allowDeselect={false}
+                                    comboboxProps={{ withinPortal: false }}
                                 />
-                                <ActionIcon color="red" variant="subtle" size="xs" onClick={() => handleRemoveProperty(index)}>
+                                {prop.operator === 'in' ? (
+                                    <FormTagsInput
+                                        placeholder="Values"
+                                        value={prop.value ? prop.value.split('|') : []}
+                                        onChange={(tags) => handlePropertyChange(index, 'value', tags.join('|'))}
+                                        size="xs"
+                                        style={{ flex: 1 }}
+                                        comboboxProps={{ withinPortal: false }}
+                                        splitChars={['|', ',', '/']}
+                                        leftSection={null}
+                                    />
+                                ) : (
+                                    <TextInput
+                                        placeholder="Value"
+                                        value={prop.value}
+                                        onChange={(e) => handlePropertyChange(index, 'value', e.target.value)}
+                                        size="xs"
+                                        style={{ flex: 1 }}
+                                    />
+                                )}
+                                <ActionIcon color="red" variant="subtle" size="xs" onClick={() => handleRemoveProperty(index)} mt={4}>
                                     <IconTrash size={12} />
                                 </ActionIcon>
                             </Group>

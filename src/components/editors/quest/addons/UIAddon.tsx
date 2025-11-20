@@ -1,4 +1,5 @@
-import { FormAddon, FormInput, FormTextarea, FormCheckbox } from '../../../ui';
+import { FormAddon, FormTextarea, FormCheckbox } from '../../../ui';
+import { IconInput } from '../components/IconInput';
 
 interface UIAddonProps {
     addon: any;
@@ -20,12 +21,12 @@ export function UIAddon({ addon, onChange }: UIAddonProps) {
                 }
             }}
         >
-            <FormInput
+            <IconInput
                 label="图标 (Icon)"
                 value={addon?.ui?.icon || ''}
-                onChange={(e) => onChange({
+                onChange={(val) => onChange({
                     ...addon,
-                    ui: { ...addon?.ui, icon: e.target.value }
+                    ui: { ...addon?.ui, icon: val }
                 })}
             />
             <FormTextarea

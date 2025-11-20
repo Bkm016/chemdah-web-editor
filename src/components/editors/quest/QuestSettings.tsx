@@ -107,19 +107,19 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
                                 <FormCheckbox
                                     label="数据隔离 (Data Isolation)"
                                     description="该任务将单独建表，以分担主表压力"
-                                    checked={questData.__option__?.['data-isolation'] || false}
+                                    checked={questData['data-isolation'] || false}
                                     onChange={(e) => onUpdate({ 
                                         ...questData, 
-                                        __option__: { ...questData.__option__, 'data-isolation': e.currentTarget.checked } 
+                                        'data-isolation': e.currentTarget.checked 
                                     })}
                                 />
                                 <FormCheckbox
                                     label="记录完成时间 (Record Completed)"
                                     description="是否记录任务（含条目）完成时间（默认启用）"
-                                    checked={questData.__option__?.['record-completed'] !== false}
+                                    checked={questData['record-completed'] !== false}
                                     onChange={(e) => onUpdate({ 
                                         ...questData, 
-                                        __option__: { ...questData.__option__, 'record-completed': e.currentTarget.checked } 
+                                        'record-completed': e.currentTarget.checked 
                                     })}
                                 />
                             </FormSection>

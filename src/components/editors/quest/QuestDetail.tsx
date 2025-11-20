@@ -70,7 +70,7 @@ export function QuestDetail({ taskId, taskData, onUpdate }: QuestDetailProps) {
                             </FormSection>
                             
                             {currentDefinition ? (
-                                <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
+                                <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" verticalSpacing="md">
                                     <FormSection>
                                         <Group mb="sm" gap="xs">
                                             <Title order={5}>条件配置</Title>
