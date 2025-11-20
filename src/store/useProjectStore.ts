@@ -29,7 +29,7 @@ interface ProjectState {
   activeFileType: FileType | null;
   
   // Actions
-  createFile: (name: string, type: FileType, path: string, initialContent?: string) => void;
+  createFile: (name: string, type: FileType, path: string, initialContent?: string) => { success: boolean; message?: string };
   deleteFile: (id: string, type: FileType) => void;
   updateFileContent: (id: string, type: FileType, content: string) => void;
   renameFile: (id: string, type: FileType, newName: string) => void;
@@ -54,24 +54,36 @@ export const useProjectStore = create<ProjectState>()(
       activeFileId: null,
       activeFileType: null,
 
-      createFile: (name, type, path, initialContent = '') => set((state) => {
-        const id = uuidv4();
-        const newFile = { id, name, type, path, content: initialContent };
+      createFile: (name, type, path, initialContent = '') => {
+        const state = get();
+        const files = type === 'quest' ? state.questFiles : state.conversationFiles;
         
-        if (type === 'quest') {
-          return {
-            questFiles: { ...state.questFiles, [id]: newFile },
-            activeFileId: id,
-            activeFileType: type
-          };
-        } else {
-          return {
-            conversationFiles: { ...state.conversationFiles, [id]: newFile },
-            activeFileId: id,
-            activeFileType: type
-          };
+        // Check if file exists
+        const exists = Object.values(files).some(f => f.name === name && f.path === path);
+        if (exists) {
+            return { success: false, message: `File '${name}' already exists in '${path || 'root'}'` };
         }
-      }),
+
+        set((state) => {
+            const id = uuidv4();
+            const newFile = { id, name, type, path, content: initialContent };
+            
+            if (type === 'quest') {
+            return {
+                questFiles: { ...state.questFiles, [id]: newFile },
+                activeFileId: id,
+                activeFileType: type
+            };
+            } else {
+            return {
+                conversationFiles: { ...state.conversationFiles, [id]: newFile },
+                activeFileId: id,
+                activeFileType: type
+            };
+            }
+        });
+        return { success: true };
+      },
 
       deleteFile: (id, type) => set((state) => {
         if (type === 'quest') {

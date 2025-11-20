@@ -1,6 +1,9 @@
 import { Tabs, ScrollArea, Box, Stack, Title } from '@mantine/core';
 import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler/icons-react';
-import { FormInput, FormSelect, FormCheckbox, FormSection } from '../../ui';
+import { useMemo } from 'react';
+import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '../../ui';
+import { useProjectStore } from '../../../store/useProjectStore';
+import { parseYaml } from '../../../utils/yaml-utils';
 import { AgentEditor } from './AgentEditor';
 import { UIAddon } from './addons/UIAddon';
 import { TrackAddon } from './addons/TrackAddon';
@@ -8,12 +11,56 @@ import { PartyAddon } from './addons/PartyAddon';
 import { AutomationAddon } from './addons/AutomationAddon';
 
 interface QuestSettingsProps {
+    fileId?: string;
     questId: string;
     questData: any;
     onUpdate: (newData: any, newId?: string) => void;
 }
 
-export function QuestSettings({ questId, questData, onUpdate }: QuestSettingsProps) {
+export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSettingsProps) {
+    const questFiles = useProjectStore((state) => state.questFiles);
+
+    const allTypes = useMemo(() => {
+        const types = new Set<string>([]);
+        Object.values(questFiles).forEach(file => {
+            try {
+                const data = parseYaml(file.content);
+                if (data && typeof data === 'object') {
+                    Object.entries(data).forEach(([key, quest]: [string, any]) => {
+                        if (key === '__option__') return;
+                        if (quest?.meta?.type) {
+                            if (Array.isArray(quest.meta.type)) {
+                                quest.meta.type.forEach((t: string) => types.add(String(t)));
+                            } else {
+                                types.add(String(quest.meta.type));
+                            }
+                        }
+                    });
+                }
+            } catch (e) {
+                // ignore
+            }
+        });
+        return Array.from(types).sort();
+    }, [questFiles]);
+
+    const idError = useMemo(() => {
+        if (!fileId) return null;
+        let error = null;
+        Object.values(questFiles).forEach(file => {
+            if (file.id === fileId) return;
+            try {
+                const data = parseYaml(file.content);
+                if (data && typeof data === 'object') {
+                    if (Object.keys(data).includes(questId)) {
+                        error = `ID '${questId}' 已存在于文件 '${file.name}' 中`;
+                    }
+                }
+            } catch (e) {}
+        });
+        return error;
+    }, [questFiles, fileId, questId]);
+
     return (
         <Tabs defaultValue="basic" orientation="vertical" variant="pills" style={{ flex: 1, display: 'flex', height: '100%' }}>
             <Tabs.List w={220} bg="var(--mantine-color-dark-7)" p="xs" style={{ borderRight: '1px solid var(--mantine-color-dark-6)' }}>
@@ -34,6 +81,7 @@ export function QuestSettings({ questId, questData, onUpdate }: QuestSettingsPro
                                     description="任务的唯一标识符"
                                     value={questId}
                                     onChange={(e) => onUpdate(questData, e.target.value)}
+                                    error={idError}
                                 />
                                 <FormInput
                                     label="显示名称"
@@ -41,11 +89,11 @@ export function QuestSettings({ questId, questData, onUpdate }: QuestSettingsPro
                                     value={questData.meta?.name || ''}
                                     onChange={(e) => onUpdate({ ...questData, meta: { ...questData.meta, name: e.target.value } })}
                                 />
-                                <FormSelect
+                                <FormTagsInput
                                     label="类型"
-                                    description="任务的刷新频率或分类"
-                                    data={['L1', 'L2', 'L3', 'Daily', 'Weekly']}
-                                    value={questData.meta?.type || 'L1'}
+                                    description="用于分类和筛选的标签，可动态创建"
+                                    data={allTypes}
+                                    value={Array.isArray(questData.meta?.type) ? questData.meta.type : (questData.meta?.type ? [String(questData.meta.type)] : [])}
                                     onChange={(val) => onUpdate({ ...questData, meta: { ...questData.meta, type: val } })}
                                 />
                             </FormSection>

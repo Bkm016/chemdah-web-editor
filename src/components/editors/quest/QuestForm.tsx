@@ -171,6 +171,7 @@ export default function QuestForm({ fileId }: { fileId: string }) {
       >
         <Tabs.Panel value="meta" style={{ flex: 1, overflow: 'hidden', display: 'flex' }}>
             <QuestSettings 
+                fileId={fileId}
                 questId={questId} 
                 questData={questData} 
                 onUpdate={handleUpdate} 

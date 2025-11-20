@@ -101,8 +101,16 @@ export default function DashboardLayout() {
     if (newFileName.trim()) {
         const type = activeTab as FileType;
         const name = newFileName.trim().endsWith('.yml') ? newFileName.trim() : `${newFileName.trim()}.yml`;
-        createFile(name, type, targetPath);
-        closeNewFileModal();
+        const result = createFile(name, type, targetPath);
+        if (result.success) {
+            closeNewFileModal();
+        } else {
+            notifications.show({
+                title: '创建失败',
+                message: result.message,
+                color: 'red'
+            });
+        }
     }
   };
 
