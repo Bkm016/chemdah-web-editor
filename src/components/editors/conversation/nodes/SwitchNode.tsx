@@ -23,12 +23,13 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
   }, [data.branches, id, updateNodeInternals]);
 
   return (
-    <Card 
-      shadow="md" 
-      p={0} 
-      radius="md" 
-      withBorder 
-      style={{ 
+    <Card
+      shadow="md"
+      p={0}
+      radius="md"
+      withBorder
+      className="conversation-node-card"
+      style={{
         width: 280,
         borderColor: selected ? 'var(--mantine-color-violet-3)' : 'var(--mantine-color-violet-8)',
         borderWidth: 2,
@@ -58,11 +59,12 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
       />
 
       {/* Header */}
-      <Box 
+      <Box
         bg="var(--mantine-color-violet-9)"
-        p="xs" 
+        p="xs"
         h={48}
-        style={{ 
+        className="conversation-node-header"
+        style={{
             borderBottom: '1px solid var(--mantine-color-dark-5)',
             display: 'flex',
             alignItems: 'center',
@@ -75,7 +77,7 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
                 <IconGitBranch size={14} />
             </ThemeIcon>
             <Stack gap={0}>
-                <Text fw={700} size="sm" c="white" lineClamp={1}>{data.label}</Text>
+                <Text fw={700} size="sm" className="conversation-node-title" lineClamp={1}>{data.label}</Text>
                 {hasNpcId ? (
                     <Text size="xs" c="violet.3" style={{ lineHeight: 1, fontSize: 10 }}>NPC: {data.npcId}</Text>
                 ) : (
@@ -90,15 +92,16 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
       </Box>
 
       {/* Branches Section */}
-      <Box bg="var(--mantine-color-dark-8)">
+      <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section">
         <Stack gap={0}>
             {data.branches && data.branches.length > 0 ? (
                 data.branches.map((branch, index) => (
-                    <Box 
-                        key={branch.id} 
+                    <Box
+                        key={branch.id}
                         p="xs"
-                        style={{ 
-                            position: 'relative', 
+                        className="conversation-player-option"
+                        style={{
+                            position: 'relative',
                             borderTop: index > 0 ? '1px solid var(--mantine-color-dark-6)' : 'none',
                             display: 'flex',
                             flexDirection: 'column',
@@ -108,7 +111,7 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
                         <Group justify="space-between" w="100%" mb={4}>
                             <Badge size="xs" variant="outline" color="gray">IF</Badge>
                             <Tooltip label={branch.condition} multiline w={200}>
-                                <Text size="xs" c="gray.3" style={{ fontFamily: 'monospace', cursor: 'help' }} lineClamp={1}>
+                                <Text size="xs" style={{ fontFamily: 'monospace', cursor: 'help' }} lineClamp={1}>
                                     {branch.condition}
                                 </Text>
                             </Tooltip>

@@ -1,8 +1,9 @@
 import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge } from '@mantine/core';
-import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSettings } from '@tabler/icons-react';
+import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSettings, IconSun, IconMoon } from '@tabler/icons-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useProjectStore, FileType, VirtualFile } from '../../store/useProjectStore';
 import { useApiStore } from '../../store/useApiStore';
+import { useThemeStore } from '../../store/useThemeStore';
 import { parseYaml } from '../../utils/yaml-utils';
 import { FileTree, TreeItem } from '../ui';
 import QuestEditor from '../editors/quest/QuestEditor';
@@ -15,13 +16,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function DashboardLayout() {
   const [activeTab, setActiveTab] = useState<string>('quest');
-  const { 
-    questFiles, questFolders, conversationFiles, conversationFolders, 
-    activeFileId, setActiveFile, 
-    createFile, deleteFile, renameFile, importFiles, moveFile, 
-    createFolder, deleteFolder, renameFolder, moveFolder 
+  const {
+    questFiles, questFolders, conversationFiles, conversationFolders,
+    activeFileId, setActiveFile,
+    createFile, deleteFile, renameFile, importFiles, moveFile,
+    createFolder, deleteFolder, renameFolder, moveFolder
   } = useProjectStore();
   const { setApiData } = useApiStore();
+  const { colorScheme, toggleColorScheme } = useThemeStore();
   
   const files = activeTab === 'quest' ? questFiles : conversationFiles;
   const folders = activeTab === 'quest' ? questFolders : conversationFolders;
@@ -317,8 +319,15 @@ export default function DashboardLayout() {
                 </ActionIcon>
                 <Title order={3} size="h4">Chemdah Lab</Title>
             </Group>
-            
+
             <Group>
+                <ActionIcon
+                    variant="subtle"
+                    onClick={toggleColorScheme}
+                    title={colorScheme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+                >
+                    {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
+                </ActionIcon>
                 <FileButton onChange={handleImportApi} accept=".json">
                     {(props) => <Button {...props} variant="subtle" size="xs" leftSection={<IconSettings size={16} />}>API</Button>}
                 </FileButton>

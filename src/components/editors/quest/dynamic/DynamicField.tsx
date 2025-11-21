@@ -71,7 +71,7 @@ export const DynamicField: React.FC<DynamicFieldProps> = ({ field, value, onChan
     return (
         <div className="flex items-stretch border-b border-(--mantine-color-dark-4) last:border-b-0">
             <div className="w-[140px] shrink-0 px-3 py-2 border-r border-(--mantine-color-dark-4) bg-(--mantine-color-dark-8) flex flex-col justify-center">
-                <Text size="sm" fw={500} lh={1.2} c="var(--mantine-color-gray-3)" style={{ wordBreak: 'break-word' }}>{field.name}</Text>
+                <Text size="sm" fw={500} lh={1.2} className="dynamic-field-label" c="var(--mantine-color-gray-3)" style={{ wordBreak: 'break-word' }}>{field.name}</Text>
                 <Text size="xs" c="dimmed" mt={4} style={{ fontSize: 10, fontFamily: 'monospace' }}>{field.pattern}</Text>
             </div>
             <div className="flex-1 flex items-center min-w-0 bg-(--mantine-color-dark-7) hover:bg-(--mantine-color-dark-6) transition-colors">

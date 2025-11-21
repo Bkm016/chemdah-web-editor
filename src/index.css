@@ -1,71 +1,272 @@
 @import "tailwindcss";
 
+/* Base Styles */
 html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #1a1b1e;
-  color: #c1c2c5;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dark Mode Styles */
+html[data-mantine-color-scheme="dark"],
+html[data-mantine-color-scheme="dark"] body,
+html[data-mantine-color-scheme="dark"] #root {
+    background-color: #1a1b1e;
+    color: #c1c2c5;
+}
+
+/* Light Mode Styles */
+html[data-mantine-color-scheme="light"],
+html[data-mantine-color-scheme="light"] body,
+html[data-mantine-color-scheme="light"] #root {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Override Mantine color variables for light mode */
+html[data-mantine-color-scheme="light"] {
+    /* Map dark colors to light equivalents */
+    --mantine-color-dark-8: #ffffff; /* darkest -> white */
+    --mantine-color-dark-7: #f8f9fa; /* darker -> lightest gray */
+    --mantine-color-dark-6: #e9ecef; /* dark -> light gray */
+    --mantine-color-dark-5: #dee2e6; /* medium -> medium gray */
+    --mantine-color-dark-4: #ced4da; /* light -> darker gray (borders) */
+    --mantine-color-dark-3: #adb5bd;
+    --mantine-color-dark-2: #868e96;
+    --mantine-color-dark-1: #495057;
+    --mantine-color-dark-0: #343a40;
+
+    /* Gray colors for borders in light mode */
+    --mantine-color-gray-0: #f8f9fa;
+    --mantine-color-gray-1: #f1f3f5;
+    --mantine-color-gray-2: #e9ecef;
+    --mantine-color-gray-3: #bfbfbf;
+
 }
 
 .file-tree-item {
-  transition: background-color 0.2s ease;
-  border-radius: 0.2rem;
+    transition: all 0.2s ease;
+    border-radius: 0.2rem;
 }
 
-.file-tree-item:hover {
-  background-color: var(--mantine-color-dark-6);
+/* Dark Mode */
+html[data-mantine-color-scheme="dark"] .file-tree-item:hover {
+    background-color: var(--mantine-color-dark-6);
 }
 
-.file-tree-item.selected {
-  background-color: rgba(34, 139, 230, 0.15);
+html[data-mantine-color-scheme="dark"] .file-tree-item.selected {
+    background-color: rgba(34, 139, 230, 0.15);
 }
 
-.file-tree-item.selected:hover {
-  background-color: rgba(34, 139, 230, 0.25);
+html[data-mantine-color-scheme="dark"] .file-tree-item.selected:hover {
+    background-color: rgba(34, 139, 230, 0.25);
 }
 
-.file-tree-item.drop-target {
-  background-color: rgba(34, 139, 230, 0.15);
-  box-shadow: inset 0 0 0 1px #228be6;
+html[data-mantine-color-scheme="dark"] .file-tree-item.drop-target {
+    background-color: rgba(34, 139, 230, 0.15);
+    box-shadow: inset 0 0 0 1px #228be6;
+}
+
+html[data-mantine-color-scheme="dark"] .file-tree-actions {
+    background-color: var(--mantine-color-dark-6);
+}
+
+/* Light Mode */
+html[data-mantine-color-scheme="light"] .file-tree-item:hover {
+    background-color: rgba(34, 139, 230, 0.08);
+    border-left: 3px solid var(--mantine-color-blue-5);
+    padding-left: calc(0.5rem - 3px);
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-item:hover * {
+    color: #1971c2 !important; /* 强制使用主题色文字 */
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-item.selected {
+    background-color: rgba(34, 139, 230, 0.12);
+    border-left: 3px solid var(--mantine-color-blue-6);
+    padding-left: calc(0.5rem - 3px);
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-item.selected * {
+    color: #1864ab !important; /* 更深的蓝色 */
+    font-weight: 500;
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-item.selected:hover {
+    background-color: rgba(34, 139, 230, 0.18);
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-item.drop-target {
+    background-color: rgba(34, 139, 230, 0.12);
+    box-shadow: inset 0 0 0 2px #228be6;
+}
+
+html[data-mantine-color-scheme="light"] .file-tree-actions {
+    background-color: var(--mantine-color-gray-1);
 }
 
 .file-tree-actions {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  background-color: var(--mantine-color-dark-6);
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .file-tree-item:hover .file-tree-actions,
 .file-tree-actions:focus-within {
-  opacity: 1;
+    opacity: 1;
 }
 
 .task-list-item {
-  transition: background-color 0.2s ease;
-  margin: 2px 0;
+    transition: all 0.2s ease;
+    margin: 2px 0;
 }
 
-.task-list-item:hover {
-  background-color: var(--mantine-color-dark-6) !important;
+/* Dark Mode */
+html[data-mantine-color-scheme="dark"] .task-list-item:hover {
+    background-color: var(--mantine-color-dark-6) !important;
 }
 
-.task-list-item[data-active="true"] {
-  background-color: rgba(34, 139, 230, 0.15) !important;
-  color: #74c0fc !important;
+html[data-mantine-color-scheme="dark"] .task-list-item[data-active="true"] {
+    background-color: rgba(34, 139, 230, 0.15) !important;
+    color: #74c0fc !important;
 }
 
-.task-list-item[data-active="true"]:hover {
-  background-color: rgba(34, 139, 230, 0.25) !important;
+html[data-mantine-color-scheme="dark"] .task-list-item[data-active="true"]:hover {
+    background-color: rgba(34, 139, 230, 0.25) !important;
+}
+
+/* Light Mode */
+html[data-mantine-color-scheme="light"] .task-list-item:hover {
+    background-color: rgba(34, 139, 230, 0.08) !important;
+    border-left: 3px solid var(--mantine-color-blue-5) !important;
+    padding-left: calc(0.75rem - 3px) !important;
+}
+
+html[data-mantine-color-scheme="light"] .task-list-item:hover * {
+    color: #1971c2 !important; /* 主题色文字 */
+}
+
+html[data-mantine-color-scheme="light"] .task-list-item[data-active="true"] {
+    background-color: rgba(34, 139, 230, 0.15) !important;
+    color: #1971c2 !important;
+    border-left: 3px solid var(--mantine-color-blue-6) !important;
+    padding-left: calc(0.75rem - 3px) !important;
+    font-weight: 600 !important;
+}
+
+html[data-mantine-color-scheme="light"] .task-list-item[data-active="true"] * {
+    color: #1864ab !important; /* 更深的蓝色 */
+}
+
+html[data-mantine-color-scheme="light"] .task-list-item[data-active="true"]:hover {
+    background-color: rgba(34, 139, 230, 0.22) !important;
 }
 
 .task-list-actions {
-  opacity: 0;
-  transition: opacity 0.2s ease;
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .task-list-item:hover .task-list-actions,
 .task-list-actions[aria-expanded="true"] {
-  opacity: 1;
+    opacity: 1;
+}
+
+/* Conversation Node Styles */
+.conversation-npc-bubble {
+    transition: all 0.2s ease;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-npc-bubble {
+    background-color: #e3f2fd !important; /* 浅蓝色，类似聊天气泡 */
+    border: 1px solid #90caf9 !important;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-npc-bubble * {
+    color: #1565c0 !important; /* 深蓝色文字，确保可读性 */
+}
+
+html[data-mantine-color-scheme="light"] .conversation-npc-bubble:hover {
+    background-color: #bbdefb !important;
+    border-color: #64b5f6 !important;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.15) !important;
+}
+
+.conversation-player-option {
+    transition: all 0.2s ease;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-player-option {
+    background-color: #f1f8e9 !important; /* 浅绿色，区分玩家选项 */
+    border-left: 3px solid transparent !important;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-player-option * {
+    color: #2e7d32 !important; /* 深绿色文字 */
+}
+
+html[data-mantine-color-scheme="light"] .conversation-player-option:hover {
+    background-color: #dcedc8 !important;
+    border-left: 3px solid #66bb6a !important;
+    box-shadow: 0 2px 4px rgba(76, 175, 80, 0.15) !important;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-player-option:hover * {
+    color: #1b5e20 !important; /* hover 时更深的绿色 */
+}
+
+html[data-mantine-color-scheme="light"] .conversation-player-section {
+    background-color: #fafafa !important;
+}
+
+/* Conversation node card and header text colors in light mode */
+html[data-mantine-color-scheme="light"] .conversation-node-card {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-node-header {
+    background-color: #f8f9fa !important;
+}
+
+html[data-mantine-color-scheme="light"] .conversation-node-header * {
+    color: #212529 !important; /* 深色文字 */
+}
+
+html[data-mantine-color-scheme="light"] .conversation-node-title {
+    color: #1864ab !important; /* 标题使用主题色 */
+}
+
+html[data-mantine-color-scheme="light"] .conversation-npc-section {
+    background-color: #f8f9fa !important;
+}
+
+/* Dynamic Field Labels in light mode */
+html[data-mantine-color-scheme="light"] .dynamic-field-label {
+    color: #495057 !important; /* 深灰色，确保在浅色背景上可读 */
+}
+
+/* Mantine Select Group Labels in light mode */
+html[data-mantine-color-scheme="light"] .mantine-Select-group {
+    background-color: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+html[data-mantine-color-scheme="light"] .mantine-Select-groupLabel {
+    color: #495057 !important;
+}
+
+/* Mantine Select Dropdown in light mode */
+html[data-mantine-color-scheme="light"] .mantine-Select-dropdown {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+}
+
+html[data-mantine-color-scheme="light"] .mantine-Select-option {
+    color: #212529 !important;
+}
+
+html[data-mantine-color-scheme="light"] .mantine-Select-option:hover {
+    background-color: rgba(34, 139, 230, 0.08) !important;
 }
 

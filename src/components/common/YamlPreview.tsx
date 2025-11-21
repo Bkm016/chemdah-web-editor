@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { Paper, Title, Box } from '@mantine/core';
+import { useThemeStore } from '../../store/useThemeStore';
 
 interface YamlPreviewProps {
   value: string;
@@ -7,6 +8,8 @@ interface YamlPreviewProps {
 }
 
 export default function YamlPreview({ value, title = 'Preview' }: YamlPreviewProps) {
+  const { colorScheme } = useThemeStore();
+
   return (
     <Paper p="0" radius="md" withBorder h="100%" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
       {title && (
@@ -19,7 +22,7 @@ export default function YamlPreview({ value, title = 'Preview' }: YamlPreviewPro
           height="100%"
           defaultLanguage="yaml"
           value={value}
-          theme="vs-dark"
+          theme={colorScheme === 'dark' ? 'vs-dark' : 'light'}
           options={{
             minimap: { enabled: false },
             fontSize: 13,

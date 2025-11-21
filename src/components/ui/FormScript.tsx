@@ -1,5 +1,6 @@
 import Editor, { EditorProps } from '@monaco-editor/react';
 import { Box, Text, Group, Badge } from '@mantine/core';
+import { useThemeStore } from '../../store/useThemeStore';
 
 interface FormScriptProps extends EditorProps {
     label?: string;
@@ -10,6 +11,8 @@ interface FormScriptProps extends EditorProps {
 }
 
 export function FormScript({ label, description, height = "200px", value, onChange, ...props }: FormScriptProps) {
+    const { colorScheme } = useThemeStore();
+
     const renderLabel = () => {
         if (!label) return null;
         const match = label.match(/^(.*?)\s*\((.*?)\)$/);
@@ -34,7 +37,7 @@ export function FormScript({ label, description, height = "200px", value, onChan
                 <Editor
                     height={height}
                     defaultLanguage="ruby"
-                    theme="vs-dark"
+                    theme={colorScheme === 'dark' ? 'vs-dark' : 'light'}
                     value={value === undefined || value === null ? '' : String(value)}
                     onChange={onChange}
                     options={{

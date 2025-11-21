@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { MantineProvider, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { useThemeStore } from './store/useThemeStore';
 
 import App from './App'
 import '@mantine/core/styles.css';
@@ -14,6 +15,17 @@ const theme = createTheme({
   defaultRadius: 'md',
   fontFamily: 'Inter, sans-serif',
 });
+
+function ThemedApp() {
+  const { colorScheme } = useThemeStore();
+
+  return (
+    <MantineProvider theme={theme} defaultColorScheme={colorScheme} forceColorScheme={colorScheme}>
+      <Notifications />
+      <App />
+    </MantineProvider>
+  );
+}
 
 class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean, error: any }> {
   constructor(props: any) {
@@ -43,10 +55,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <MantineProvider theme={theme} defaultColorScheme="dark" forceColorScheme="dark">
-        <Notifications />
-        <App />
-      </MantineProvider>
+      <ThemedApp />
     </ErrorBoundary>
   </React.StrictMode>,
 )

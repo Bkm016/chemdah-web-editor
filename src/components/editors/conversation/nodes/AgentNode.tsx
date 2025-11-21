@@ -25,12 +25,13 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
   const isEntry = !!data.npcId;
 
   return (
-    <Card 
-      shadow="md" 
-      p={0} 
-      radius="md" 
-      withBorder 
-      style={{ 
+    <Card
+      shadow="md"
+      p={0}
+      radius="md"
+      withBorder
+      className="conversation-node-card"
+      style={{
         width: 280,
         borderColor: selected ? 'var(--mantine-color-blue-5)' : (isEntry ? 'var(--mantine-color-orange-6)' : 'var(--mantine-color-dark-4)'),
         borderWidth: 2,
@@ -69,11 +70,12 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
       </Handle>
 
       {/* Header */}
-      <Box 
+      <Box
         bg={isEntry ? "rgba(253, 126, 20, 0.15)" : "var(--mantine-color-dark-6)"}
-        p="xs" 
+        p="xs"
         h={48}
-        style={{ 
+        className="conversation-node-header"
+        style={{
             borderBottom: '1px solid var(--mantine-color-dark-5)',
             display: 'flex',
             alignItems: 'center',
@@ -85,7 +87,7 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
                 {isEntry ? <IconMapPin size={14} /> : <IconMessage size={14} />}
             </ThemeIcon>
             <Stack gap={0}>
-                <Text fw={700} size="sm" c="white" lineClamp={1}>{data.label}</Text>
+                <Text fw={700} size="sm" className="conversation-node-title" lineClamp={1}>{data.label}</Text>
                 {isEntry && <Text size="xs" c="orange.3" style={{ lineHeight: 1, fontSize: 10 }}>入口: {data.npcId}</Text>}
             </Stack>
         </Group>
@@ -94,17 +96,18 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
 
       <Stack gap={0}>
         {/* NPC Section */}
-        <Box p="sm" bg="var(--mantine-color-dark-7)">
+        <Box p="sm" bg="var(--mantine-color-dark-7)" className="conversation-npc-section">
             <Stack gap={6}>
                 {data.npcLines && data.npcLines.length > 0 ? (
                     data.npcLines.map((line, index) => (
-                        <Box 
-                            key={index} 
-                            bg="var(--mantine-color-dark-6)" 
-                            p="xs" 
+                        <Box
+                            key={index}
+                            bg="var(--mantine-color-dark-6)"
+                            p="xs"
+                            className="conversation-npc-bubble"
                             style={{ borderRadius: 6, borderTopLeftRadius: 0 }}
                         >
-                            <Text size="xs" c="gray.3" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.4 }}>
+                            <Text size="xs" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.4 }}>
                                 {line}
                             </Text>
                         </Box>
@@ -116,22 +119,23 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
         </Box>
 
         {/* Player Section */}
-        <Box bg="var(--mantine-color-dark-8)" style={{ borderTop: '1px solid var(--mantine-color-dark-5)' }}>
+        <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section" style={{ borderTop: '1px solid var(--mantine-color-dark-5)' }}>
             <Stack gap={0}>
                 {data.playerOptions && data.playerOptions.length > 0 ? (
                     data.playerOptions.map((option, index) => (
-                        <Box 
-                            key={option.id} 
+                        <Box
+                            key={option.id}
                             p="xs"
-                            style={{ 
-                                position: 'relative', 
+                            className="conversation-player-option"
+                            style={{
+                                position: 'relative',
                                 borderTop: index > 0 ? '1px solid var(--mantine-color-dark-6)' : 'none',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'flex-end'
                             }}
                         >
-                            <Text size="xs" c="gray.4" mr={16} ta="right">{option.text || '(Empty)'}</Text>
+                            <Text size="xs" mr={16} ta="right">{option.text || '(Empty)'}</Text>
                             
                             {/* Output Handle */}
                             <Handle 
