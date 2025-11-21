@@ -1,10 +1,12 @@
 import { Modal, Tabs, Stack, Button, ActionIcon, Text, Box, ScrollArea, Title, Group, Accordion, Badge, ThemeIcon, Select } from '@mantine/core';
-import { IconMessage, IconUser, IconScript, IconSettings, IconPlus, IconTrash, IconGitBranch } from '@tabler/icons-react';
+import { IconMessage, IconUser, IconScript, IconSettings, IconPlus, IconTrash, IconGitBranch, IconPuzzle } from '@tabler/icons-react';
 import { FormSection, FormInput, FormTextarea, AnimatedTabs, FormScript } from '../../ui';
 import { AgentEditor } from '../quest/AgentEditor';
 import { AgentNodeData } from './nodes/AgentNode';
 import { SwitchNodeData } from './nodes/SwitchNode';
 import { useGlobalIdCheck } from './useGlobalIdCheck';
+import { useApiStore } from '@/store/useApiStore';
+import { DynamicComponentField } from '../quest/dynamic/DynamicComponentField';
 
 interface ConversationNodeEditorProps {
     opened: boolean;
@@ -18,6 +20,11 @@ interface ConversationNodeEditorProps {
 
 export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', onUpdate, fileId, existingIds = [] }: ConversationNodeEditorProps) {
     const { checkDuplicate } = useGlobalIdCheck(fileId);
+    const { apiData } = useApiStore();
+
+    const conversationNodeComponents = apiData.conversationNodeComponents || [];
+    const conversationPlayerOptionComponents = apiData.conversationPlayerOptionComponents || [];
+
     const globalDuplicates = checkDuplicate(data.label);
     const isDuplicateInCurrentFile = existingIds.includes(data.label);
     
@@ -76,7 +83,8 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                 { value: 'basic', label: '基础设置', icon: <IconSettings size={14} /> },
                 { value: 'npc', label: 'NPC 对话', icon: <IconMessage size={14} /> },
                 { value: 'player', label: '玩家选项', icon: <IconUser size={14} /> },
-                { value: 'agent', label: '脚本代理', icon: <IconScript size={14} /> }
+                { value: 'agent', label: '脚本代理', icon: <IconScript size={14} /> },
+                { value: 'custom', label: '自定义组件', icon: <IconPuzzle size={14} /> }
             ]}
         >
             <ScrollArea style={{ flex: 1 }} bg="var(--mantine-color-dark-8)">
@@ -138,28 +146,39 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                                                     {opt.condition && <Badge size="xs" variant="outline" color="blue">Condition</Badge>}
                                                     {opt.actions && <Badge size="xs" variant="outline" color="orange">Script</Badge>}
                                                 </Group>
-                                                <ActionIcon 
-                                                    color="red" 
-                                                    variant="subtle" 
-                                                    size="sm" 
+                                                <Box
+                                                    component="div"
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         removeOption(idx);
                                                     }}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        width: 28,
+                                                        height: 28,
+                                                        borderRadius: 4,
+                                                        color: 'var(--mantine-color-red-6)',
+                                                        transition: 'background-color 0.1s ease'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--mantine-color-red-9)'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                                 >
                                                     <IconTrash size={16} />
-                                                </ActionIcon>
+                                                </Box>
                                             </Group>
                                         </Accordion.Control>
                                         <Accordion.Panel>
                                             <Stack gap="sm">
-                                        <FormInput 
+                                        <FormInput
                                             label="回复文本"
                                             placeholder="玩家点击的按钮文本"
                                             value={opt.text}
                                             onChange={(e) => handleOptionChange(idx, 'text', e.currentTarget.value)}
                                         />
-                                        <FormScript 
+                                        <FormScript
                                             label="显示条件 (if)"
                                             height="80px"
                                             value={opt.condition || ''}
@@ -172,6 +191,53 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                                                     value={opt.actions || ''}
                                                     onChange={(val) => handleOptionChange(idx, 'actions', val || '')}
                                                 />
+
+                                                {/* 渲染玩家选项自定义组件 - 直接显示字段 */}
+                                                {conversationPlayerOptionComponents.map(component => (
+                                                    <Box key={component.id}>
+                                                        <Text size="sm" fw={500} mb="xs" c="dimmed">
+                                                            {component.name} ({component.id})
+                                                        </Text>
+                                                        {component.fields.map((field) => (
+                                                            <DynamicComponentField
+                                                                key={field.name}
+                                                                field={field}
+                                                                value={(() => {
+                                                                    const keys = field.name.split('.');
+                                                                    let value = opt;
+                                                                    for (const key of keys) {
+                                                                        if (value === undefined || value === null) return undefined;
+                                                                        value = value[key];
+                                                                    }
+                                                                    return value;
+                                                                })()}
+                                                                onChange={(value) => {
+                                                                    const keys = field.name.split('.');
+                                                                    const newOption = { ...opt };
+                                                                    let current: any = newOption;
+                                                                    for (let i = 0; i < keys.length - 1; i++) {
+                                                                        const key = keys[i];
+                                                                        if (!current[key]) {
+                                                                            current[key] = {};
+                                                                        } else {
+                                                                            current[key] = { ...current[key] };
+                                                                        }
+                                                                        current = current[key];
+                                                                    }
+                                                                    const lastKey = keys[keys.length - 1];
+                                                                    if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+                                                                        delete current[lastKey];
+                                                                    } else {
+                                                                        current[lastKey] = value;
+                                                                    }
+                                                                    const newOptions = [...data.playerOptions];
+                                                                    newOptions[idx] = newOption;
+                                                                    onUpdate({ ...data, playerOptions: newOptions });
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </Box>
+                                                ))}
                                             </Stack>
                                         </Accordion.Panel>
                                     </Accordion.Item>
@@ -187,12 +253,68 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
                     <Tabs.Panel value="agent">
                         <FormSection>
                             <Title order={5} mb="xs">生命周期脚本</Title>
-                            <AgentEditor 
-                                data={data.agent || {}} 
+                            <AgentEditor
+                                data={data.agent || {}}
                                 onUpdate={(newAgent) => onUpdate({ ...data, agent: newAgent })}
                                 types={['begin', 'end', 'refuse']}
                             />
                         </FormSection>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="custom">
+                        <Stack gap="md">
+                            <Title order={4}>自定义节点组件</Title>
+                            {conversationNodeComponents.length > 0 ? (
+                                conversationNodeComponents.map(component => (
+                                    <FormSection key={component.id}>
+                                        <Title order={5} mb="xs">{component.name} ({component.id})</Title>
+                                        <Text size="xs" c="dimmed" mb="sm">{component.category}</Text>
+                                        <Stack gap="sm">
+                                            {component.fields.map((field) => (
+                                                <DynamicComponentField
+                                                    key={field.name}
+                                                    field={field}
+                                                    value={(() => {
+                                                        const keys = field.name.split('.');
+                                                        let value = data;
+                                                        for (const key of keys) {
+                                                            if (value === undefined || value === null) return undefined;
+                                                            value = value[key];
+                                                        }
+                                                        return value;
+                                                    })()}
+                                                    onChange={(value) => {
+                                                        const keys = field.name.split('.');
+                                                        const newData = { ...data };
+                                                        let current: any = newData;
+                                                        for (let i = 0; i < keys.length - 1; i++) {
+                                                            const key = keys[i];
+                                                            if (!current[key]) {
+                                                                current[key] = {};
+                                                            } else {
+                                                                current[key] = { ...current[key] };
+                                                            }
+                                                            current = current[key];
+                                                        }
+                                                        const lastKey = keys[keys.length - 1];
+                                                        if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
+                                                            delete current[lastKey];
+                                                        } else {
+                                                            current[lastKey] = value;
+                                                        }
+                                                        onUpdate(newData);
+                                                    }}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    </FormSection>
+                                ))
+                            ) : (
+                                <Text c="dimmed" ta="center" py="xl">
+                                    暂无自定义组件。可以通过导入 API 定义来添加自定义组件。
+                                </Text>
+                            )}
+                        </Stack>
                     </Tabs.Panel>
                 </Box>
             </ScrollArea>

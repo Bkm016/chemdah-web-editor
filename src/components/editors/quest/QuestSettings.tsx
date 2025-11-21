@@ -3,12 +3,14 @@ import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler
 import { useMemo } from 'react';
 import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '../../ui';
 import { useProjectStore } from '../../../store/useProjectStore';
+import { useApiStore } from '../../../store/useApiStore';
 import { parseYaml } from '../../../utils/yaml-utils';
 import { AgentEditor } from './AgentEditor';
 import { UIAddon } from './addons/UIAddon';
 import { TrackAddon } from './addons/TrackAddon';
 import { PartyAddon } from './addons/PartyAddon';
 import { AutomationAddon } from './addons/AutomationAddon';
+import { DynamicComponentRenderer } from './dynamic/DynamicComponentRenderer';
 
 interface QuestSettingsProps {
     fileId?: string;
@@ -19,6 +21,9 @@ interface QuestSettingsProps {
 
 export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSettingsProps) {
     const questFiles = useProjectStore((state) => state.questFiles);
+    const { apiData } = useApiStore();
+
+    const questMetaComponents = apiData.questMetaComponents || [];
 
     const allTypes = useMemo(() => {
         const types = new Set<string>([]);
@@ -129,27 +134,36 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
                     <Tabs.Panel value="addons">
                         <Stack gap="md">
                             <Title order={4}>组件配置</Title>
-                            
-                            <UIAddon 
-                                addon={questData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })} 
+
+                            <UIAddon
+                                addon={questData.addon}
+                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
                             />
 
-                            <TrackAddon 
-                                addon={questData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })} 
+                            <TrackAddon
+                                addon={questData.addon}
+                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
                                 type="quest"
                             />
 
-                            <PartyAddon 
-                                addon={questData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })} 
+                            <PartyAddon
+                                addon={questData.addon}
+                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
                             />
 
-                            <AutomationAddon 
-                                addon={questData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })} 
+                            <AutomationAddon
+                                addon={questData.addon}
+                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
                             />
+
+                            {questMetaComponents.map(component => (
+                                <DynamicComponentRenderer
+                                    key={component.id}
+                                    component={component}
+                                    data={questData.meta || {}}
+                                    onChange={(newMeta) => onUpdate({ ...questData, meta: newMeta })}
+                                />
+                            ))}
                         </Stack>
                     </Tabs.Panel>
 

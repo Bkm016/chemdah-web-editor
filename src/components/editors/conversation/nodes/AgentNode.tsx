@@ -17,7 +17,7 @@ export type AgentNodeData = {
     text: string;
     condition?: string; // 'if' field
     actions?: string; // script before goto
-    target?: string; // raw target if needed, but mostly handled by edges
+    next?: string; // target node ID extracted from goto
   }[];
 };
 
@@ -41,19 +41,19 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
       }}
     >
       {/* Input Handle - Placed at the header level to indicate entry point */}
-      <Handle 
-        type="target" 
-        position={Position.Left} 
-        style={{ 
-            width: 10, 
-            height: 20, 
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{
+            width: 10,
+            height: 20,
             borderRadius: '4px 0 0 4px',
             left: -12,
             top: 24, // Align with header center
             background: 'var(--mantine-color-blue-5)',
             border: 'none',
-            zIndex: 10
-        }} 
+            zIndex: 100
+        }}
       >
         {/* Visual arrow indicator */}
         <div style={{ 
@@ -119,7 +119,7 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
         </Box>
 
         {/* Player Section */}
-        <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section" style={{ borderTop: '1px solid var(--mantine-color-dark-5)' }}>
+        <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section" style={{ borderTop: '1px solid var(--mantine-color-dark-5)', position: 'relative', zIndex: 1 }}>
             <Stack gap={0}>
                 {data.playerOptions && data.playerOptions.length > 0 ? (
                     data.playerOptions.map((option, index) => (
@@ -132,26 +132,28 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
                                 borderTop: index > 0 ? '1px solid var(--mantine-color-dark-6)' : 'none',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'flex-end'
+                                justifyContent: 'flex-end',
+                                zIndex: 1
                             }}
                         >
                             <Text size="xs" mr={16} ta="right">{option.text || '(Empty)'}</Text>
-                            
+
                             {/* Output Handle */}
-                            <Handle 
-                                type="source" 
-                                position={Position.Right} 
+                            <Handle
+                                type="source"
+                                position={Position.Right}
                                 id={option.id}
-                                style={{ 
-                                    right: -12, 
-                                    width: 10, 
-                                    height: 20, 
+                                style={{
+                                    right: -12,
+                                    width: 10,
+                                    height: 20,
                                     borderRadius: '0 4px 4px 0',
                                     background: 'var(--mantine-color-green-6)',
                                     border: 'none',
                                     top: '50%',
-                                    transform: 'translateY(-50%)'
-                                }} 
+                                    transform: 'translateY(-50%)',
+                                    zIndex: 100
+                                }}
                             >
                                 <div style={{ 
                                     position: 'absolute', 

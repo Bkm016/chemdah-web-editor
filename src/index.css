@@ -270,3 +270,19 @@ html[data-mantine-color-scheme="light"] .mantine-Select-option:hover {
     background-color: rgba(34, 139, 230, 0.08) !important;
 }
 
+/* Monaco Editor Spacing */
+.monaco-editor {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+}
+
+.monaco-aria-container {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+/* FormScript Monaco Editor Wrapper */
+html[data-mantine-color-scheme="light"] .monaco-editor-wrapper {
+    border-color: #dee2e6 !important;
+}
+

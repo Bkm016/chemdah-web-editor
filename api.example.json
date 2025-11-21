@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$comment": "Chemdah Web Editor API 定义文件 - 用于扩展任务目标和对话组件",
+
+  "objectives": {
+    "$comment": "任务目标定义 - 按分组组织，每个分组包含多个目标类型",
+
+    "示例分组": {
+      "$comment": "这是一个分组示例，可以按插件或功能模块命名",
+
+      "示例目标": {
+        "$comment": "目标类型定义，包含 condition（条件）和 goal（目标）两部分",
+
+        "condition": [
+          {
+            "name": "amount",
+            "pattern": "Number",
+            "$comment": "字段名为 amount，类型为 Number（数字）"
+          },
+          {
+            "name": "type",
+            "pattern": "String",
+            "$comment": "字段名为 type，类型为 String（字符串）"
+          }
+        ],
+        "condition-vars": ["amount", "type"],
+        "$comment": "condition-vars 定义哪些字段可以在条件中使用变量",
+
+        "goal": [
+          {
+            "name": "amount",
+            "pattern": "Number",
+            "$comment": "目标部分的字段定义，与条件类似"
+          }
+        ],
+        "goal-vars": ["amount"],
+        "$comment": "goal-vars 定义哪些字段可以在目标中使用变量"
+      }
+    },
+
+    "Chemdah 内置": {
+      "$comment": "Chemdah 插件内置的任务目标示例",
+
+      "物品交付": {
+        "condition": [
+          {
+            "name": "material",
+            "pattern": "Material"
+          },
+          {
+            "name": "amount",
+            "pattern": "Number"
+          },
+          {
+            "name": "data",
+            "pattern": "Number"
+          },
+          {
+            "name": "name",
+            "pattern": "String"
+          },
+          {
+            "name": "lore",
+            "pattern": "Array"
+          }
+        ],
+        "condition-vars": ["amount"],
+        "goal": [
+          {
+            "name": "amount",
+            "pattern": "Number"
+          }
+        ],
+        "goal-vars": ["amount"]
+      },
+
+      "击杀实体": {
+        "condition": [
+          {
+            "name": "entity",
+            "pattern": "EntityType"
+          },
+          {
+            "name": "name",
+            "pattern": "String"
+          }
+        ],
+        "condition-vars": [],
+        "goal": [
+          {
+            "name": "amount",
+            "pattern": "Number"
+          }
+        ],
+        "goal-vars": ["amount"]
+      }
+    }
+  },
+
+  "questMetaComponents": [
+    {
+      "$comment": "任务元数据组件 - 定义任务的全局属性字段",
+
+      "id": "type",
+      "name": "任务类型",
+      "category": "基础信息",
+      "fields": [
+        {
+          "name": "type",
+          "label": "任务类型",
+          "pattern": "String",
+          "description": "任务的分类标识，如：主线、支线、日常等",
+          "default": "main",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "reward",
+      "name": "奖励系统",
+      "category": "奖励",
+      "fields": [
+        {
+          "name": "money",
+          "label": "金币奖励",
+          "pattern": "Number",
+          "description": "完成任务后给予的金币数量",
+          "default": 0,
+          "required": false
+        },
+        {
+          "name": "exp",
+          "label": "经验奖励",
+          "pattern": "Number",
+          "description": "完成任务后给予的经验值",
+          "default": 0,
+          "required": false
+        },
+        {
+          "name": "items",
+          "label": "物品奖励",
+          "pattern": "Array",
+          "description": "完成任务后给予的物品列表",
+          "required": false
+        }
+      ]
+    }
+  ],
+
+  "taskAddonComponents": [
+    {
+      "$comment": "任务流程组件 - 定义任务步骤中可用的附加字段",
+
+      "id": "description",
+      "name": "任务描述",
+      "category": "显示",
+      "fields": [
+        {
+          "name": "description",
+          "label": "描述文本",
+          "pattern": "RichText",
+          "description": "任务步骤的详细描述，支持多行文本和变量",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "npc-dialog",
+      "name": "NPC 对话",
+      "category": "交互",
+      "fields": [
+        {
+          "name": "npc",
+          "label": "NPC ID",
+          "pattern": "String",
+          "description": "触发对话的 NPC 标识符",
+          "required": false
+        },
+        {
+          "name": "dialog",
+          "label": "对话内容",
+          "pattern": "Array",
+          "description": "对话文本列表",
+          "required": false
+        }
+      ]
+    }
+  ],
+
+  "conversationNodeComponents": [
+    {
+      "$comment": "对话节点组件 - 定义对话节点的自定义字段",
+
+      "id": "root",
+      "name": "UI 根节点",
+      "category": "显示",
+      "fields": [
+        {
+          "name": "root",
+          "label": "根节点类型",
+          "pattern": "String",
+          "description": "对话界面的根容器类型，如：完全居中旁白对话",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "model",
+      "name": "实体模型",
+      "category": "实体",
+      "fields": [
+        {
+          "name": "model",
+          "label": "模型 ID",
+          "pattern": "String",
+          "description": "显示的实体或模型标识符",
+          "required": false
+        }
+      ]
+    }
+  ],
+
+  "conversationPlayerOptionComponents": [
+    {
+      "$comment": "对话选项组件 - 定义玩家选项的自定义字段",
+
+      "id": "gscript",
+      "name": "Groovy 脚本",
+      "category": "脚本",
+      "fields": [
+        {
+          "name": "gscript",
+          "label": "脚本内容",
+          "pattern": "Script",
+          "description": "选择此选项时执行的 Groovy 脚本",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "dos",
+      "name": "UI 动作",
+      "category": "动作",
+      "fields": [
+        {
+          "name": "dos",
+          "label": "动作命令",
+          "pattern": "String",
+          "description": "UI 相关的动作指令",
+          "required": false
+        }
+      ]
+    }
+  ],
+
+  "$documentation": {
+    "$comment": "字段类型说明",
+    "pattern类型": {
+      "String": "字符串类型",
+      "Number": "数字类型",
+      "Boolean": "布尔类型（true/false）",
+      "Array": "数组类型",
+      "Script": "脚本类型（支持语法高亮）",
+      "RichText": "富文本类型（支持多行和变量）",
+      "Material": "物品材质类型",
+      "EntityType": "实体类型"
+    },
+    "扩展方法": {
+      "1": "复制此文件并修改内容",
+      "2": "在 API 中心上传或添加 URL",
+      "3": "启用并调整加载顺序",
+      "4": "后加载的定义会覆盖先加载的同名定义"
+    }
+  }
+}

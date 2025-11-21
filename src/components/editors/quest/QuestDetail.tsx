@@ -14,6 +14,7 @@ import { OptionalAddon } from './addons/OptionalAddon';
 import { DependAddon } from './addons/DependAddon';
 import { PartyAddon } from './addons/PartyAddon';
 import { AutomationAddon } from './addons/AutomationAddon';
+import { DynamicComponentRenderer } from './dynamic/DynamicComponentRenderer';
 
 interface QuestDetailProps {
     taskId: string;
@@ -24,12 +25,15 @@ interface QuestDetailProps {
 export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
     const { apiData } = useApiStore();
 
-    // Prepare options for Select with groups
-    const objectiveOptions = Object.entries(apiData)
+    const taskAddonComponents = apiData.taskAddonComponents || [];
+
+    // Prepare options for Select with groups (兼容新旧结构)
+    const objectives = apiData.objectives || (apiData as any); // 兼容旧的扁平结构
+    const objectiveOptions = Object.entries(objectives)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([group, objectives]) => ({
             group,
-            items: Object.keys(objectives)
+            items: Object.keys(objectives as any)
                 .sort((a, b) => a.localeCompare(b))
                 .map(name => ({ value: name, label: name }))
         }));
@@ -37,9 +41,10 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
     // Find current definition
     let currentDefinition = null;
     if (taskData.objective) {
-        for (const group in apiData) {
-            if (apiData[group][taskData.objective]) {
-                currentDefinition = apiData[group][taskData.objective];
+        for (const group in objectives) {
+            const groupObjectives = (objectives as any)[group];
+            if (groupObjectives && groupObjectives[taskData.objective]) {
+                currentDefinition = groupObjectives[taskData.objective];
                 break;
             }
         }
@@ -110,56 +115,65 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
 
                     <Tabs.Panel value="addons" className="animate-in fade-in slide-in-from-bottom-1 duration-200">
                         <Stack gap="md">
-                            <UIAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <UIAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <TrackAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <TrackAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                                 type="task"
                             />
 
-                            <StatsAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <StatsAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <RestartAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <RestartAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <TimeoutAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <TimeoutAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <ResetDataAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <ResetDataAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <OptionalAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <OptionalAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <DependAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <DependAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <PartyAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <PartyAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            <AutomationAddon 
-                                addon={taskData.addon} 
-                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })} 
+                            <AutomationAddon
+                                addon={taskData.addon}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
+
+                            {taskAddonComponents.map(component => (
+                                <DynamicComponentRenderer
+                                    key={component.id}
+                                    component={component}
+                                    data={taskData.addon || {}}
+                                    onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
+                                />
+                            ))}
                         </Stack>
                     </Tabs.Panel>
 

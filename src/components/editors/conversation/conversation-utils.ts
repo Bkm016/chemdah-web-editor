@@ -153,6 +153,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
 };
 
 export const parseConversationToFlow = (yamlContent: string) => {
+  // console.log(`[开始] 解析对话 YAML`);
   const data = parseYaml(yamlContent) || {};
   const nodes: Node[] = [];
   const edges: Edge[] = [];
@@ -222,28 +223,58 @@ export const parseConversationToFlow = (yamlContent: string) => {
         // Agent Node
         const npcLines = Array.isArray(section.npc) ? section.npc : (section.npc ? [section.npc] : []);
         const playerOptions = Array.isArray(section.player) ? section.player : [];
-        
+
         const options = playerOptions.map((opt: any, index: number) => {
-            let actions = opt.then;
-            let target = opt.then;
-            
-            // Try to separate actions and goto
-            if (typeof opt.then === 'string') {
-                const gotoMatch = opt.then.match(/goto\s+([a-zA-Z0-9_]+)/);
-                if (gotoMatch) {
-                    // Remove goto from actions to display in editor
-                    actions = opt.then.replace(gotoMatch[0], '').trim();
+            let actions = '';
+            let next = opt.next || '';
+
+            // 如果有 then 字段，处理其中的 goto 语句
+            if (opt.then) {
+                const thenStr = typeof opt.then === 'string' ? opt.then : String(opt.then);
+                // console.log(`[解析] 节点: ${key}, 选项: ${opt.reply}, then内容:`, thenStr);
+
+                // 如果没有 next 字段，从 then 中解析
+                if (!next) {
+                    // 匹配 goto 后面的节点ID，支持中文、字母、数字、下划线等字符
+                    // 使用 \S+ 匹配非空白字符，这样可以支持各种语言的字符
+                    const gotoMatch = thenStr.match(/goto\s+(\S+)/);
+                    if (gotoMatch) {
+                        next = gotoMatch[1].trim();
+                        // console.log(`[解析] ✓ 从 then 中提取 next: "${next}"`);
+                    } else {
+                        // console.log(`[解析] ✗ 未找到 goto 语句`);
+                    }
+                } else {
+                    // console.log(`[解析] ✓ 使用已有的 next: "${next}"`);
                 }
+
+                // 移除 goto 语句，只保留纯脚本部分
+                // 使用全局匹配移除所有 goto 语句（支持各种字符的节点ID）
+                actions = thenStr
+                    .replace(/goto\s+\S+/g, '')
+                    .replace(/^\s+|\s+$/g, '')
+                    .trim();
+
+                // if (actions) {
+                //     console.log(`[解析] 提取的纯脚本:`, actions);
+                // }
             }
+
+            // 提取玩家选项的自定义字段
+            const { reply, if: optIf, then, next: nextField, ...optCustomFields } = opt;
 
             return {
                 id: `${key}-opt-${index}`,
                 text: opt.reply || '...',
                 condition: opt.if,
-                actions: actions,
-                target: target
+                actions: actions,  // 纯脚本内容（不包含 goto）
+                next: next,  // 使用 YAML 中的 next 或从 then 解析出的 next
+                ...optCustomFields  // 包含 dos, dosh, gscript 等自定义字段
             };
         });
+
+        // 提取节点的自定义字段（排除已知字段）
+        const { npc, player, agent, condition, canvas, 'npc id': npcIdField, ...nodeCustomFields } = section;
 
         nodes.push({
             id: key,
@@ -255,24 +286,26 @@ export const parseConversationToFlow = (yamlContent: string) => {
                 playerOptions: options,
                 npcId: section['npc id'],
                 condition: section.condition,
-                agent: section.agent
+                agent: section.agent,
+                ...nodeCustomFields  // 包含 root, self, model 等自定义字段
             }
         });
 
         // Parse Edges
+        // console.log(`[连线] 开始为节点 "${key}" 创建边缘，选项数量: ${options.length}`);
         options.forEach((opt: any) => {
-            if (typeof opt.target === 'string') {
-                const match = opt.target.match(/goto\s+([a-zA-Z0-9_]+)/);
-                if (match && match[1]) {
-                    edges.push({
-                        id: `e-${opt.id}-${match[1]}`,
-                        source: key,
-                        sourceHandle: opt.id,
-                        target: match[1],
-                        type: 'default',
-                        animated: true,
-                    });
-                }
+            if (opt.next) {
+                // console.log(`[连线] ✓ 创建边缘: ${key} -> ${opt.next} (选项: ${opt.text})`);
+                edges.push({
+                    id: `e-${opt.id}-${opt.next}`,
+                    source: key,
+                    sourceHandle: opt.id,
+                    target: opt.next,
+                    type: 'default',
+                    animated: true,
+                });
+            } else {
+                // console.log(`[连线] ✗ 选项 "${opt.text}" 没有 next 字段，跳过`);
             }
         });
     }
@@ -280,13 +313,16 @@ export const parseConversationToFlow = (yamlContent: string) => {
 
   // Apply auto layout if no canvas data found
   if (!hasCanvasData && nodes.length > 0) {
+      // console.log(`[布局] 未找到画布数据，应用自动布局`);
       return autoLayout(nodes, edges);
   }
 
+  // console.log(`[完成] 解析完成 - 节点数: ${nodes.length}, 边缘数: ${edges.length}`);
   return { nodes, edges };
 };
 
 export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
+    // console.log(`[开始] 序列化对话 - 节点数: ${nodes.length}, 边缘数: ${edges.length}`);
     const conversationObj: any = {
         '__option__': {
             theme: 'chat',
@@ -333,29 +369,46 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
             conversationObj[label] = nodeObj;
 
         } else if (node.type === 'agent') {
-            const { label, npcLines, playerOptions, npcId, condition, agent } = node.data as AgentNodeData;
-            
+            const { label, npcLines, playerOptions, npcId, condition, agent, ...customFields } = node.data as AgentNodeData;
+
             const playerSection = playerOptions.map(opt => {
                 const edge = edges.find(e => e.source === node.id && e.sourceHandle === opt.id);
-                let thenScript = opt.actions || '';
-                
-                if (edge) {
-                    const targetNode = nodes.find(n => n.id === edge.target);
-                    if (targetNode) {
-                        const gotoCmd = `goto ${targetNode.data.label}`;
-                        thenScript = thenScript ? `${thenScript}\n${gotoCmd}` : gotoCmd;
-                    }
-                }
+                // console.log(`[序列化] 节点: ${label}, 选项: ${opt.text}, 是否有边缘: ${!!edge}, actions: "${opt.actions}", next: "${opt.next}"`);
 
                 const optObj: any = {
                     reply: opt.text
                 };
+
                 if (opt.condition) {
                     optObj.if = opt.condition;
                 }
+
+                // 构建 then 脚本：actions + goto
+                let thenScript = opt.actions || '';
+                if (edge) {
+                    const targetNode = nodes.find(n => n.id === edge.target);
+                    if (targetNode) {
+                        const gotoCmd = `goto ${targetNode.data.label}`;
+                        // 将 goto 放在脚本末尾
+                        thenScript = thenScript ? `${thenScript}\n${gotoCmd}` : gotoCmd;
+                        // 同时设置 next 辅助字段用于编辑器连线
+                        optObj.next = targetNode.data.label;
+                        // console.log(`[序列化] ✓ 生成 then: "${thenScript}", next: "${optObj.next}"`);
+                    }
+                } else if (opt.next) {
+                    // 即使没有边缘，如果节点数据中有 next，也保留它
+                    optObj.next = opt.next;
+                    // console.log(`[序列化] ⚠ 没有边缘但保留 next: "${opt.next}"`);
+                }
+
                 if (thenScript) {
                     optObj.then = thenScript;
                 }
+
+                // 添加玩家选项的自定义字段 (dos, dosh, gscript 等)
+                const { id, text, condition: optCond, actions, next, ...optCustomFields } = opt;
+                Object.assign(optObj, optCustomFields);
+
                 return optObj;
             });
 
@@ -369,10 +422,14 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
             if (condition) nodeObj.condition = condition;
             if (agent) nodeObj.agent = agent;
 
+            // 添加节点的自定义字段 (root, self, model 等)
+            Object.assign(nodeObj, customFields);
+
             conversationObj[label] = nodeObj;
         }
     });
 
+    // console.log(`[完成] 序列化完成`);
     return toYaml(conversationObj);
 };
 

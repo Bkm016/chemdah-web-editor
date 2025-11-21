@@ -112,6 +112,14 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
     setEditingNodeId(node.id);
   };
 
+  const onEdgeDoubleClick = useCallback(
+    (_: React.MouseEvent, edge: Edge) => {
+      // 双击连线时删除该连线
+      setEdges((eds) => eds.filter((e) => e.id !== edge.id));
+    },
+    [setEdges]
+  );
+
   const editingNode = nodes.find(n => n.id === editingNodeId);
   const hasSelectedNodes = nodes.some(n => n.selected);
 
@@ -133,6 +141,7 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
                 onConnect={onConnect}
                 onReconnect={onReconnect}
                 onNodeDoubleClick={onNodeDoubleClick}
+                onEdgeDoubleClick={onEdgeDoubleClick}
                 nodeTypes={nodeTypes}
                 fitView
                 proOptions={{ hideAttribution: true }}

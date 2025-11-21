@@ -1,5 +1,5 @@
-import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge } from '@mantine/core';
-import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSettings, IconSun, IconMoon } from '@tabler/icons-react';
+import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge, Radio } from '@mantine/core';
+import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSettings, IconSun, IconMoon, IconApi } from '@tabler/icons-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useProjectStore, FileType, VirtualFile } from '../../store/useProjectStore';
 import { useApiStore } from '../../store/useApiStore';
@@ -8,6 +8,7 @@ import { parseYaml } from '../../utils/yaml-utils';
 import { FileTree, TreeItem } from '../ui';
 import QuestEditor from '../editors/quest/QuestEditor';
 import ConversationEditor from '../editors/conversation/ConversationEditor';
+import { ApiCenterPage } from '../pages/ApiCenterPage';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import JSZip from 'jszip';
@@ -22,16 +23,16 @@ export default function DashboardLayout() {
     createFile, deleteFile, renameFile, importFiles, moveFile,
     createFolder, deleteFolder, renameFolder, moveFolder
   } = useProjectStore();
-  const { setApiData } = useApiStore();
+  const { setApiData: setApiDataReplace, mergeApiData } = useApiStore();
   const { colorScheme, toggleColorScheme } = useThemeStore();
-  
+
   const files = activeTab === 'quest' ? questFiles : conversationFiles;
   const folders = activeTab === 'quest' ? questFolders : conversationFolders;
 
   const [searchQuery, setSearchQuery] = useState('');
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [sidebarOpened, { toggle: toggleSidebar, close: closeSidebar }] = useDisclosure(true);
-  
+
   // Rename Modal State
   const [renameModalOpened, { open: openRenameModal, close: closeRenameModal }] = useDisclosure(false);
   const [itemToRename, setItemToRename] = useState<{ id: string, name: string, isFolder?: boolean } | null>(null);
@@ -44,9 +45,20 @@ export default function DashboardLayout() {
   // New File Modal State
   const [newFileModalOpened, { open: openNewFileModal, close: closeNewFileModal }] = useDisclosure(false);
   const [newFileName, setNewFileName] = useState('');
-  
+
   // Target path for creating new files/folders
   const [targetPath, setTargetPath] = useState('');
+
+  // API Import Mode Modal
+  const [apiImportModalOpened, { open: openApiImportModal, close: closeApiImportModal }] = useDisclosure(false);
+  const [pendingApiFile, setPendingApiFile] = useState<File | null>(null);
+  const [apiImportMode, setApiImportMode] = useState<'merge' | 'replace'>('merge');
+
+  // API Center Modal
+  const [apiCenterOpened, { open: openApiCenter, close: closeApiCenter }] = useDisclosure(false);
+
+  // Show/hide sidebar based on active tab
+  const shouldShowSidebar = activeTab === 'quest' || activeTab === 'conversation';
 
   // Filter files based on active tab and search query
   const currentFiles = useMemo(() => {
@@ -285,16 +297,36 @@ export default function DashboardLayout() {
 
   const handleImportApi = async (file: File | null) => {
     if (!file) return;
-    
+
+    setPendingApiFile(file);
+    openApiImportModal();
+  };
+
+  const confirmApiImport = async () => {
+    if (!pendingApiFile) return;
+
     try {
-        const text = await file.text();
+        const text = await pendingApiFile.text();
         const json = JSON.parse(text);
-        setApiData(json);
-        notifications.show({
-            title: 'API 导入成功',
-            message: '自定义 API 定义已加载',
-            color: 'green'
-        });
+
+        if (apiImportMode === 'merge') {
+            mergeApiData(json);
+            notifications.show({
+                title: 'API 合并成功',
+                message: '自定义 API 定义已合并到现有数据',
+                color: 'green'
+            });
+        } else {
+            setApiDataReplace(json);
+            notifications.show({
+                title: 'API 替换成功',
+                message: '自定义 API 定义已完全替换',
+                color: 'green'
+            });
+        }
+
+        closeApiImportModal();
+        setPendingApiFile(null);
     } catch (error) {
         notifications.show({
             title: 'API 导入失败',
@@ -308,16 +340,25 @@ export default function DashboardLayout() {
     <>
         <AppShell
         header={{ height: 60 }}
-        navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !sidebarOpened, desktop: !sidebarOpened } }}
+        navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !sidebarOpened || !shouldShowSidebar, desktop: !sidebarOpened || !shouldShowSidebar } }}
         padding="0"
         >
         <AppShell.Header>
             <Group h="100%" px="md" justify="space-between" bg="var(--mantine-color-dark-8)">
             <Group>
-                <ActionIcon variant="subtle" onClick={toggleSidebar}>
-                    {sidebarOpened ? <IconLayoutSidebarLeftCollapse /> : <IconLayoutSidebarLeftExpand />}
-                </ActionIcon>
-                <Title order={3} size="h4">Chemdah Lab</Title>
+                {shouldShowSidebar && (
+                    <ActionIcon variant="subtle" onClick={toggleSidebar}>
+                        {sidebarOpened ? <IconLayoutSidebarLeftCollapse /> : <IconLayoutSidebarLeftExpand />}
+                    </ActionIcon>
+                )}
+                <Title
+                    order={3}
+                    size="h4"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setActiveTab('quest')}
+                >
+                    Chemdah Lab
+                </Title>
             </Group>
 
             <Group>
@@ -328,9 +369,15 @@ export default function DashboardLayout() {
                 >
                     {colorScheme === 'dark' ? <IconSun size={18} /> : <IconMoon size={18} />}
                 </ActionIcon>
-                <FileButton onChange={handleImportApi} accept=".json">
-                    {(props) => <Button {...props} variant="subtle" size="xs" leftSection={<IconSettings size={16} />}>API</Button>}
-                </FileButton>
+                <Button
+                    variant="subtle"
+                    size="xs"
+                    leftSection={<IconApi size={16} />}
+                    onClick={() => setActiveTab(activeTab === 'api' ? 'quest' : 'api')}
+                    color={activeTab === 'api' ? 'blue' : 'gray'}
+                >
+                    API 中心
+                </Button>
                 <FileButton onChange={handleImport} accept=".zip,.yml,.yaml">
                     {(props) => <Button {...props} variant="subtle" size="xs" leftSection={<IconUpload size={16} />}>导入</Button>}
                 </FileButton>
@@ -548,7 +595,11 @@ export default function DashboardLayout() {
         </AppShell.Navbar>
 
         <AppShell.Main style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', backgroundColor: 'var(--mantine-color-dark-8)' }}>
-            {activeFile ? (
+            {activeTab === 'api' ? (
+                <Box style={{ flex: 1, width: '100%', overflow: 'auto' }}>
+                    <ApiCenterPage />
+                </Box>
+            ) : activeFile ? (
                 <Box style={{ flex: 1, width: '100%', overflow: 'hidden' }}>
                     {activeFile.type === 'quest' && <QuestEditor fileId={activeFile.id} />}
                     {activeFile.type === 'conversation' && <ConversationEditor fileId={activeFile.id} />}
@@ -605,6 +656,41 @@ export default function DashboardLayout() {
                 <Group justify="flex-end">
                     <Button variant="default" onClick={closeNewFileModal}>取消</Button>
                     <Button onClick={handleCreateFile}>创建</Button>
+                </Group>
+            </Stack>
+        </Modal>
+
+        {/* API Import Mode Modal */}
+        <Modal opened={apiImportModalOpened} onClose={closeApiImportModal} title="API 导入模式" centered>
+            <Stack>
+                <Text size="sm" c="dimmed">
+                    选择如何导入 API 定义文件：
+                </Text>
+
+                <Radio.Group value={apiImportMode} onChange={(val) => setApiImportMode(val as 'merge' | 'replace')}>
+                    <Stack mt="xs">
+                        <Radio
+                            value="merge"
+                            label="合并模式（推荐）"
+                            description="新导入的定义会与现有定义合并。相同分组和目标会被覆盖，其他保留。"
+                        />
+                        <Radio
+                            value="replace"
+                            label="替换模式"
+                            description="完全替换所有现有的 API 定义，包括默认定义。"
+                        />
+                    </Stack>
+                </Radio.Group>
+
+                <Box mt="md" p="sm" style={{ backgroundColor: 'var(--mantine-color-blue-light)', borderRadius: '4px' }}>
+                    <Text size="xs" c="blue">
+                        <strong>提示：</strong>合并模式适合追加新插件的目标定义，替换模式适合完全自定义所有目标。
+                    </Text>
+                </Box>
+
+                <Group justify="flex-end" mt="md">
+                    <Button variant="default" onClick={closeApiImportModal}>取消</Button>
+                    <Button onClick={confirmApiImport}>确认导入</Button>
                 </Group>
             </Stack>
         </Modal>

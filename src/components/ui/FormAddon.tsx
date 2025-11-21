@@ -40,7 +40,7 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
             if (match) {
                 return (
                     <Group gap={8}>
-                        <Text fw={500}>{match[1]}</Text>
+                        <Text fw={500} component="span">{match[1]}</Text>
                         <Badge size="sm" variant="light" color="gray" style={{ textTransform: 'none' }}>
                             {match[2]}
                         </Badge>
@@ -48,7 +48,7 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
                 );
             }
         }
-        return <Text fw={500}>{label}</Text>;
+        return <Text fw={500} component="div">{label}</Text>;
     };
 
     return (
@@ -69,7 +69,7 @@ export function FormAddon({ label, description, checked, defaultChecked, onChang
                 <Group justify="space-between" mb={_checked && children ? 'md' : 0}>
                     <Box>
                         {renderLabel()}
-                        {description && <Text size="xs" c="dimmed">{description}</Text>}
+                        {description && <Text size="xs" c="dimmed" component="div">{description}</Text>}
                     </Box>
                     <Switch checked={_checked} onChange={handleSwitchChange} />
                 </Group>

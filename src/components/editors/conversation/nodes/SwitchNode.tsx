@@ -38,24 +38,24 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
         transition: 'all 0.2s ease'
       }}
     >
-      {/* Input Handle - Switch is always an entry point conceptually, but can be linked to? 
+      {/* Input Handle - Switch is always an entry point conceptually, but can be linked to?
           Actually user said "Switch is definitely an entry", so maybe no input handle needed?
           But in ReactFlow, having an input handle is good for layout or if we want to chain switches.
           Let's keep it but make it subtle or standard.
       */}
-      <Handle 
-        type="target" 
-        position={Position.Left} 
-        style={{ 
-            width: 10, 
-            height: 20, 
+      <Handle
+        type="target"
+        position={Position.Left}
+        style={{
+            width: 10,
+            height: 20,
             borderRadius: '4px 0 0 4px',
             left: -12,
-            top: 24, 
+            top: 24,
             background: 'var(--mantine-color-violet-8)',
             border: 'none',
-            zIndex: 10
-        }} 
+            zIndex: 100
+        }}
       />
 
       {/* Header */}
@@ -92,7 +92,7 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
       </Box>
 
       {/* Branches Section */}
-      <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section">
+      <Box bg="var(--mantine-color-dark-8)" className="conversation-player-section" style={{ position: 'relative', zIndex: 1 }}>
         <Stack gap={0}>
             {data.branches && data.branches.length > 0 ? (
                 data.branches.map((branch, index) => (
@@ -105,7 +105,8 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
                             borderTop: index > 0 ? '1px solid var(--mantine-color-dark-6)' : 'none',
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'flex-end'
+                            alignItems: 'flex-end',
+                            zIndex: 1
                         }}
                     >
                         <Group justify="space-between" w="100%" mb={4}>
@@ -116,7 +117,7 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
                                 </Text>
                             </Tooltip>
                         </Group>
-                        
+
                         <Group gap={4} align="center">
                             <Text size="xs" c="dimmed">
                                 {branch.actionType === 'open' ? 'Open' : 'Run'}
@@ -130,20 +131,21 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
 
                         {/* Output Handle - Only if actionType is 'open' (link) */}
                         {branch.actionType === 'open' && (
-                            <Handle 
-                                type="source" 
-                                position={Position.Right} 
+                            <Handle
+                                type="source"
+                                position={Position.Right}
                                 id={branch.id}
-                                style={{ 
-                                    right: -12, 
-                                    width: 10, 
-                                    height: 20, 
+                                style={{
+                                    right: -12,
+                                    width: 10,
+                                    height: 20,
                                     borderRadius: '0 4px 4px 0',
                                     background: 'var(--mantine-color-violet-5)',
                                     border: 'none',
                                     top: '50%',
-                                    transform: 'translateY(-50%)'
-                                }} 
+                                    transform: 'translateY(-50%)',
+                                    zIndex: 100
+                                }}
                             >
                                 <div style={{ 
                                     position: 'absolute', 
