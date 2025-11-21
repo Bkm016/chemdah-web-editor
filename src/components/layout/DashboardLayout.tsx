@@ -1,8 +1,7 @@
-import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge, Radio } from '@mantine/core';
-import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSettings, IconSun, IconMoon, IconApi } from '@tabler/icons-react';
+import { AppShell, Group, Title, Button, Stack, Text, ScrollArea, ActionIcon, Box, TextInput, Menu, Modal, FileButton, Highlight, SegmentedControl, Badge } from '@mantine/core';
+import { IconPlus, IconTrash, IconFileText, IconSearch, IconEdit, IconDotsVertical, IconDownload, IconUpload, IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconFolderPlus, IconFilePlus, IconSun, IconMoon, IconApi } from '@tabler/icons-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useProjectStore, FileType, VirtualFile } from '../../store/useProjectStore';
-import { useApiStore } from '../../store/useApiStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import { parseYaml } from '../../utils/yaml-utils';
 import { FileTree, TreeItem } from '../ui';
@@ -23,7 +22,6 @@ export default function DashboardLayout() {
     createFile, deleteFile, renameFile, importFiles, moveFile,
     createFolder, deleteFolder, renameFolder, moveFolder
   } = useProjectStore();
-  const { setApiData: setApiDataReplace, mergeApiData } = useApiStore();
   const { colorScheme, toggleColorScheme } = useThemeStore();
 
   const files = activeTab === 'quest' ? questFiles : conversationFiles;
@@ -48,14 +46,6 @@ export default function DashboardLayout() {
 
   // Target path for creating new files/folders
   const [targetPath, setTargetPath] = useState('');
-
-  // API Import Mode Modal
-  const [apiImportModalOpened, { open: openApiImportModal, close: closeApiImportModal }] = useDisclosure(false);
-  const [pendingApiFile, setPendingApiFile] = useState<File | null>(null);
-  const [apiImportMode, setApiImportMode] = useState<'merge' | 'replace'>('merge');
-
-  // API Center Modal
-  const [apiCenterOpened, { open: openApiCenter, close: closeApiCenter }] = useDisclosure(false);
 
   // Show/hide sidebar based on active tab
   const shouldShowSidebar = activeTab === 'quest' || activeTab === 'conversation';
@@ -290,47 +280,6 @@ export default function DashboardLayout() {
         notifications.show({
             title: '导入失败',
             message: '无法导入项目文件',
-            color: 'red'
-        });
-    }
-  };
-
-  const handleImportApi = async (file: File | null) => {
-    if (!file) return;
-
-    setPendingApiFile(file);
-    openApiImportModal();
-  };
-
-  const confirmApiImport = async () => {
-    if (!pendingApiFile) return;
-
-    try {
-        const text = await pendingApiFile.text();
-        const json = JSON.parse(text);
-
-        if (apiImportMode === 'merge') {
-            mergeApiData(json);
-            notifications.show({
-                title: 'API 合并成功',
-                message: '自定义 API 定义已合并到现有数据',
-                color: 'green'
-            });
-        } else {
-            setApiDataReplace(json);
-            notifications.show({
-                title: 'API 替换成功',
-                message: '自定义 API 定义已完全替换',
-                color: 'green'
-            });
-        }
-
-        closeApiImportModal();
-        setPendingApiFile(null);
-    } catch (error) {
-        notifications.show({
-            title: 'API 导入失败',
-            message: '无法解析 API 文件',
             color: 'red'
         });
     }
@@ -656,41 +605,6 @@ export default function DashboardLayout() {
                 <Group justify="flex-end">
                     <Button variant="default" onClick={closeNewFileModal}>取消</Button>
                     <Button onClick={handleCreateFile}>创建</Button>
-                </Group>
-            </Stack>
-        </Modal>
-
-        {/* API Import Mode Modal */}
-        <Modal opened={apiImportModalOpened} onClose={closeApiImportModal} title="API 导入模式" centered>
-            <Stack>
-                <Text size="sm" c="dimmed">
-                    选择如何导入 API 定义文件：
-                </Text>
-
-                <Radio.Group value={apiImportMode} onChange={(val) => setApiImportMode(val as 'merge' | 'replace')}>
-                    <Stack mt="xs">
-                        <Radio
-                            value="merge"
-                            label="合并模式（推荐）"
-                            description="新导入的定义会与现有定义合并。相同分组和目标会被覆盖，其他保留。"
-                        />
-                        <Radio
-                            value="replace"
-                            label="替换模式"
-                            description="完全替换所有现有的 API 定义，包括默认定义。"
-                        />
-                    </Stack>
-                </Radio.Group>
-
-                <Box mt="md" p="sm" style={{ backgroundColor: 'var(--mantine-color-blue-light)', borderRadius: '4px' }}>
-                    <Text size="xs" c="blue">
-                        <strong>提示：</strong>合并模式适合追加新插件的目标定义，替换模式适合完全自定义所有目标。
-                    </Text>
-                </Box>
-
-                <Group justify="flex-end" mt="md">
-                    <Button variant="default" onClick={closeApiImportModal}>取消</Button>
-                    <Button onClick={confirmApiImport}>确认导入</Button>
                 </Group>
             </Stack>
         </Modal>

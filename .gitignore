@@ -3,3 +3,4 @@ node_modules
 /CLAUDE.md
 /.idea/
 /ex-api.json
+/.claude/

@@ -1,6 +1,5 @@
-import React from 'react';
 import { ComponentField } from '@/store/useApiStore';
-import { FormInput, FormSelect, FormScript } from '@/components/ui';
+import { FormScript } from '@/components/ui';
 import { Switch, Stack, TextInput, NumberInput, Group, Text } from '@mantine/core';
 
 interface DynamicComponentFieldProps {
@@ -10,7 +9,6 @@ interface DynamicComponentFieldProps {
 }
 
 export function DynamicComponentField({ field, value, onChange }: DynamicComponentFieldProps) {
-    const fieldName = field.name;
     const currentValue = value ?? field.default;
 
     const renderField = () => {
