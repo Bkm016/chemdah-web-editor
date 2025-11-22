@@ -47,7 +47,7 @@ export const DEFAULT_API_DATA: ApiDefinition = {
         }
     },
 
-    // 全局组件定义（Quest Meta）
+    // 任务全局元数据组件（Quest Meta）
     questMetaComponents: [
         {
             id: "type",
@@ -78,6 +78,20 @@ export const DEFAULT_API_DATA: ApiDefinition = {
             ]
         },
         {
+            id: "abandon",
+            name: "可放弃设置",
+            category: "基础信息",
+            fields: [
+                {
+                    name: "abandon",
+                    label: "可放弃",
+                    pattern: "Boolean",
+                    description: "玩家是否可以放弃此任务",
+                    default: true
+                }
+            ]
+        },
+        {
             id: "briefing",
             name: "任务简报",
             category: "描述系统",
@@ -102,20 +116,6 @@ export const DEFAULT_API_DATA: ApiDefinition = {
                     pattern: "Array<String>",
                     description: "任务详细描述",
                     default: []
-                }
-            ]
-        },
-        {
-            id: "abandon",
-            name: "可放弃设置",
-            category: "基础信息",
-            fields: [
-                {
-                    name: "abandon",
-                    label: "可放弃",
-                    pattern: "Boolean",
-                    description: "玩家是否可以放弃此任务",
-                    default: true
                 }
             ]
         },
@@ -161,7 +161,44 @@ export const DEFAULT_API_DATA: ApiDefinition = {
         }
     ],
 
-    // 任务流程组件定义（Task Addon）
+    // 任务全局组件（Quest Addon）
+    questAddonComponents: [
+        // 预留扩展空间，可通过 API 中心添加自定义全局组件
+    ],
+
+    // 任务流程元数据组件（Task Meta）
+    taskMetaComponents: [
+        {
+            id: "hidden",
+            name: "隐藏任务",
+            category: "基础信息",
+            fields: [
+                {
+                    name: "hidden",
+                    label: "隐藏",
+                    pattern: "Boolean",
+                    description: "是否在任务列表中隐藏该目标",
+                    default: false
+                }
+            ]
+        },
+        {
+            id: "priority",
+            name: "优先级",
+            category: "高级选项",
+            fields: [
+                {
+                    name: "priority",
+                    label: "优先级",
+                    pattern: "Number",
+                    description: "任务目标的优先级（数值越大越优先）",
+                    default: 0
+                }
+            ]
+        }
+    ],
+
+    // 任务流程组件（Task Addon）
     taskAddonComponents: [
         {
             id: "description",

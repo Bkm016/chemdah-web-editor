@@ -1,0 +1,69 @@
+{
+	"MythicMobs": {
+		"objective": {
+			"mythicmobs kill": {
+				"condition": [
+					{
+						"name": "level",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "name",
+						"pattern": "String"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"level", 
+					"name"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "MythicMobs 怪物击杀目标",
+				"description": [
+					"击杀 MythicMobs 怪物", 
+					"支持怪物名称、等级、位置等条件判断", 
+					"需要 MythicMobs 插件支持"
+				],
+				"alias": [
+					"mm击杀", 
+					"击杀mm", 
+					"神话怪物"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "怪物死亡位置"
+					}, 
+					{
+						"name": "name",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "怪物ID或名称"
+					}, 
+					{
+						"name": "level",
+						"type": "number",
+						"required": false,
+						"options": [],
+						"description": "怪物等级"
+					}
+				]
+			}
+		}
+	}
+}

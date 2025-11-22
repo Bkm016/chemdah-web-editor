@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { ApiData } from './useApiStore';
 
 export interface ApiSource {
   id: string;
@@ -22,42 +23,72 @@ interface ApiCenterState {
   updateSource: (id: string, updates: Partial<ApiSource>) => void;
   toggleSource: (id: string) => void;
   reorderSources: (sourceIds: string[]) => void;
-  loadSource: (id: string) => Promise<void>;
-  loadAllEnabledSources: () => Promise<void>;
-  getMergedApiData: () => any;
+  loadSource: (id: string, forceReload?: boolean) => Promise<void>;
+  loadAllEnabledSources: (forceReload?: boolean) => Promise<void>;
+  getMergedApiData: () => ApiData | null;
+}
+
+/**
+ * 深度合并两个对象
+ */
+function deepMerge(target: any, source: any): any {
+  const result = { ...target };
+
+  for (const key in source) {
+    if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+      result[key] = deepMerge(result[key] || {}, source[key]);
+    } else {
+      result[key] = source[key];
+    }
+  }
+
+  return result;
 }
 
 export const useApiCenterStore = create<ApiCenterState>()(
   persist(
     (set, get) => ({
-      sources: [
-        {
-          id: 'default',
-          name: 'Default API',
-          url: './api.json',
-          enabled: true,
-          order: 0,
-          status: 'idle'
-        }
-      ],
+      sources: [],
 
       addSource: (source) => {
         const sources = get().sources;
+
+        // 检查是否已存在同名或同 URL 的源
+        const exists = sources.some(s =>
+          s.name === source.name ||
+          (source.url && s.url === source.url)
+        );
+
+        if (exists) {
+          console.log('⚠️ API 源已存在，跳过添加:', source.name);
+          return;
+        }
+
         const maxOrder = Math.max(...sources.map(s => s.order), -1);
         const newSource: ApiSource = {
           ...source,
-          id: `api_${Date.now()}`,
+          id: `api_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // 添加随机数避免冲突
           order: maxOrder + 1,
           status: 'idle'
         };
         set({ sources: [...sources, newSource] });
+        console.log('✅ 已添加 API 源:', source.name);
       },
 
       addLocalSource: (name, data) => {
         const sources = get().sources;
+
+        // 检查是否已存在同名的源
+        const exists = sources.some(s => s.name === name);
+
+        if (exists) {
+          console.log('⚠️ API 源已存在，跳过添加:', name);
+          return;
+        }
+
         const maxOrder = Math.max(...sources.map(s => s.order), -1);
         const newSource: ApiSource = {
-          id: `local_${Date.now()}`,
+          id: `local_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // 添加随机数避免冲突
           name,
           enabled: true,
           order: maxOrder + 1,
@@ -67,6 +98,7 @@ export const useApiCenterStore = create<ApiCenterState>()(
           lastLoaded: new Date().toISOString()
         };
         set({ sources: [...sources, newSource] });
+        console.log('✅ 已添加本地 API 源:', name);
       },
 
       removeSource: (id) => {
@@ -99,13 +131,25 @@ export const useApiCenterStore = create<ApiCenterState>()(
         set({ sources: reordered });
       },
 
-      loadSource: async (id) => {
+      loadSource: async (id, forceReload = false) => {
         const source = get().sources.find(s => s.id === id);
         if (!source) return;
 
         // Skip loading for local sources (already have data)
         if (source.isLocal) {
-          console.log('Skipping load for local source:', source.name);
+          console.log('⏭️ 跳过本地源加载:', source.name);
+          return;
+        }
+
+        // 防止重复加载：如果正在加载，跳过
+        if (source.status === 'loading') {
+          console.log('⏭️ 源正在加载中，跳过:', source.name);
+          return;
+        }
+
+        // 只有在非强制重载的情况下才检查是否已加载
+        if (!forceReload && source.status === 'success' && source.data) {
+          console.log('⏭️ 源已加载，跳过:', source.name);
           return;
         }
 
@@ -120,7 +164,16 @@ export const useApiCenterStore = create<ApiCenterState>()(
         get().updateSource(id, { status: 'loading', error: undefined });
 
         try {
-          const response = await fetch(source.url);
+          // 添加时间戳参数以避免浏览器缓存
+          const urlWithTimestamp = `${source.url}${source.url.includes('?') ? '&' : '?'}_t=${Date.now()}`;
+          const response = await fetch(urlWithTimestamp, {
+            cache: 'no-cache', // 禁用浏览器缓存
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
+          });
+
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
           }
@@ -132,18 +185,21 @@ export const useApiCenterStore = create<ApiCenterState>()(
             lastLoaded: new Date().toISOString(),
             error: undefined
           });
+
+          console.log(`✅ API 源${forceReload ? '重新' : ''}加载成功: ${source.name}`);
         } catch (error: any) {
           get().updateSource(id, {
             status: 'error',
             error: error.message || 'Failed to load API'
           });
+          console.error(`❌ API 源加载失败: ${source.name}`, error);
         }
       },
 
-      loadAllEnabledSources: async () => {
+      loadAllEnabledSources: async (forceReload = false) => {
         const enabledSources = get().sources.filter(s => s.enabled);
         await Promise.all(
-          enabledSources.map(source => get().loadSource(source.id))
+          enabledSources.map(source => get().loadSource(source.id, forceReload))
         );
       },
 
@@ -152,99 +208,77 @@ export const useApiCenterStore = create<ApiCenterState>()(
           .filter(s => s.enabled && s.status === 'success' && s.data)
           .sort((a, b) => a.order - b.order);
 
-        if (sources.length === 0) return null;
+        if (sources.length === 0) {
+          console.warn('⚠️ 没有可用的 API 源');
+          return null;
+        }
 
-        // Merge all API data in order using the same logic as useApiStore
-        const merged: any = {
-          objectives: {},
-          questMetaComponents: [],
-          taskAddonComponents: [],
-          conversationNodeComponents: [],
-          conversationPlayerOptionComponents: []
-        };
+        // 合并所有 API 数据（新格式）
+        const merged: ApiData = {};
 
         sources.forEach(source => {
           const data = source.data;
 
-          // 检测是否为旧格式（直接是 conditions/goals 结构）
-          const isOldFormat = !data.objectives && !data.questMetaComponents && !data.taskAddonComponents;
-
-          if (isOldFormat) {
-            // 旧格式：每个顶层 key 是一个分组
-            for (const group in data) {
-              if (!merged.objectives[group]) {
-                merged.objectives[group] = data[group];
-              } else {
-                // 合并目标定义
-                merged.objectives[group] = {
-                  ...merged.objectives[group],
-                  ...data[group]
-                };
-              }
+          // 遍历每个插件
+          for (const [pluginName, pluginData] of Object.entries(data)) {
+            // 确保插件存在
+            if (!merged[pluginName]) {
+              merged[pluginName] = {};
             }
-          } else {
-            // 新格式
+
+            const pluginApi = pluginData as any;
+
             // 合并 objectives
-            if (data.objectives) {
-              for (const group in data.objectives) {
-                if (!merged.objectives[group]) {
-                  merged.objectives[group] = data.objectives[group];
-                } else {
-                  merged.objectives[group] = {
-                    ...merged.objectives[group],
-                    ...data.objectives[group]
-                  };
-                }
+            if (pluginApi.objective) {
+              if (!merged[pluginName].objective) {
+                merged[pluginName].objective = {};
               }
+              merged[pluginName].objective = {
+                ...merged[pluginName].objective,
+                ...pluginApi.objective
+              };
             }
 
-            // 合并 questMetaComponents
-            if (data.questMetaComponents) {
-              const componentMap = new Map();
-              merged.questMetaComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              data.questMetaComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              merged.questMetaComponents = Array.from(componentMap.values());
+            // 合并 metas
+            if (pluginApi.meta) {
+              if (!merged[pluginName].meta) {
+                merged[pluginName].meta = {};
+              }
+              merged[pluginName].meta = {
+                ...merged[pluginName].meta,
+                ...pluginApi.meta
+              };
             }
 
-            // 合并 taskAddonComponents
-            if (data.taskAddonComponents) {
-              const componentMap = new Map();
-              merged.taskAddonComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              data.taskAddonComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              merged.taskAddonComponents = Array.from(componentMap.values());
-            }
-
-            // 合并 conversationNodeComponents
-            if (data.conversationNodeComponents) {
-              const componentMap = new Map();
-              merged.conversationNodeComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              data.conversationNodeComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              merged.conversationNodeComponents = Array.from(componentMap.values());
-            }
-
-            // 合并 conversationPlayerOptionComponents
-            if (data.conversationPlayerOptionComponents) {
-              const componentMap = new Map();
-              merged.conversationPlayerOptionComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              data.conversationPlayerOptionComponents.forEach((comp: any) => componentMap.set(comp.id, comp));
-              merged.conversationPlayerOptionComponents = Array.from(componentMap.values());
+            // 合并 addons
+            if (pluginApi.addon) {
+              if (!merged[pluginName].addon) {
+                merged[pluginName].addon = {};
+              }
+              merged[pluginName].addon = {
+                ...merged[pluginName].addon,
+                ...pluginApi.addon
+              };
             }
           }
         });
 
-        // 如果没有任何数据，返回 null
-        if (Object.keys(merged.objectives).length === 0 &&
-            merged.questMetaComponents.length === 0 &&
-            merged.taskAddonComponents.length === 0) {
-          return null;
+        // 统计信息
+        let objCount = 0, metaCount = 0, addonCount = 0;
+        for (const plugin of Object.values(merged)) {
+          if (plugin.objective) objCount += Object.keys(plugin.objective).length;
+          if (plugin.meta) metaCount += Object.keys(plugin.meta).length;
+          if (plugin.addon) addonCount += Object.keys(plugin.addon).length;
         }
+
+        console.log(`📦 API 数据已合并: ${objCount} objectives, ${metaCount} metas, ${addonCount} addons`);
 
         return merged;
       }
     }),
     {
       name: 'chemdah-api-center-storage',
-      version: 1
+      version: 2 // 版本号升级，清除旧数据
     }
   )
 );
