@@ -4,6 +4,23 @@ import { useApiCenterStore } from './useApiCenterStore';
 
 // ==================== 新 API 结构类型定义 ====================
 
+// 组件字段定义（用于自定义组件）
+export interface ComponentField {
+    name: string;
+    label: string;
+    pattern: string;
+    description?: string;
+    default?: any;
+}
+
+// 自定义组件定义（Meta/Addon 的新结构）
+export interface ComponentDefinition {
+    id: string;
+    name: string;
+    category: string;
+    fields: ComponentField[];
+}
+
 // Objective 字段定义
 export interface ObjectiveField {
     name: string;
@@ -65,11 +82,26 @@ export interface PluginApiDefinition {
     addon?: {
         [addonId: string]: AddonDefinition;
     };
+    conversationNodeComponents?: ComponentDefinition[];
+    conversationPlayerOptionComponents?: ComponentDefinition[];
 }
 
 // 完整 API 数据（按插件分组）
 export interface ApiData {
     [pluginName: string]: PluginApiDefinition;
+}
+
+// 旧版 API 结构定义（用于默认数据）
+export interface LegacyApiDefinition {
+    objectives?: {
+        [pluginName: string]: {
+            [objectiveId: string]: ObjectiveDefinition;
+        };
+    };
+    questMetaComponents?: ComponentDefinition[];
+    questAddonComponents?: ComponentDefinition[];
+    taskMetaComponents?: ComponentDefinition[];
+    taskAddonComponents?: ComponentDefinition[];
 }
 
 // ==================== 搜索索引类型定义 ====================

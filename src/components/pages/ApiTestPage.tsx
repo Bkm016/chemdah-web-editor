@@ -1,4 +1,4 @@
-import { Container, Title, Stack, Text, Group, Badge, Card, Button, Tabs } from '@mantine/core';
+import { Container, Title, Stack, Text, Group, Badge, Card, Tabs } from '@mantine/core';
 import { useState } from 'react';
 import { ApiSearchSelect, parseApiValue } from '../common/ApiSearchSelect';
 import { useApiStore, SearchResultItem } from '../../store/useApiStore';
@@ -8,35 +8,27 @@ export function ApiTestPage() {
   const { apiData, searchIndex } = useApiStore();
   const { sources } = useApiCenterStore();
 
-  const [selectedObjective, setSelectedObjective] = useState<string | null>(null);
-  const [selectedMeta, setSelectedMeta] = useState<string | null>(null);
-  const [selectedAddon, setSelectedAddon] = useState<string | null>(null);
+  const [selectedObjective, setSelectedObjective] = useState<string | undefined>(undefined);
+  const [selectedMeta, setSelectedMeta] = useState<string | undefined>(undefined);
+  const [selectedAddon, setSelectedAddon] = useState<string | undefined>(undefined);
 
   const [selectedObjItem, setSelectedObjItem] = useState<SearchResultItem | null>(null);
   const [selectedMetaItem, setSelectedMetaItem] = useState<SearchResultItem | null>(null);
   const [selectedAddonItem, setSelectedAddonItem] = useState<SearchResultItem | null>(null);
 
   const handleObjectiveChange = (value: string | null, item: SearchResultItem | null) => {
-    setSelectedObjective(value);
+    setSelectedObjective(value || undefined);
     setSelectedObjItem(item);
   };
 
   const handleMetaChange = (value: string | null, item: SearchResultItem | null) => {
-    setSelectedMeta(value);
+    setSelectedMeta(value || undefined);
     setSelectedMetaItem(item);
   };
 
   const handleAddonChange = (value: string | null, item: SearchResultItem | null) => {
-    setSelectedAddon(value);
+    setSelectedAddon(value || undefined);
     setSelectedAddonItem(item);
-  };
-
-  // 获取详细信息
-  const getObjectiveDetail = () => {
-    if (!selectedObjective) return null;
-    const parsed = parseApiValue(selectedObjective);
-    if (!parsed) return null;
-    return useApiStore.getState().getObjective(parsed.plugin, parsed.id);
   };
 
   const getMetaDetail = () => {

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Select, SelectProps, Text, Group, Badge, Stack, Highlight, ActionIcon } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import { useApiSearch, formatSearchResultLabel } from '../../hooks/useApiSearch';
@@ -24,9 +23,7 @@ export function ApiSearchSelect({
   value,
   onChange,
   placeholder,
-  searchPlaceholder,
-  limit = 20,
-  ...props
+  limit = 20
 }: ApiSearchSelectProps) {
   // 使用 useApiSearch 提供的状态管理
   const { query, setQuery, results } = useApiSearch({ type, limit });

@@ -1,6 +1,6 @@
-import { ApiDefinition } from "./useApiStore";
+import { LegacyApiDefinition } from "./useApiStore";
 
-export const DEFAULT_API_DATA: ApiDefinition = {
+export const DEFAULT_API_DATA: LegacyApiDefinition = {
     // 任务目标定义
     objectives: {
         "minecraft": {

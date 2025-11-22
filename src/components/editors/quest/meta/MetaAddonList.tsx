@@ -1,7 +1,7 @@
 import { Stack, TextInput, Text, Box, Divider, Group } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useState, useMemo } from 'react';
-import { useApiStore, SearchItemType } from '../../../../store/useApiStore';
+import { useApiStore } from '../../../../store/useApiStore';
 import { MetaConfigCard } from './MetaConfigCard';
 import { AddonConfigCard } from './AddonConfigCard';
 
@@ -15,7 +15,7 @@ interface MetaAddonListProps {
 
 export function MetaAddonList({ type, scope, data, onChange, excludeIds = [] }: MetaAddonListProps) {
     const [searchQuery, setSearchQuery] = useState('');
-    const { searchMetas, searchAddons, apiData, getMeta, getAddon } = useApiStore();
+    const { searchMetas, searchAddons, getMeta, getAddon } = useApiStore();
 
     // 获取搜索结果
     const searchResults = useMemo(() => {

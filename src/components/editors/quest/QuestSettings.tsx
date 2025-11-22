@@ -3,7 +3,6 @@ import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler
 import { useMemo } from 'react';
 import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '../../ui';
 import { useProjectStore } from '../../../store/useProjectStore';
-import { useApiStore } from '../../../store/useApiStore';
 import { parseYaml } from '../../../utils/yaml-utils';
 import { AgentEditor } from './AgentEditor';
 import { MetaAddonList } from './meta/MetaAddonList';
