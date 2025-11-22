@@ -1,0 +1,282 @@
+{
+	"gujian": {
+		"meta": {
+			"abandon": {
+				"option_type": "ANY",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.meta.MetaAbandon",
+				"scope": "quest",
+				"name": "可放弃设置",
+				"description": [
+					"设置玩家是否可以放弃此任务", 
+					"主线任务通常设为 false"
+				],
+				"alias": [
+					"放弃", 
+					"可取消", 
+					"允许放弃"
+				],
+				"params": [
+					{
+						"name": "abandon",
+						"type": "boolean",
+						"required": false,
+						"options": [],
+						"description": "是否允许放弃任务（默认 true）"
+					}
+				]
+			},
+			"description": {
+				"option_type": "ANY",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.meta.MetaDescription",
+				"scope": "quest",
+				"name": "任务描述",
+				"description": [
+					"任务的详细描述", 
+					"支持多行文本", 
+					"支持逗号或分号分隔"
+				],
+				"alias": [
+					"描述", 
+					"详情", 
+					"说明文本"
+				],
+				"params": [
+					{
+						"name": "description",
+						"type": "any",
+						"required": false,
+						"options": [],
+						"description": "任务描述文本，支持：单个字符串 | 逗号/分号分隔的字符串 | 字符串列表"
+					}
+				]
+			},
+			"index": {
+				"option_type": "ANY",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.meta.MetaIndex",
+				"scope": "quest",
+				"name": "索引标记",
+				"description": [
+					"标记为重要任务", 
+					"会在任务列表中高亮显示"
+				],
+				"alias": [
+					"重要任务", 
+					"标记", 
+					"高亮"
+				],
+				"params": [
+					{
+						"name": "index",
+						"type": "boolean",
+						"required": false,
+						"options": [],
+						"description": "是否标记为重要任务（默认 false）"
+					}
+				]
+			},
+			"briefing": {
+				"option_type": "MAP_LIST",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.meta.MetaBriefing",
+				"scope": "quest",
+				"name": "任务简报",
+				"description": [
+					"任务简报，支持富文本格式", 
+					"支持导航点击等交互元素", 
+					"使用 TellrawJson 格式"
+				],
+				"alias": [
+					"简报", 
+					"说明", 
+					"介绍"
+				],
+				"params": [
+					{
+						"name": "briefing[]",
+						"type": "map",
+						"required": true,
+						"options": [],
+						"description": "简报内容列表，每项为一个 TellrawJson 格式的 Map"
+					}, 
+					{
+						"name": "briefing[].text",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "显示的文本内容"
+					}, 
+					{
+						"name": "briefing[].color",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "文本颜色"
+					}, 
+					{
+						"name": "briefing[].clickEvent",
+						"type": "section",
+						"required": false,
+						"options": [],
+						"description": "点击事件配置"
+					}, 
+					{
+						"name": "briefing[].hoverEvent",
+						"type": "section",
+						"required": false,
+						"options": [],
+						"description": "悬浮事件配置"
+					}
+				]
+			},
+			"rewards": {
+				"option_type": "ANY",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.meta.MetaRewards",
+				"scope": "quest_only",
+				"name": "奖励系统",
+				"description": [
+					"任务完成后的奖励配置", 
+					"支持物品、金钱、经验、脚本奖励"
+				],
+				"alias": [
+					"奖励", 
+					"报酬", 
+					"奖品"
+				],
+				"params": [
+					{
+						"name": "items",
+						"type": "list",
+						"required": false,
+						"options": [],
+						"description": "物品奖励列表，使用 GeneralItem 格式"
+					}, 
+					{
+						"name": "money",
+						"type": "number",
+						"required": false,
+						"options": [],
+						"description": "金钱奖励（铜板数量），使用 UserMoney 系统"
+					}, 
+					{
+						"name": "exp",
+						"type": "number",
+						"required": false,
+						"options": [],
+						"description": "经验奖励，添加到 JobManager"
+					}, 
+					{
+						"name": "script",
+						"type": "string",
+						"required": false,
+						"options": [
+							"script"
+						],
+						"description": "JavaScript 脚本奖励，使用 javaScript.evalScript 执行"
+					}, 
+					{
+						"name": "kether",
+						"type": "string",
+						"required": false,
+						"options": [
+							"kether"
+						],
+						"description": "Kether 脚本奖励，完成任务时执行"
+					}
+				]
+			}
+		},
+		"task_addon": {
+			"navigate": {
+				"option_type": "ANY",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.addon.AddonNavigate",
+				"scope": "task_only",
+				"name": "导航系统",
+				"description": [
+					"为任务目标添加导航功能", 
+					"支持坐标导航和 NPC 导航", 
+					"使用 GermPlugin 的导航 API"
+				],
+				"alias": [
+					"导航", 
+					"寻路", 
+					"指引"
+				],
+				"params": [
+					{
+						"name": "type",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "导航的类型标识"
+					}, 
+					{
+						"name": "destination",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "导航目标的显示名称"
+					}, 
+					{
+						"name": "location",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "导航目标位置，格式1：world x y z（坐标导航），格式2：adyeshach NPC-ID（Adyeshach NPC 导航）"
+					}
+				]
+			},
+			"description": {
+				"option_type": "MAP_LIST",
+				"class": "top.maplex.gujianproject.module.chemdah.quest.addon.AddonDescription",
+				"scope": "task_only",
+				"name": "任务目标描述",
+				"description": [
+					"任务目标的描述文本", 
+					"支持 TellrawJson 格式", 
+					"支持进度变量 {0}（当前进度）和 {1}（目标数量）"
+				],
+				"alias": [
+					"目标描述", 
+					"条目说明", 
+					"任务说明"
+				],
+				"params": [
+					{
+						"name": "description[]",
+						"type": "map",
+						"required": true,
+						"options": [],
+						"description": "描述内容列表，每项为一个 TellrawJson 格式的 Map"
+					}, 
+					{
+						"name": "description[].text",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "显示的文本内容，支持 {0} 和 {1} 变量"
+					}, 
+					{
+						"name": "description[].color",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "文本颜色"
+					}, 
+					{
+						"name": "description[].clickEvent",
+						"type": "section",
+						"required": false,
+						"options": [],
+						"description": "点击事件配置"
+					}, 
+					{
+						"name": "description[].hoverEvent",
+						"type": "section",
+						"required": false,
+						"options": [],
+						"description": "悬浮事件配置"
+					}
+				]
+			}
+		}
+	}
+}

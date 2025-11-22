@@ -1,0 +1,174 @@
+{
+	"Adyeshach": {
+		"objective": {
+			"anpc interact": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position:clicked",
+						"pattern": "Vector"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "id",
+						"pattern": "String"
+					}, 
+					{
+						"name": "type",
+						"pattern": "String"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Boolean"
+					}
+				],
+				"condition-vars": [
+					"id"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "Adyeshach NPC 交互目标",
+				"description": [
+					"与 Adyeshach NPC 交互", 
+					"支持 NPC ID、类型、位置、手持物品、主副手等条件判断", 
+					"需要 Adyeshach 插件支持"
+				],
+				"alias": [
+					"anpc交互", 
+					"点击npc", 
+					"互动npc"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "NPC 的位置"
+					}, 
+					{
+						"name": "position:clicked",
+						"type": "Vector",
+						"required": false,
+						"options": [],
+						"description": "点击 NPC 的位置（点击向量）"
+					}, 
+					{
+						"name": "id",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "NPC 的唯一标识"
+					}, 
+					{
+						"name": "type",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "NPC 的实体类型"
+					}, 
+					{
+						"name": "hand",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否为主手点击（true 为主手，false 为副手）"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "玩家点击时持握的物品"
+					}
+				]
+			},
+			"anpc damage": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "id",
+						"pattern": "String"
+					}, 
+					{
+						"name": "type",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"id"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "Adyeshach NPC 伤害目标",
+				"description": [
+					"对 Adyeshach NPC 造成伤害", 
+					"支持 NPC ID、类型、位置、使用物品等条件判断", 
+					"需要 Adyeshach 插件支持"
+				],
+				"alias": [
+					"anpc伤害", 
+					"伤害npc", 
+					"攻击npc"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "NPC 的位置"
+					}, 
+					{
+						"name": "id",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "NPC 的唯一标识"
+					}, 
+					{
+						"name": "type",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "NPC 的实体类型"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "玩家手中的物品"
+					}
+				]
+			}
+		}
+	}
+}

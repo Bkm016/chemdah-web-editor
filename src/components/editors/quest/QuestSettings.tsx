@@ -3,14 +3,13 @@ import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler
 import { useMemo } from 'react';
 import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '../../ui';
 import { useProjectStore } from '../../../store/useProjectStore';
-import { useApiStore } from '../../../store/useApiStore';
 import { parseYaml } from '../../../utils/yaml-utils';
 import { AgentEditor } from './AgentEditor';
-import { UIAddon } from './addons/UIAddon';
+import { MetaAddonList } from './meta/MetaAddonList';
 import { TrackAddon } from './addons/TrackAddon';
+import { UIAddon } from './addons/UIAddon';
 import { PartyAddon } from './addons/PartyAddon';
 import { AutomationAddon } from './addons/AutomationAddon';
-import { DynamicComponentRenderer } from './dynamic/DynamicComponentRenderer';
 
 interface QuestSettingsProps {
     fileId?: string;
@@ -21,9 +20,6 @@ interface QuestSettingsProps {
 
 export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSettingsProps) {
     const questFiles = useProjectStore((state) => state.questFiles);
-    const { apiData } = useApiStore();
-
-    const questMetaComponents = apiData.questMetaComponents || [];
 
     const allTypes = useMemo(() => {
         const types = new Set<string>([]);
@@ -102,6 +98,15 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
                                     onChange={(val) => onUpdate({ ...questData, meta: { ...questData.meta, type: val } })}
                                 />
                             </FormSection>
+
+                            {/* Quest Meta 组件列表 */}
+                            <MetaAddonList
+                                type="meta"
+                                scope="quest"
+                                data={questData.meta || {}}
+                                onChange={(newMeta) => onUpdate({ ...questData, meta: newMeta })}
+                                excludeIds={['name', 'type']}
+                            />
                         </Stack>
                     </Tabs.Panel>
 
@@ -113,18 +118,18 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
                                     label="数据隔离 (Data Isolation)"
                                     description="该任务将单独建表，以分担主表压力"
                                     checked={questData['data-isolation'] || false}
-                                    onChange={(e) => onUpdate({ 
-                                        ...questData, 
-                                        'data-isolation': e.currentTarget.checked 
+                                    onChange={(e) => onUpdate({
+                                        ...questData,
+                                        'data-isolation': e.currentTarget.checked
                                     })}
                                 />
                                 <FormCheckbox
                                     label="记录完成时间 (Record Completed)"
                                     description="是否记录任务（含条目）完成时间（默认启用）"
                                     checked={questData['record-completed'] !== false}
-                                    onChange={(e) => onUpdate({ 
-                                        ...questData, 
-                                        'record-completed': e.currentTarget.checked 
+                                    onChange={(e) => onUpdate({
+                                        ...questData,
+                                        'record-completed': e.currentTarget.checked
                                     })}
                                 />
                             </FormSection>
@@ -133,8 +138,9 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
 
                     <Tabs.Panel value="addons">
                         <Stack gap="md">
-                            <Title order={4}>组件配置</Title>
+                            <Title order={4}>扩展组件配置</Title>
 
+                            {/* Quest 内置 Addon 组件（编程式） */}
                             <UIAddon
                                 addon={questData.addon}
                                 onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
@@ -156,14 +162,14 @@ export function QuestSettings({ fileId, questId, questData, onUpdate }: QuestSet
                                 onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
                             />
 
-                            {questMetaComponents.map(component => (
-                                <DynamicComponentRenderer
-                                    key={component.id}
-                                    component={component}
-                                    data={questData.meta || {}}
-                                    onChange={(newMeta) => onUpdate({ ...questData, meta: newMeta })}
-                                />
-                            ))}
+                            {/* 其他 Quest Addon 组件（JSON 动态生成，排除已有专门组件的） */}
+                            <MetaAddonList
+                                type="addon"
+                                scope="quest"
+                                data={questData.addon || {}}
+                                onChange={(newAddon) => onUpdate({ ...questData, addon: newAddon })}
+                                excludeIds={['ui', 'track', 'party', 'automation']}
+                            />
                         </Stack>
                     </Tabs.Panel>
 

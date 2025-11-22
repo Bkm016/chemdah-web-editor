@@ -1,0 +1,56 @@
+{
+	"PlaceholderAPI": {
+		"objective": {
+			"placeholder api": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "all-match",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "value",
+						"pattern": "String"
+					}, 
+					{
+						"name": "key",
+						"pattern": "String"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "PlaceholderAPI 变量目标",
+				"description": [
+					"获取 PlaceholderAPI 变量值", 
+					"支持所有 PAPI 变量", 
+					"需要 PlaceholderAPI 插件支持"
+				],
+				"alias": [
+					"papi", 
+					"变量", 
+					"占位符"
+				],
+				"params": [
+					{
+						"name": "key",
+						"type": "string",
+						"required": true,
+						"options": [],
+						"description": "PlaceholderAPI 变量名称"
+					}
+				]
+			}
+		}
+	}
+}

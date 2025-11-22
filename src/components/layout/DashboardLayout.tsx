@@ -16,12 +16,26 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function DashboardLayout() {
   const [activeTab, setActiveTab] = useState<string>('quest');
-  const {
-    questFiles, questFolders, conversationFiles, conversationFolders,
-    activeFileId, setActiveFile,
-    createFile, deleteFile, renameFile, importFiles, moveFile,
-    createFolder, deleteFolder, renameFolder, moveFolder
-  } = useProjectStore();
+
+  // 分别订阅需要的数据,避免不必要的重渲染
+  const questFiles = useProjectStore((state) => state.questFiles);
+  const questFolders = useProjectStore((state) => state.questFolders);
+  const conversationFiles = useProjectStore((state) => state.conversationFiles);
+  const conversationFolders = useProjectStore((state) => state.conversationFolders);
+  const activeFileId = useProjectStore((state) => state.activeFileId);
+
+  // 方法单独订阅
+  const setActiveFile = useProjectStore((state) => state.setActiveFile);
+  const createFile = useProjectStore((state) => state.createFile);
+  const deleteFile = useProjectStore((state) => state.deleteFile);
+  const renameFile = useProjectStore((state) => state.renameFile);
+  const importFiles = useProjectStore((state) => state.importFiles);
+  const moveFile = useProjectStore((state) => state.moveFile);
+  const createFolder = useProjectStore((state) => state.createFolder);
+  const deleteFolder = useProjectStore((state) => state.deleteFolder);
+  const renameFolder = useProjectStore((state) => state.renameFolder);
+  const moveFolder = useProjectStore((state) => state.moveFolder);
+
   const { colorScheme, toggleColorScheme } = useThemeStore();
 
   const files = activeTab === 'quest' ? questFiles : conversationFiles;

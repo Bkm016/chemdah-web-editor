@@ -2,7 +2,7 @@ import { Paper, Tabs, Text } from '@mantine/core';
 import { useProjectStore } from '../../../store/useProjectStore';
 import { parseYaml, toYaml } from '../../../utils/yaml-utils';
 import { IconSettings, IconCheckbox } from '@tabler/icons-react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { DropResult } from '@hello-pangea/dnd';
 
 import { QuestSettings } from './QuestSettings';
@@ -11,13 +11,17 @@ import { QuestDetail } from './QuestDetail';
 import { AnimatedTabs } from '../../ui';
 
 export default function QuestForm({ fileId }: { fileId: string }) {
-  const { questFiles, updateFileContent } = useProjectStore();
-  const file = questFiles[fileId];
-  
-  // Parse YAML safely
-  const data = parseYaml(file.content) || {};
-  const questId = Object.keys(data)[0] || 'new_quest';
-  const questData = data[questId] || { meta: {}, task: {} };
+  // 只订阅需要的数据
+  const file = useProjectStore((state) => state.questFiles[fileId]);
+  const updateFileContent = useProjectStore((state) => state.updateFileContent);
+
+  // 缓存 YAML 解析结果,避免每次渲染都重新解析
+  const parsedData = useMemo(() => {
+    return parseYaml(file.content) || {};
+  }, [file.content]);
+
+  const questId = useMemo(() => Object.keys(parsedData)[0] || 'new_quest', [parsedData]);
+  const questData = useMemo(() => parsedData[questId] || { meta: {}, task: {} }, [parsedData, questId]);
   
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [sidebarWidth, setSidebarWidth] = useState(250);

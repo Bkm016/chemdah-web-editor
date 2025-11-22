@@ -117,8 +117,10 @@ export function ApiCenterPage() {
   };
 
   const handleLoadAll = async () => {
-    await loadAllEnabledSources();
-    // Sync to API Store after loading
+    // 强制重新加载所有已启用的源
+    await loadAllEnabledSources(true);
+
+    // 同步到 API Store（这会触发重新构建搜索索引）
     syncFromApiCenter();
 
     // Show notification
@@ -129,7 +131,7 @@ export function ApiCenterPage() {
     if (errorCount === 0) {
       notifications.show({
         title: '全部更新成功',
-        message: `成功更新 ${successCount} 个 API 源`,
+        message: `已强制重新加载 ${successCount} 个 API 源`,
         color: 'green'
       });
     } else if (successCount > 0) {
@@ -148,7 +150,9 @@ export function ApiCenterPage() {
   };
 
   const handleLoadSingle = async (id: string) => {
-    await loadSource(id);
+    // 强制重新加载单个源
+    await loadSource(id, true);
+
     // Sync to API Store after loading
     syncFromApiCenter();
 
@@ -158,7 +162,7 @@ export function ApiCenterPage() {
       if (source.status === 'success') {
         notifications.show({
           title: '更新成功',
-          message: `API 源 "${source.name}" 已更新`,
+          message: `API 源 "${source.name}" 已重新加载`,
           color: 'green'
         });
       } else if (source.status === 'error') {
