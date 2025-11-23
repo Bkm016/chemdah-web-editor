@@ -22,8 +22,13 @@ export function ConversationNodeEditor({ opened, onClose, data, type = 'agent', 
     const { checkDuplicate } = useGlobalIdCheck(fileId);
     const { apiData } = useApiStore();
 
-    const conversationNodeComponents = apiData.conversationNodeComponents || [];
-    const conversationPlayerOptionComponents = apiData.conversationPlayerOptionComponents || [];
+    // Collect all conversationNodeComponents and conversationPlayerOptionComponents from all plugins
+    const conversationNodeComponents = Object.values(apiData).flatMap(
+        plugin => plugin.conversationNodeComponents || []
+    );
+    const conversationPlayerOptionComponents = Object.values(apiData).flatMap(
+        plugin => plugin.conversationPlayerOptionComponents || []
+    );
 
     const globalDuplicates = checkDuplicate(data.label);
     const isDuplicateInCurrentFile = existingIds.includes(data.label);

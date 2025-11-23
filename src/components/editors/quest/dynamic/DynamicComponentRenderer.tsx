@@ -1,17 +1,17 @@
-import { QuestMetaComponent, TaskAddonComponent } from '@/store/useApiStore';
+import { ComponentDefinition, ComponentField } from '@/store/useApiStore';
 import { DynamicComponentField } from './DynamicComponentField';
 import { FormAddon } from '@/components/ui';
 import { Stack } from '@mantine/core';
 
 interface DynamicComponentRendererProps {
-    component: QuestMetaComponent | TaskAddonComponent;
+    component: ComponentDefinition;
     data: any;
     onChange: (data: any) => void;
 }
 
 export function DynamicComponentRenderer({ component, data, onChange }: DynamicComponentRendererProps) {
     // 检查组件是否启用（有数据）
-    const isEnabled = component.fields.some(field => {
+    const isEnabled = component.fields.some((field: ComponentField) => {
         const keys = field.name.split('.');
         let value = data;
         for (const key of keys) {
@@ -61,7 +61,7 @@ export function DynamicComponentRenderer({ component, data, onChange }: DynamicC
         if (!checked) {
             // 清空所有字段
             const newData = { ...data };
-            component.fields.forEach(field => {
+            component.fields.forEach((field: ComponentField) => {
                 const keys = field.name.split('.');
                 let current: any = newData;
                 for (let i = 0; i < keys.length - 1; i++) {
@@ -74,7 +74,7 @@ export function DynamicComponentRenderer({ component, data, onChange }: DynamicC
         } else {
             // 设置默认值
             const newData = { ...data };
-            component.fields.forEach(field => {
+            component.fields.forEach((field: ComponentField) => {
                 if (field.default !== undefined) {
                     const keys = field.name.split('.');
                     let current: any = newData;
@@ -99,7 +99,7 @@ export function DynamicComponentRenderer({ component, data, onChange }: DynamicC
             onChange={handleToggle}
         >
             <Stack gap="md">
-                {component.fields.map((field) => (
+                {component.fields.map((field: ComponentField) => (
                     <DynamicComponentField
                         key={field.name}
                         field={field}

@@ -12,13 +12,13 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     const outEdges = new Map<string, string[]>();
     const inEdges = new Map<string, string[]>();
     const inDegree = new Map<string, number>();
-    
+
     nodes.forEach(n => {
         outEdges.set(n.id, []);
         inEdges.set(n.id, []);
         inDegree.set(n.id, 0);
     });
-    
+
     edges.forEach(e => {
         if (outEdges.has(e.source)) outEdges.get(e.source)?.push(e.target);
         if (inEdges.has(e.target)) inEdges.get(e.target)?.push(e.source);
@@ -28,7 +28,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     // 2. Assign ranks (levels) using Longest Path Layering
     const levels = new Map<string, number>();
     const queue: string[] = [];
-    
+
     // Find roots (in-degree 0)
     nodes.forEach(n => {
         if ((inDegree.get(n.id) || 0) === 0) {
@@ -36,7 +36,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
             levels.set(n.id, 0);
         }
     });
-    
+
     // If no roots (cycle), pick the first one
     if (queue.length === 0 && nodes.length > 0) {
         queue.push(nodes[0].id);
@@ -44,7 +44,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     }
 
     const visited = new Set<string>();
-    
+
     // Simple BFS for layering
     while (queue.length > 0) {
         const currId = queue.shift()!;
@@ -53,7 +53,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
 
         const currLevel = levels.get(currId)!;
         const neighbors = outEdges.get(currId) || [];
-        
+
         neighbors.forEach(nextId => {
             // Update level if we found a longer path, but prevent infinite growth in cycles
             const currentNextLevel = levels.get(nextId) || 0;
@@ -61,7 +61,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
                 levels.set(nextId, currLevel + 1);
                 queue.push(nextId);
                 // If we updated the level, we might need to re-visit to update its children
-                visited.delete(nextId); 
+                visited.delete(nextId);
             }
         });
     }
@@ -87,14 +87,14 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     for (let i = 1; i <= maxLevel; i++) {
         const currentNodes = rows.get(i) || [];
         const prevNodes = rows.get(i - 1) || [];
-        
+
         const prevNodePos = new Map<string, number>();
         prevNodes.forEach((n, idx) => prevNodePos.set(n.id, idx));
-        
+
         const nodeWeights = currentNodes.map(n => {
             const parents = inEdges.get(n.id) || [];
             if (parents.length === 0) return { id: n.id, weight: 9999 };
-            
+
             let sum = 0;
             let count = 0;
             parents.forEach(pId => {
@@ -103,16 +103,16 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
                     count++;
                 }
             });
-            
+
             return { id: n.id, weight: count > 0 ? sum / count : 9999 };
         });
-        
+
         currentNodes.sort((a, b) => {
             const wA = nodeWeights.find(w => w.id === a.id)?.weight || 0;
             const wB = nodeWeights.find(w => w.id === b.id)?.weight || 0;
             return wA - wB;
         });
-        
+
         rows.set(i, currentNodes);
     }
 
@@ -131,10 +131,10 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     };
 
     const newNodes: Node[] = [];
-    
+
     rows.forEach((rowNodes, level) => {
         let currentY = 0;
-        
+
         // Calculate total height of this column
         const totalHeight = rowNodes.reduce((sum, node) => sum + getNodeHeight(node) + nodeSep, 0) - nodeSep;
         let startY = -(totalHeight / 2) + 100; // Center around Y=100
@@ -143,7 +143,7 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
             const h = getNodeHeight(node);
             const x = level * (nodeWidth + rankSep) + 100;
             const y = startY + currentY;
-            
+
             newNodes.push({ ...node, position: { x, y } });
             currentY += h + nodeSep;
         });
@@ -153,18 +153,17 @@ export const autoLayout = (nodes: Node[], edges: Edge[]) => {
 };
 
 export const parseConversationToFlow = (yamlContent: string) => {
-  // console.log(`[开始] 解析对话 YAML`);
   const data = parseYaml(yamlContent) || {};
   const nodes: Node[] = [];
   const edges: Edge[] = [];
-  
+
   let hasCanvasData = false;
 
   Object.keys(data).forEach((key) => {
     if (key === '__option__') return; // Skip metadata
 
     const section = data[key];
-    
+
     // Determine position
     let position = { x: 0, y: 0 };
     if (section.canvas) {
@@ -231,7 +230,6 @@ export const parseConversationToFlow = (yamlContent: string) => {
             // 如果有 then 字段，处理其中的 goto 语句
             if (opt.then) {
                 const thenStr = typeof opt.then === 'string' ? opt.then : String(opt.then);
-                // console.log(`[解析] 节点: ${key}, 选项: ${opt.reply}, then内容:`, thenStr);
 
                 // 如果没有 next 字段，从 then 中解析
                 if (!next) {
@@ -240,12 +238,7 @@ export const parseConversationToFlow = (yamlContent: string) => {
                     const gotoMatch = thenStr.match(/goto\s+(\S+)/);
                     if (gotoMatch) {
                         next = gotoMatch[1].trim();
-                        // console.log(`[解析] ✓ 从 then 中提取 next: "${next}"`);
-                    } else {
-                        // console.log(`[解析] ✗ 未找到 goto 语句`);
                     }
-                } else {
-                    // console.log(`[解析] ✓ 使用已有的 next: "${next}"`);
                 }
 
                 // 移除 goto 语句，只保留纯脚本部分
@@ -254,10 +247,6 @@ export const parseConversationToFlow = (yamlContent: string) => {
                     .replace(/goto\s+\S+/g, '')
                     .replace(/^\s+|\s+$/g, '')
                     .trim();
-
-                // if (actions) {
-                //     console.log(`[解析] 提取的纯脚本:`, actions);
-                // }
             }
 
             // 提取玩家选项的自定义字段
@@ -292,10 +281,8 @@ export const parseConversationToFlow = (yamlContent: string) => {
         });
 
         // Parse Edges
-        // console.log(`[连线] 开始为节点 "${key}" 创建边缘，选项数量: ${options.length}`);
         options.forEach((opt: any) => {
             if (opt.next) {
-                // console.log(`[连线] ✓ 创建边缘: ${key} -> ${opt.next} (选项: ${opt.text})`);
                 edges.push({
                     id: `e-${opt.id}-${opt.next}`,
                     source: key,
@@ -304,8 +291,6 @@ export const parseConversationToFlow = (yamlContent: string) => {
                     type: 'default',
                     animated: true,
                 });
-            } else {
-                // console.log(`[连线] ✗ 选项 "${opt.text}" 没有 next 字段，跳过`);
             }
         });
     }
@@ -313,16 +298,13 @@ export const parseConversationToFlow = (yamlContent: string) => {
 
   // Apply auto layout if no canvas data found
   if (!hasCanvasData && nodes.length > 0) {
-      // console.log(`[布局] 未找到画布数据，应用自动布局`);
       return autoLayout(nodes, edges);
   }
 
-  // console.log(`[完成] 解析完成 - 节点数: ${nodes.length}, 边缘数: ${edges.length}`);
   return { nodes, edges };
 };
 
 export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
-    // console.log(`[开始] 序列化对话 - 节点数: ${nodes.length}, 边缘数: ${edges.length}`);
     const conversationObj: any = {
         '__option__': {
             theme: 'chat',
@@ -333,11 +315,11 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
     nodes.forEach(node => {
         if (node.type === 'switch') {
             const { label, npcId, branches } = node.data as SwitchNodeData;
-            
+
             const whenSection = branches.map(branch => {
                 const edge = edges.find(e => e.source === node.id && e.sourceHandle === branch.id);
                 let actionValue = branch.actionValue;
-                
+
                 // If connected, use the connection target
                 if (branch.actionType === 'open' && edge) {
                     const targetNode = nodes.find(n => n.id === edge.target);
@@ -349,13 +331,13 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
                 const branchObj: any = {
                     if: branch.condition
                 };
-                
+
                 if (branch.actionType === 'open') {
                     branchObj.open = actionValue;
                 } else {
                     branchObj.run = actionValue;
                 }
-                
+
                 return branchObj;
             });
 
@@ -365,7 +347,7 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
             };
 
             if (npcId) nodeObj['npc id'] = npcId;
-            
+
             conversationObj[label] = nodeObj;
 
         } else if (node.type === 'agent') {
@@ -373,7 +355,6 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
 
             const playerSection = playerOptions.map(opt => {
                 const edge = edges.find(e => e.source === node.id && e.sourceHandle === opt.id);
-                // console.log(`[序列化] 节点: ${label}, 选项: ${opt.text}, 是否有边缘: ${!!edge}, actions: "${opt.actions}", next: "${opt.next}"`);
 
                 const optObj: any = {
                     reply: opt.text
@@ -393,12 +374,10 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
                         thenScript = thenScript ? `${thenScript}\n${gotoCmd}` : gotoCmd;
                         // 同时设置 next 辅助字段用于编辑器连线
                         optObj.next = targetNode.data.label;
-                        // console.log(`[序列化] ✓ 生成 then: "${thenScript}", next: "${optObj.next}"`);
                     }
                 } else if (opt.next) {
                     // 即使没有边缘，如果节点数据中有 next，也保留它
                     optObj.next = opt.next;
-                    // console.log(`[序列化] ⚠ 没有边缘但保留 next: "${opt.next}"`);
                 }
 
                 if (thenScript) {
@@ -429,7 +408,6 @@ export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
         }
     });
 
-    // console.log(`[完成] 序列化完成`);
     return toYaml(conversationObj);
 };
 

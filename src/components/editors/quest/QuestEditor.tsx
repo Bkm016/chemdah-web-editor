@@ -10,8 +10,8 @@ interface QuestEditorProps {
 }
 
 export default function QuestEditor({ fileId }: QuestEditorProps) {
-  const { questFiles } = useProjectStore();
-  const file = questFiles[fileId];
+  // 只订阅当前文件,而不是整个 questFiles 对象
+  const file = useProjectStore((state) => state.questFiles[fileId]);
   const [opened, { open, close }] = useDisclosure(false);
 
   if (!file) return null;

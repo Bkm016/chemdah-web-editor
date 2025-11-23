@@ -10,8 +10,8 @@ interface ConversationEditorProps {
 }
 
 export default function ConversationEditor({ fileId }: ConversationEditorProps) {
-  const { conversationFiles } = useProjectStore();
-  const file = conversationFiles[fileId];
+  // 只订阅当前文件
+  const file = useProjectStore((state) => state.conversationFiles[fileId]);
   const [opened, { open, close }] = useDisclosure(false);
 
   if (!file) return null;

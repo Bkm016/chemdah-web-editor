@@ -392,6 +392,27 @@ export const useProjectStore = create<ProjectState>()(
     }),
     {
       name: 'chemdah-project-storage',
+      // 添加防抖,避免频繁写入 localStorage
+      skipHydration: false,
+      // 使用自定义存储,添加防抖
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          return str ? JSON.parse(str) : null;
+        },
+        setItem: (() => {
+          let timer: number | null = null;
+          return (name: string, value: any) => {
+            // 防抖 1 秒
+            if (timer) clearTimeout(timer);
+            timer = window.setTimeout(() => {
+              localStorage.setItem(name, JSON.stringify(value));
+              timer = null;
+            }, 1000);
+          };
+        })(),
+        removeItem: (name) => localStorage.removeItem(name),
+      },
     }
   )
 );

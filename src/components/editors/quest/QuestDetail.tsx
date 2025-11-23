@@ -1,9 +1,10 @@
 import { Tabs, Box, ScrollArea, Stack, Text, Title, SimpleGrid, Badge, Group } from '@mantine/core';
-import { IconTarget, IconPuzzle, IconScript } from '@tabler/icons-react';
+import { IconTarget, IconPuzzle, IconScript, IconAdjustments } from '@tabler/icons-react';
 import { DynamicSection } from './dynamic/DynamicSection';
-import { FormSelect, FormSection, AnimatedTabs } from '../../ui';
+import { FormSection, AnimatedTabs } from '../../ui';
 import { AgentEditor } from './AgentEditor';
 import { useApiStore } from '../../../store/useApiStore';
+import { ApiSearchSelect, parseApiValue } from '../../common/ApiSearchSelect';
 import { UIAddon } from './addons/UIAddon';
 import { TrackAddon } from './addons/TrackAddon';
 import { StatsAddon } from './addons/StatsAddon';
@@ -14,7 +15,7 @@ import { OptionalAddon } from './addons/OptionalAddon';
 import { DependAddon } from './addons/DependAddon';
 import { PartyAddon } from './addons/PartyAddon';
 import { AutomationAddon } from './addons/AutomationAddon';
-import { DynamicComponentRenderer } from './dynamic/DynamicComponentRenderer';
+import { MetaAddonList } from './meta/MetaAddonList';
 
 interface QuestDetailProps {
     taskId: string;
@@ -23,32 +24,55 @@ interface QuestDetailProps {
 }
 
 export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
-    const { apiData } = useApiStore();
+    const { apiData, getObjective, recordUsage } = useApiStore();
 
-    const taskAddonComponents = apiData.taskAddonComponents || [];
-
-    // Prepare options for Select with groups (兼容新旧结构)
-    const objectives = apiData.objectives || (apiData as any); // 兼容旧的扁平结构
-    const objectiveOptions = Object.entries(objectives)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([group, objectives]) => ({
-            group,
-            items: Object.keys(objectives as any)
-                .sort((a, b) => a.localeCompare(b))
-                .map(name => ({ value: name, label: name }))
-        }));
-
-    // Find current definition
+    // 从 taskData.objective 中提取 plugin 和 id
+    // 如果是旧格式（只有 id），尝试在所有 plugin 中查找
+    let currentObjectiveValue: string | undefined = undefined;
     let currentDefinition = null;
+
     if (taskData.objective) {
-        for (const group in objectives) {
-            const groupObjectives = (objectives as any)[group];
-            if (groupObjectives && groupObjectives[taskData.objective]) {
-                currentDefinition = groupObjectives[taskData.objective];
-                break;
+        // 检查是否是新格式 "plugin:id"
+        const parsed = parseApiValue(taskData.objective);
+        if (parsed) {
+            // 新格式
+            currentObjectiveValue = taskData.objective;
+            currentDefinition = getObjective(parsed.plugin, parsed.id);
+        } else {
+            // 旧格式，只有 id，尝试在所有 plugin 中查找
+            for (const [pluginName, pluginApi] of Object.entries(apiData)) {
+                if (pluginApi.objective && pluginApi.objective[taskData.objective]) {
+                    currentObjectiveValue = `${pluginName}:${taskData.objective}`;
+                    currentDefinition = pluginApi.objective[taskData.objective];
+                    break;
+                }
             }
         }
     }
+
+    // 将 params 信息合并到 condition 和 goal 字段中
+    const enrichFieldsWithParams = (fields: any[], params?: any[]) => {
+        if (!params || params.length === 0) return fields;
+
+        return fields.map(field => {
+            const param = params.find(p => p.name === field.name);
+            if (param && param.description) {
+                return {
+                    ...field,
+                    description: param.description
+                };
+            }
+            return field;
+        });
+    };
+
+    const enrichedCondition = currentDefinition
+        ? enrichFieldsWithParams(currentDefinition.condition, currentDefinition.params)
+        : [];
+
+    const enrichedGoal = currentDefinition
+        ? enrichFieldsWithParams(currentDefinition.goal, currentDefinition.params)
+        : [];
 
     return (
         <AnimatedTabs
@@ -56,8 +80,9 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
             style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
             tabs={[
                 { value: 'objective', label: '目标配置', icon: <IconTarget size={14} /> },
-                { value: 'addons', label: '组件', icon: <IconPuzzle size={14} /> },
-                { value: 'agent', label: '脚本代理', icon: <IconScript size={14} /> }
+                { value: 'addons', label: '组件配置', icon: <IconPuzzle size={14} /> },
+                { value: 'agent', label: '脚本代理', icon: <IconScript size={14} /> },
+                { value: 'meta', label: '元数据配置', icon: <IconAdjustments size={14} /> }
             ]}
         >
             <ScrollArea style={{ flex: 1 }}>
@@ -66,11 +91,27 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
                         <Stack gap="md">
                             <FormSection>
                                 <Title order={5} mb="sm">目标类型</Title>
-                                <FormSelect
-                                    data={objectiveOptions}
-                                    value={taskData.objective}
-                                    onChange={(val) => onUpdate({ ...taskData, objective: val, condition: {}, goal: {} })}
-                                    searchable
+                                <ApiSearchSelect
+                                    type="objective"
+                                    value={currentObjectiveValue}
+                                    onChange={(value, item) => {
+                                        if (value && item) {
+                                            // 记录使用频率
+                                            recordUsage(item.plugin, item.id, 'objective');
+
+                                            // 使用 id 作为 objective 值
+                                            const objectiveId = item.id;
+                                            onUpdate({
+                                                ...taskData,
+                                                objective: objectiveId,
+                                                condition: {},
+                                                goal: {}
+                                            });
+                                        } else {
+                                            onUpdate({ ...taskData, objective: undefined, condition: {}, goal: {} });
+                                        }
+                                    }}
+                                    placeholder="搜索任务目标..."
                                 />
                             </FormSection>
                             
@@ -81,9 +122,9 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
                                             <Title order={5}>条件配置</Title>
                                             <Badge variant="light" color="gray">Conditions</Badge>
                                         </Group>
-                                        {currentDefinition.condition.length > 0 ? (
+                                        {enrichedCondition.length > 0 ? (
                                             <DynamicSection
-                                                fields={currentDefinition.condition}
+                                                fields={enrichedCondition}
                                                 data={taskData.condition || {}}
                                                 onChange={(newCondition) => onUpdate({ ...taskData, condition: newCondition })}
                                             />
@@ -96,9 +137,9 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
                                             <Title order={5}>目标配置</Title>
                                             <Badge variant="light" color="gray">Goals</Badge>
                                         </Group>
-                                        {currentDefinition.goal.length > 0 ? (
+                                        {enrichedGoal.length > 0 ? (
                                             <DynamicSection
-                                                fields={currentDefinition.goal}
+                                                fields={enrichedGoal}
                                                 data={taskData.goal || {}}
                                                 onChange={(newGoal) => onUpdate({ ...taskData, goal: newGoal })}
                                             />
@@ -115,6 +156,9 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
 
                     <Tabs.Panel value="addons" className="animate-in fade-in slide-in-from-bottom-1 duration-200">
                         <Stack gap="md">
+                            <Title order={5}>组件配置</Title>
+
+                            {/* Task 内置 Addon 组件（编程式） */}
                             <UIAddon
                                 addon={taskData.addon}
                                 onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
@@ -166,23 +210,38 @@ export function QuestDetail({ taskData, onUpdate }: QuestDetailProps) {
                                 onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
                             />
 
-                            {taskAddonComponents.map(component => (
-                                <DynamicComponentRenderer
-                                    key={component.id}
-                                    component={component}
-                                    data={taskData.addon || {}}
-                                    onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
-                                />
-                            ))}
+                            {/* 其他 Task Addon 组件（JSON 动态生成，排除已有专门组件的） */}
+                            <MetaAddonList
+                                type="addon"
+                                scope="task"
+                                data={taskData.addon || {}}
+                                onChange={(newAddon) => onUpdate({ ...taskData, addon: newAddon })}
+                                excludeIds={['ui', 'track', 'stats', 'restart', 'timeout', 'reset-data-on-accepted', 'optional', 'depend', 'party', 'automation']}
+                            />
                         </Stack>
                     </Tabs.Panel>
 
                     <Tabs.Panel value="agent" className="animate-in fade-in slide-in-from-bottom-1 duration-200">
                         <Stack gap="md">
-                            <AgentEditor 
-                                data={taskData.agent} 
+                            <Title order={5}>脚本代理</Title>
+                            <AgentEditor
+                                data={taskData.agent}
                                 onUpdate={(newAgent) => onUpdate({ ...taskData, agent: newAgent })}
                                 types={['task_continued', 'task_restarted', 'task_completed']}
+                            />
+                        </Stack>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel value="meta" className="animate-in fade-in slide-in-from-bottom-1 duration-200">
+                        <Stack gap="md">
+                            <Title order={5}>元数据配置</Title>
+
+                            {/* Task Meta 组件列表 */}
+                            <MetaAddonList
+                                type="meta"
+                                scope="task"
+                                data={taskData.meta || {}}
+                                onChange={(newMeta) => onUpdate({ ...taskData, meta: newMeta })}
                             />
                         </Stack>
                     </Tabs.Panel>

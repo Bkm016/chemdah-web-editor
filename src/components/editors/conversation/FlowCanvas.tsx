@@ -11,8 +11,9 @@ import { ConversationNodeEditor } from './ConversationNodeEditor';
 import 'reactflow/dist/style.css';
 
 export default function FlowCanvas({ fileId }: { fileId: string }) {
-  const { conversationFiles, updateFileContent } = useProjectStore();
-  const file = conversationFiles[fileId];
+  // 只订阅当前文件和更新函数
+  const file = useProjectStore((state) => state.conversationFiles[fileId]);
+  const updateFileContent = useProjectStore((state) => state.updateFileContent);
 
   const nodeTypes = useMemo(() => ({ agent: AgentNode, switch: SwitchNode }), []);
   

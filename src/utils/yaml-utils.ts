@@ -30,7 +30,6 @@ export const toYaml = (obj: any): string => {
       forceQuotes: false    // 不强制所有字符串加引号
     });
   } catch (e) {
-    console.error('YAML Dump Error', e);
     return '';
   }
 };
@@ -39,7 +38,6 @@ export const parseYaml = (str: string): any => {
   try {
     return yaml.load(str);
   } catch (e) {
-    console.error('YAML Parse Error', e);
     return null;
   }
 };

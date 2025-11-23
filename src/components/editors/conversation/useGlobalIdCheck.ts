@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { useProjectStore } from '../../../store/useProjectStore';
 
 export const useGlobalIdCheck = (currentFileId?: string) => {
-    const { conversationFiles } = useProjectStore();
+    // 只订阅 conversationFiles
+    const conversationFiles = useProjectStore((state) => state.conversationFiles);
 
     const globalIds = useMemo(() => {
         const ids = new Map<string, string[]>(); // ID -> List of filenames where it appears
