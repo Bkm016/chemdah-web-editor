@@ -1,7 +1,13 @@
 import { Edge, Node } from 'reactflow';
-import { parseYaml, toYaml } from '../../../utils/yaml-utils';
+import { parseYaml, toYaml } from '@/utils/yaml-utils';
 import { AgentNodeData } from './nodes/AgentNode';
 import { SwitchNodeData } from './nodes/SwitchNode';
+
+export interface ConversationOptions {
+    theme?: string;
+    title?: string;
+    'global-flags'?: string[];  // 使用正确的字段名
+}
 
 export const autoLayout = (nodes: Node[], edges: Edge[]) => {
     const nodeWidth = 320;
@@ -158,6 +164,19 @@ export const parseConversationToFlow = (yamlContent: string) => {
   const edges: Edge[] = [];
 
   let hasCanvasData = false;
+  let conversationOptions: ConversationOptions = {
+    theme: 'chat',
+    title: '{name}'
+  };
+
+  // Parse __option__ if it exists
+  if (data.__option__) {
+    conversationOptions = {
+      theme: data.__option__.theme,
+      title: data.__option__.title,
+      'global-flags': data.__option__['global-flags']
+    };
+  }
 
   Object.keys(data).forEach((key) => {
     if (key === '__option__') return; // Skip metadata
@@ -298,15 +317,25 @@ export const parseConversationToFlow = (yamlContent: string) => {
 
   // Apply auto layout if no canvas data found
   if (!hasCanvasData && nodes.length > 0) {
-      return autoLayout(nodes, edges);
+      const layouted = autoLayout(nodes, edges);
+      return { ...layouted, options: conversationOptions };
   }
 
-  return { nodes, edges };
+  return { nodes, edges, options: conversationOptions };
 };
 
-export const generateYamlFromFlow = (nodes: Node[], edges: Edge[]) => {
+export const generateYamlFromFlow = (nodes: Node[], edges: Edge[], options?: ConversationOptions) => {
+    const optionObj: any = {};
+
+    // Build __option__ object only with defined values
+    if (options?.theme) optionObj.theme = options.theme;
+    if (options?.title) optionObj.title = options.title;
+    if (options?.['global-flags'] && options['global-flags'].length > 0) {
+        optionObj['global-flags'] = options['global-flags'];
+    }
+
     const conversationObj: any = {
-        '__option__': {
+        '__option__': Object.keys(optionObj).length > 0 ? optionObj : {
             theme: 'chat',
             title: '{name}'
         }

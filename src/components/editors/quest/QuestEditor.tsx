@@ -1,9 +1,9 @@
 import { Box, Button, Drawer, Group, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCode } from '@tabler/icons-react';
-import { useProjectStore } from '../../../store/useProjectStore';
+import { useProjectStore } from '@/store/useProjectStore';
 import QuestForm from './QuestForm';
-import YamlPreview from '../../common/YamlPreview';
+import YamlPreview from '@/components/common/YamlPreview';
 
 interface QuestEditorProps {
   fileId: string;

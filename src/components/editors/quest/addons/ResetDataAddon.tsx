@@ -1,4 +1,4 @@
-import { FormAddon } from '../../../ui';
+import { FormAddon } from '@/components/ui';
 
 interface ResetDataAddonProps {
     addon: any;

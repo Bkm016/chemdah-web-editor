@@ -1,4 +1,5 @@
-import { FormAddon, FormInput, FormTextarea } from '../../../ui';
+import { FormAddon } from '@/components/ui';
+import { DebouncedTextInput, DebouncedTextarea } from '@/components/ui/DebouncedInput';
 import { Stack, Paper, Group, Box, Text, SegmentedControl, Collapse, Badge } from '@mantine/core';
 import { BeaconSettings } from './track/BeaconSettings';
 import { LandmarkSettings } from './track/LandmarkSettings';
@@ -97,31 +98,36 @@ export function TrackAddon({ addon, onChange, type }: TrackAddonProps) {
         >
             <Stack gap="md">
                 {type === 'task' && (
-                    <FormInput
+                    <DebouncedTextInput
                         label="追踪中心 (Center)"
                         description="固定坐标点 (world x y z) 或 NPC 单位 (adyeshach npc_id)"
                         placeholder="world 100 64 100"
                         value={addon?.track?.center || ''}
-                        onChange={(e) => updateTrack('center', e.target.value)}
+                        onChange={(val) => updateTrack('center', val)}
+                        debounceMs={800}
                     />
                 )}
-                <FormInput
+                <DebouncedTextInput
                     label="追踪名称 (Name)"
                     description="追踪显示名称（支持语言文件）"
                     value={addon?.track?.name || ''}
-                    onChange={(e) => updateTrack('name', e.target.value)}
+                    onChange={(val) => updateTrack('name', val)}
+                    debounceMs={800}
                 />
-                <FormTextarea
+                <DebouncedTextarea
                     label="追踪描述 (Description)"
                     description="追踪描述（支持语言文件）"
                     value={Array.isArray(addon?.track?.description) ? addon.track.description.join('\n') : (addon?.track?.description || '')}
-                    onChange={(e) => updateTrack('description', e.target.value.split('\n'))}
+                    onChange={(val) => updateTrack('description', val.split('\n'))}
+                    autosize
+                    minRows={2}
+                    debounceMs={800}
                 />
-                <FormTextarea
+                <DebouncedTextarea
                     label="提示信息 (Message)"
                     description="开启追踪时的提示信息"
                     value={Array.isArray(addon?.track?.message) ? addon.track.message.join('\n') : (addon?.track?.message || '')}
-                    onChange={(e) => updateTrack('message', e.target.value.split('\n'))}
+                    onChange={(val) => updateTrack('message', val.split('\n'))}
                 />
 
                 <TriStateAddon

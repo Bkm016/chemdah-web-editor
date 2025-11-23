@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberInput } from '@mantine/core';
+import { DebouncedNumberInput } from '@/components/ui/DebouncedInput';
 
 interface NumberFieldProps {
     value: any;
@@ -8,7 +8,7 @@ interface NumberFieldProps {
 
 export const NumberField: React.FC<NumberFieldProps> = ({ value, onChange }) => {
     return (
-        <NumberInput
+        <DebouncedNumberInput
             value={value === undefined || value === null ? '' : value}
             onChange={(val) => {
                 if (val === '' || val === undefined) {
@@ -20,6 +20,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({ value, onChange }) => 
             placeholder="未设置"
             size="xs"
             variant="filled"
+            debounceMs={800}
         />
     );
 };

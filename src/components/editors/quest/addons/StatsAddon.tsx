@@ -1,4 +1,4 @@
-import { FormAddon, FormCheckbox } from '../../../ui';
+import { FormAddon, FormCheckbox } from '@/components/ui';
 
 interface StatsAddonProps {
     addon: any;

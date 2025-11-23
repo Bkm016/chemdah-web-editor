@@ -1,9 +1,9 @@
 import { Stack, Checkbox } from '@mantine/core';
-import { ParamDefinition } from '../../../../store/useApiStore';
-import { FormScript } from '../../../ui';
+import { ParamDefinition } from '@/store/useApiStore';
+import { FormScript } from '@/components/ui';
 import { DynamicMapList } from './DynamicMapList';
 import { memo, useCallback } from 'react';
-import { DebouncedTextInput, DebouncedNumberInput, DebouncedTextarea } from '../../../ui/DebouncedInput';
+import { DebouncedTextInput, DebouncedNumberInput, DebouncedTextarea } from '@/components/ui/DebouncedInput';
 
 interface DynamicMetaFieldsProps {
     params: ParamDefinition[];
@@ -72,7 +72,7 @@ export const DynamicMetaFields = memo(function DynamicMetaFields({ params, optio
                 placeholder={`输入${param.description || param.name}`}
                 value={value || ''}
                 onChange={onChange}
-                debounceMs={300}
+                debounceMs={800}
             />
         );
     }
@@ -114,7 +114,7 @@ export const DynamicMetaFields = memo(function DynamicMetaFields({ params, optio
                                 placeholder={`输入${param.description || param.name}`}
                                 value={fieldValue}
                                 onChange={(val) => handleChange(param.name, val)}
-                                debounceMs={300}
+                                debounceMs={800}
                             />
                         );
 
@@ -127,7 +127,7 @@ export const DynamicMetaFields = memo(function DynamicMetaFields({ params, optio
                                 value={fieldValue || ''}
                                 onChange={(val) => handleChange(param.name, val)}
                                 minRows={3}
-                                debounceMs={300}
+                                debounceMs={800}
                             />
                         );
 
@@ -139,7 +139,7 @@ export const DynamicMetaFields = memo(function DynamicMetaFields({ params, optio
                                 placeholder={`输入${param.description || param.name}`}
                                 value={fieldValue || ''}
                                 onChange={(val) => handleChange(param.name, val)}
-                                debounceMs={300}
+                                debounceMs={800}
                             />
                         );
                 }

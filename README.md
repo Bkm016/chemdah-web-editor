@@ -22,11 +22,12 @@
 ### 🔌 API 中心
 - **多源管理**：支持多个 API 定义源
 - **网络 URL**：从远程服务器加载 API 定义
-- **本地上传**：上传本地 JSON 文件，数据持久化保存
+- **本地上传**：上传本地 JSON 文件，数据持久化保存在 IndexedDB
 - **拖拽排序**：调整加载优先级，后加载的覆盖先加载的
 - **启用/禁用**：灵活控制各个源的生效状态
 - **实时更新**：手动更新网络源的最新内容
 - **自动同步**：所有变更自动应用到编辑器
+- **数据分离**：项目文件存储在 IndexedDB，API 定义存储在 localStorage
 
 ### 🎨 用户体验
 - **暗黑/亮色主题**：自动跟随系统或手动切换
@@ -92,12 +93,13 @@ chemdah-web-editor/
 │   │   ├── ui/                 # 通用 UI 组件
 │   │   └── common/             # 公共组件
 │   ├── store/                  # Zustand 状态管理
-│   │   ├── useProjectStore.ts  # 项目文件管理
+│   │   ├── useProjectStore.ts  # 项目文件管理（IndexedDB）
 │   │   ├── useApiStore.ts      # API 数据管理
 │   │   ├── useApiCenterStore.ts # API 中心管理
 │   │   └── useThemeStore.ts    # 主题管理
 │   ├── utils/                  # 工具函数
-│   │   └── yaml-utils.ts       # YAML 转换
+│   │   ├── yaml-utils.ts       # YAML 转换
+│   │   └── indexedDBStorage.ts # IndexedDB 存储工具
 │   └── registry/               # 注册表
 │       └── quest-objectives.tsx # 任务目标注册
 ├── public/
@@ -153,16 +155,23 @@ chemdah-web-editor/
   },
   "questMetaComponents": [...],
   "taskAddonComponents": [...],
-  "conversationNodeComponents": [...],
-  "conversationPlayerOptionComponents": [...]
+  "conversation": {                    // 新版对话组件（推荐）
+    "组件ID": {
+      "name": "组件名称",
+      "scope": "node|player-option|both",
+      "params": [...]
+    }
+  },
+  "conversationNodeComponents": [...],        // 旧版（已废弃）
+  "conversationPlayerOptionComponents": [...]  // 旧版（已废弃）
 }
 ```
 
 支持的字段类型：
-- `String`, `Number`, `Boolean`, `Array`
-- `Script` (代码编辑器)
-- `RichText` (富文本)
-- `Material`, `EntityType` (Minecraft 类型)
+- **新版 (conversation.params.type)**: `String`, `Number`, `Boolean`, `Array<String>`, `Script`, `RichTextArray`
+- **旧版 (pattern)**: `String`, `Number`, `Boolean`, `Array`, `Script`, `RichText`, `Material`, `EntityType`
+
+**推荐使用新版 `conversation` 格式**，提供更好的作用域控制和参数系统。
 
 ### 导入导出
 
@@ -176,12 +185,20 @@ chemdah-web-editor/
 
 ### 数据持久化
 
-所有数据保存在浏览器 LocalStorage：
-- 文件和文件夹结构
-- API 中心配置和数据
-- 主题设置
+数据存储策略：
+- **项目文件**（任务、对话、文件夹）：保存在浏览器 **IndexedDB**
+  - 支持大容量存储（50%+ 浏览器存储配额）
+  - 异步操作，不阻塞 UI
+  - 智能保存队列（1秒防抖 + 空闲时保存）
+- **API 定义**：保存在浏览器 **localStorage**
+  - 快速访问，适合小型数据
+  - 用于 API 中心配置和缓存
+- **主题设置**：保存在 localStorage
 
-**注意**：清除浏览器数据会丢失所有内容，建议定期导出备份。
+**重要提示**：
+- 清除浏览器数据会丢失所有内容，建议定期导出备份
+- 可在 API 中心使用"删除本地记录"按钮清空项目文件（不影响 API 配置）
+- 首次访问时会自动从 localStorage 迁移旧数据到 IndexedDB
 
 ## API 中心详解
 
@@ -234,10 +251,13 @@ URL: https://example.com/api.json
 ## 常见问题
 
 ### Q: 数据保存在哪里？
-A: 所有数据保存在浏览器的 LocalStorage 中，不会上传到服务器。
+A:
+- **项目文件**：保存在浏览器 IndexedDB（任务、对话、文件夹）
+- **API 配置**：保存在浏览器 localStorage（API 中心设置和缓存）
+- 数据不会上传到服务器，完全本地存储
 
 ### Q: 如何备份数据？
-A: 使用 **导出 → 导出全部 (ZIP)** 功能定期备份。
+A: 使用 **导出 → 导出全部 (ZIP)** 功能定期备份。也可以在 API 中心单独管理本地记录。
 
 ### Q: 支持哪些浏览器？
 A: 推荐使用最新版本的 Chrome、Edge、Firefox 或 Safari。

@@ -1,6 +1,6 @@
 import { Stack, Group, Title } from '@mantine/core';
-import { FormSelect, FormInput, FormCheckbox } from '../../../../ui';
-import { PARTICLE_TYPES } from '../../../../../utils/particle-types';
+import { FormSelect, FormInput, FormCheckbox } from '@/components/ui';
+import { PARTICLE_TYPES } from '@/utils/particle-types';
 
 interface NavigationSettingsProps {
     data: any;

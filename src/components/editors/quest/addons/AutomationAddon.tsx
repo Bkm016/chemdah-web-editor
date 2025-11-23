@@ -1,4 +1,4 @@
-import { FormAddon, FormCheckbox, FormInput, FormSelect, FormSection } from '../../../ui';
+import { FormAddon, FormCheckbox, FormInput, FormSelect, FormSection } from '@/components/ui';
 import { Stack, Group } from '@mantine/core';
 
 interface AutomationAddonProps {

@@ -1,5 +1,5 @@
 import { Stack, Badge, Group, Text } from '@mantine/core';
-import { FormAddon, FormScript } from '../../ui';
+import { FormAddon, FormScript } from '@/components/ui';
 
 export const AGENT_TYPES = {
     // Quest Agents

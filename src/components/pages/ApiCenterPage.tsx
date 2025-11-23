@@ -15,13 +15,16 @@ import {
   FileButton,
   Tabs,
   Title,
-  Container
+  Container,
+  Modal
 } from '@mantine/core';
-import { IconPlus, IconTrash, IconRefresh, IconGripVertical, IconAlertCircle, IconCheck, IconUpload, IconLink } from '@tabler/icons-react';
-import { useApiCenterStore, ApiSource } from '../../store/useApiCenterStore';
-import { useApiStore } from '../../store/useApiStore';
+import { IconPlus, IconTrash, IconRefresh, IconGripVertical, IconAlertCircle, IconCheck, IconUpload, IconLink, IconDatabase } from '@tabler/icons-react';
+import { useApiCenterStore, ApiSource } from '@/store/useApiCenterStore';
+import { useApiStore } from '@/store/useApiStore';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { notifications } from '@mantine/notifications';
+import { indexedDBStorage } from '@/utils/indexedDBStorage';
+import { useProjectStore } from '@/store/useProjectStore';
 
 export function ApiCenterPage() {
   const { sources, addSource, addLocalSource, removeSource, toggleSource, reorderSources, loadSource, loadAllEnabledSources } = useApiCenterStore();
@@ -29,6 +32,7 @@ export function ApiCenterPage() {
   const [newName, setNewName] = useState('');
   const [newUrl, setNewUrl] = useState('');
   const [activeTab, setActiveTab] = useState<string | null>('url');
+  const [confirmModalOpened, setConfirmModalOpened] = useState(false);
 
   const sortedSources = [...sources].sort((a, b) => a.order - b.order);
 
@@ -175,6 +179,36 @@ export function ApiCenterPage() {
     }
   };
 
+  const handleClearLocalRecords = async () => {
+    try {
+      await indexedDBStorage.clearProject();
+
+      // 清空 store 状态
+      useProjectStore.setState({
+        questFiles: {},
+        conversationFiles: {},
+        questFolders: {},
+        conversationFolders: {},
+        activeFileId: null,
+        activeFileType: null
+      });
+
+      setConfirmModalOpened(false);
+
+      notifications.show({
+        title: '删除成功',
+        message: '所有本地记录已清空',
+        color: 'green'
+      });
+    } catch (error: any) {
+      notifications.show({
+        title: '删除失败',
+        message: error.message || '无法清空本地记录',
+        color: 'red'
+      });
+    }
+  };
+
   const handleToggle = async (id: string) => {
     const source = sources.find(s => s.id === id);
     const wasEnabled = source?.enabled;
@@ -225,14 +259,25 @@ export function ApiCenterPage() {
               管理任务目标和对话组件的 API 定义源
             </Text>
           </div>
-          <Button
-            size="sm"
-            variant="light"
-            leftSection={<IconRefresh size={16} />}
-            onClick={handleLoadAll}
-          >
-            更新所有已启用的源
-          </Button>
+          <Group gap="sm">
+            <Button
+              size="sm"
+              variant="light"
+              color="red"
+              leftSection={<IconDatabase size={16} />}
+              onClick={() => setConfirmModalOpened(true)}
+            >
+              删除本地记录
+            </Button>
+            <Button
+              size="sm"
+              variant="light"
+              leftSection={<IconRefresh size={16} />}
+              onClick={handleLoadAll}
+            >
+              更新所有已启用的源
+            </Button>
+          </Group>
         </Group>
 
         {/* Add New Source */}
@@ -412,6 +457,28 @@ export function ApiCenterPage() {
           </Stack>
         </Paper>
       </Stack>
+
+      {/* Confirm Modal */}
+      <Modal
+        opened={confirmModalOpened}
+        onClose={() => setConfirmModalOpened(false)}
+        title="删除本地记录"
+        centered
+      >
+        <Stack gap="md">
+          <Text size="sm">
+            这将删除所有保存在 IndexedDB 中的任务和对话文件数据。此操作不可恢复！
+          </Text>
+          <Group justify="flex-end">
+            <Button variant="default" onClick={() => setConfirmModalOpened(false)}>
+              取消
+            </Button>
+            <Button color="red" onClick={handleClearLocalRecords}>
+              确认删除
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
     </Container>
   );
 }

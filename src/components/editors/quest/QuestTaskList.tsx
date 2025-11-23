@@ -2,7 +2,7 @@ import { ScrollArea, Group, Text, ActionIcon, NavLink, Box, Menu } from '@mantin
 import { IconPlus, IconTrash, IconGripVertical, IconCopy, IconEdit, IconDotsVertical } from '@tabler/icons-react';
 import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from '@hello-pangea/dnd';
 import { useState } from 'react';
-import { FormInput, ContextMenu } from '../../ui';
+import { FormInput, ContextMenu } from '@/components/ui';
 
 interface QuestTaskListProps {
     tasks: Record<string, any>;

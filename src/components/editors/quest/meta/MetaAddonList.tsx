@@ -1,7 +1,7 @@
 import { Stack, TextInput, Text, Box, Divider, Group } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useState, useMemo, useCallback } from 'react';
-import { useApiStore } from '../../../../store/useApiStore';
+import { useApiStore } from '@/store/useApiStore';
 import { MetaConfigCard } from './MetaConfigCard';
 import { AddonConfigCard } from './AddonConfigCard';
 

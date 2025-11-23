@@ -1,6 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { Paper, Title, Box } from '@mantine/core';
-import { useThemeStore } from '../../store/useThemeStore';
+import { useThemeStore } from '@/store/useThemeStore';
 
 interface YamlPreviewProps {
   value: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ObjectiveField } from '../../../../store/useApiStore';
+import { ObjectiveField } from '@/store/useApiStore';
 import { Text, Box, Tooltip, useMantineColorScheme } from '@mantine/core';
 import { LocationField } from './fields/LocationField';
 import { VectorField } from './fields/VectorField';

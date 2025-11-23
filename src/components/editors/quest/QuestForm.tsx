@@ -1,6 +1,6 @@
 import { Paper, Tabs, Text } from '@mantine/core';
-import { useProjectStore } from '../../../store/useProjectStore';
-import { parseYaml, toYaml } from '../../../utils/yaml-utils';
+import { useProjectStore } from '@/store/useProjectStore';
+import { parseYaml, toYaml } from '@/utils/yaml-utils';
 import { IconSettings, IconCheckbox } from '@tabler/icons-react';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { DropResult } from '@hello-pangea/dnd';
@@ -8,7 +8,7 @@ import { DropResult } from '@hello-pangea/dnd';
 import { QuestSettings } from './QuestSettings';
 import { QuestTaskList } from './QuestTaskList';
 import { QuestDetail } from './QuestDetail';
-import { AnimatedTabs } from '../../ui';
+import { AnimatedTabs } from '@/components/ui';
 
 export default function QuestForm({ fileId }: { fileId: string }) {
   // 只订阅需要的数据

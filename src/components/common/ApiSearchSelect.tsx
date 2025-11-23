@@ -1,7 +1,7 @@
 import { Select, SelectProps, Text, Group, Badge, Stack, Highlight, ActionIcon } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
-import { useApiSearch, formatSearchResultLabel } from '../../hooks/useApiSearch';
-import { SearchResultItem, SearchItemType } from '../../store/useApiStore';
+import { useApiSearch, formatSearchResultLabel } from '@/hooks/useApiSearch';
+import { SearchResultItem, SearchItemType } from '@/store/useApiStore';
 
 export interface ApiSearchSelectProps extends Omit<SelectProps, 'data' | 'onChange' | 'value'> {
   type: SearchItemType;          // 搜索类型：objective, meta, addon

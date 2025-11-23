@@ -1,4 +1,4 @@
-import { FormAddon, FormScript } from '../../../ui';
+import { FormAddon, FormScript } from '@/components/ui';
 
 interface RestartAddonProps {
     addon: any;

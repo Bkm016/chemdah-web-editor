@@ -1,6 +1,6 @@
 import { Stack, TextInput, NumberInput, Checkbox, Textarea } from '@mantine/core';
-import { ParamDefinition } from '../../../../store/useApiStore';
-import { FormScript } from '../../../ui';
+import { ParamDefinition } from '@/store/useApiStore';
+import { FormScript } from '@/components/ui';
 
 interface DynamicMapItemProps {
     fields: ParamDefinition[];

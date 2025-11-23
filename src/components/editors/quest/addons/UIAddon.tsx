@@ -1,5 +1,6 @@
-import { FormAddon, FormTextarea, FormCheckbox } from '../../../ui';
-import { IconInput } from '../components/IconInput';
+import { FormAddon, FormCheckbox } from '@/components/ui';
+import { IconInput } from '@/components/editors/quest/components/IconInput';
+import { DebouncedTextarea } from '@/components/ui/DebouncedInput';
 
 interface UIAddonProps {
     addon: any;
@@ -29,13 +30,16 @@ export function UIAddon({ addon, onChange }: UIAddonProps) {
                     ui: { ...addon?.ui, icon: val }
                 })}
             />
-            <FormTextarea
+            <DebouncedTextarea
                 label="描述 (Description)"
                 value={Array.isArray(addon?.ui?.description) ? addon.ui.description.join('\n') : (addon?.ui?.description || '')}
-                onChange={(e) => onChange({
+                onChange={(val) => onChange({
                     ...addon,
-                    ui: { ...addon?.ui, description: e.target.value.split('\n') }
+                    ui: { ...addon?.ui, description: val.split('\n') }
                 })}
+                autosize
+                minRows={3}
+                debounceMs={800}
             />
             <FormCheckbox
                 label="开始时可见 (Visible Start)"

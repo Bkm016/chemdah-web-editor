@@ -1,7 +1,7 @@
 import React from 'react';
 import { DynamicField } from './DynamicField';
-import { FormAddon, FormScript } from '../../../ui';
-import { ObjectiveField } from '../../../../store/useApiStore';
+import { FormAddon, FormScript } from '@/components/ui';
+import { ObjectiveField } from '@/store/useApiStore';
 
 interface DynamicSectionProps {
     fields: ObjectiveField[];

@@ -1,0 +1,98 @@
+{
+  "Chemdah": {
+    "conversation": {
+      "dos": {
+        "name": "客户端指令",
+        "description": ["在客户端执行指令"],
+        "alias": ["客户端命令", "client-command"],
+        "scope": "player-option",
+        "params": [
+          {
+            "name": "dos",
+            "type": "string",
+            "required": false,
+            "options": [],
+            "description": "要执行的客户端指令"
+          }
+        ]
+      },
+      "dosh": {
+        "name": "服务端指令",
+        "description": ["在服务端执行指令"],
+        "alias": ["服务端命令", "server-command"],
+        "scope": "player-option",
+        "params": [
+          {
+            "name": "dosh",
+            "type": "string",
+            "required": false,
+            "options": [],
+            "description": "要执行的服务端指令"
+          }
+        ]
+      },
+      "gscript": {
+        "name": "全局脚本",
+        "description": ["执行全局 Kether 脚本"],
+        "alias": ["global-script"],
+        "scope": "both",
+        "class": "ink.ptms.chemdah.module.conversation.GScriptComponent",
+        "params": [
+          {
+            "name": "gscript",
+            "type": "string",
+            "required": false,
+            "options": [],
+            "description": "全局脚本内容（不影响对话流程）"
+          }
+        ]
+      },
+      "model": {
+        "name": "NPC模型",
+        "description": ["设置NPC的模型ID"],
+        "alias": ["模型", "skin"],
+        "scope": "node",
+        "class": "ink.ptms.chemdah.module.conversation.ModelComponent",
+        "params": [
+          {
+            "name": "model",
+            "type": "string",
+            "required": false,
+            "options": [],
+            "description": "NPC模型ID（如: adyeshach test2）"
+          }
+        ]
+      },
+      "root": {
+        "name": "根节点",
+        "description": ["标记此节点为对话的根节点入口"],
+        "alias": ["entry", "start"],
+        "scope": "node",
+        "params": [
+          {
+            "name": "root",
+            "type": "boolean",
+            "required": false,
+            "options": [],
+            "description": "是否为根节点"
+          }
+        ]
+      },
+      "self": {
+        "name": "自我对话",
+        "description": ["标记此对话是否为NPC的自言自语"],
+        "alias": ["monologue"],
+        "scope": "node",
+        "params": [
+          {
+            "name": "self",
+            "type": "boolean",
+            "required": false,
+            "options": [],
+            "description": "是否为自言自语模式"
+          }
+        ]
+      }
+    }
+  }
+}

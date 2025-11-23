@@ -7,7 +7,7 @@ interface DebouncedTextInputProps extends Omit<TextInputProps, 'onChange'> {
     debounceMs?: number;
 }
 
-export function DebouncedTextInput({ value, onChange, debounceMs = 300, ...props }: DebouncedTextInputProps) {
+export function DebouncedTextInput({ value, onChange, debounceMs = 800, ...props }: DebouncedTextInputProps) {
     const [localValue, setLocalValue] = useState(value || '');
     const onChangeRef = useRef(onChange);
 
@@ -47,7 +47,7 @@ interface DebouncedNumberInputProps extends Omit<NumberInputProps, 'onChange'> {
     debounceMs?: number;
 }
 
-export function DebouncedNumberInput({ value, onChange, debounceMs = 300, ...props }: DebouncedNumberInputProps) {
+export function DebouncedNumberInput({ value, onChange, debounceMs = 800, ...props }: DebouncedNumberInputProps) {
     const [localValue, setLocalValue] = useState<number | string>(value ?? '');
     const onChangeRef = useRef(onChange);
 
@@ -84,7 +84,7 @@ interface DebouncedTextareaProps extends Omit<TextareaProps, 'onChange'> {
     debounceMs?: number;
 }
 
-export function DebouncedTextarea({ value, onChange, debounceMs = 300, ...props }: DebouncedTextareaProps) {
+export function DebouncedTextarea({ value, onChange, debounceMs = 800, ...props }: DebouncedTextareaProps) {
     const [localValue, setLocalValue] = useState(value || '');
     const onChangeRef = useRef(onChange);
 

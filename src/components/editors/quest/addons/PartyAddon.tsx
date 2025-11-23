@@ -1,4 +1,4 @@
-import { FormAddon, FormCheckbox, FormInput } from '../../../ui';
+import { FormAddon, FormCheckbox, FormInput } from '@/components/ui';
 
 interface PartyAddonProps {
     addon: any;

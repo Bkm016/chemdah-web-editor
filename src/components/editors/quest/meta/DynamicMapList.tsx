@@ -1,7 +1,7 @@
 import { Stack, Button, Card, Group, ActionIcon, Text, Collapse, Box } from '@mantine/core';
 import { IconPlus, IconTrash, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useState } from 'react';
-import { ParamDefinition } from '../../../../store/useApiStore';
+import { ParamDefinition } from '@/store/useApiStore';
 import { DynamicMapItem } from './DynamicMapItem';
 
 interface DynamicMapListProps {

@@ -1,8 +1,8 @@
 import { Container, Title, Stack, Text, Group, Badge, Card, Tabs } from '@mantine/core';
 import { useState } from 'react';
-import { ApiSearchSelect, parseApiValue } from '../common/ApiSearchSelect';
-import { useApiStore, SearchResultItem } from '../../store/useApiStore';
-import { useApiCenterStore } from '../../store/useApiCenterStore';
+import { ApiSearchSelect, parseApiValue } from '@/components/common/ApiSearchSelect';
+import { useApiStore, SearchResultItem } from '@/store/useApiStore';
+import { useApiCenterStore } from '@/store/useApiCenterStore';
 
 export function ApiTestPage() {
   const { apiData, searchIndex } = useApiStore();

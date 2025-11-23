@@ -1,10 +1,10 @@
 import { Tabs, Box, ScrollArea, Stack, Text, Title, SimpleGrid, Badge, Group } from '@mantine/core';
 import { IconTarget, IconPuzzle, IconScript, IconAdjustments } from '@tabler/icons-react';
 import { DynamicSection } from './dynamic/DynamicSection';
-import { FormSection, AnimatedTabs } from '../../ui';
+import { FormSection, AnimatedTabs } from '@/components/ui';
 import { AgentEditor } from './AgentEditor';
-import { useApiStore } from '../../../store/useApiStore';
-import { ApiSearchSelect, parseApiValue } from '../../common/ApiSearchSelect';
+import { useApiStore } from '@/store/useApiStore';
+import { ApiSearchSelect, parseApiValue } from '@/components/common/ApiSearchSelect';
 import { UIAddon } from './addons/UIAddon';
 import { TrackAddon } from './addons/TrackAddon';
 import { StatsAddon } from './addons/StatsAddon';

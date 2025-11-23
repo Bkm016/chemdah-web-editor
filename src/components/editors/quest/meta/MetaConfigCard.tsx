@@ -1,7 +1,7 @@
 import { Card, Group, Text, Badge, Stack, Collapse, ActionIcon, Box } from '@mantine/core';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useState, memo, useCallback } from 'react';
-import { MetaDefinition } from '../../../../store/useApiStore';
+import { MetaDefinition } from '@/store/useApiStore';
 import { DynamicMetaFields } from './DynamicMetaFields';
 
 interface MetaConfigCardProps {

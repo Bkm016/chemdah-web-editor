@@ -17,8 +17,8 @@ import {
   Tabs
 } from '@mantine/core';
 import { IconPlus, IconTrash, IconRefresh, IconGripVertical, IconAlertCircle, IconCheck, IconUpload, IconLink } from '@tabler/icons-react';
-import { useApiCenterStore, ApiSource } from '../../store/useApiCenterStore';
-import { useApiStore } from '../../store/useApiStore';
+import { useApiCenterStore, ApiSource } from '@/store/useApiCenterStore';
+import { useApiStore } from '@/store/useApiStore';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { notifications } from '@mantine/notifications';
 

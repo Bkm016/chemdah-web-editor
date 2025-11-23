@@ -1,5 +1,6 @@
 import { Stack } from '@mantine/core';
-import { FormTextarea, FormInput, FormCheckbox } from '../../../../ui';
+import { FormCheckbox } from '@/components/ui';
+import { DebouncedTextarea, DebouncedNumberInput } from '@/components/ui/DebouncedInput';
 
 interface LandmarkSettingsProps {
     data: any;
@@ -13,23 +14,25 @@ export function LandmarkSettings({ data, onChange }: LandmarkSettingsProps) {
 
     return (
         <Stack gap="xs">
-            <FormInput
+            <DebouncedNumberInput
                 label="显示距离 (Distance)"
-                type="number"
                 value={data?.distance ?? 128}
-                onChange={(e) => update('distance', parseFloat(e.target.value))}
+                onChange={(val) => update('distance', typeof val === 'number' ? val : parseFloat(String(val)))}
+                debounceMs={800}
             />
             <FormCheckbox
                 label="靠近隐藏 (Hide Near)"
                 checked={data?.['hide-near'] || false}
                 onChange={(e) => update('hide-near', e.currentTarget.checked)}
             />
-            <FormTextarea
+            <DebouncedTextarea
                 label="显示内容 (Content)"
                 description="支持变量 {distance}, {name}, {description}"
                 value={Array.isArray(data?.content) ? data.content.join('\n') : (data?.content || '')}
-                onChange={(e) => update('content', e.target.value.split('\n'))}
+                onChange={(val) => update('content', val.split('\n'))}
                 minRows={2}
+                autosize
+                debounceMs={800}
             />
         </Stack>
     );

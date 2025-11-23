@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Group, TextInput, ActionIcon, Stack, Text, Button, Popover, Badge, Select } from '@mantine/core';
+import { Group, ActionIcon, Stack, Text, Button, Popover, Badge, Select } from '@mantine/core';
 import { IconPlus, IconTrash, IconSettings } from '@tabler/icons-react';
-import { FormTagsInput } from '../../../../ui/FormTagsInput';
+import { FormTagsInput } from '@/components/ui/FormTagsInput';
+import { DebouncedTextInput } from '@/components/ui/DebouncedInput';
 
 interface InferFieldProps {
     value: string;
@@ -127,16 +128,17 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
     return (
         <Popover opened={opened} onChange={setOpened} width={450} position="bottom-end" withArrow trapFocus>
             <Popover.Target>
-                <TextInput
+                <DebouncedTextInput
                     placeholder={placeholder || "Value"}
                     value={mainValue}
-                    onChange={(e) => {
-                        setMainValue(e.target.value);
-                        updateValue(e.target.value, properties);
+                    onChange={(val) => {
+                        setMainValue(val);
+                        updateValue(val, properties);
                     }}
                     style={{ flex: 1 }}
                     size="xs"
                     variant="filled"
+                    debounceMs={800}
                     rightSection={
                         <ActionIcon variant={properties.length > 0 ? "light" : "subtle"} color={properties.length > 0 ? "blue" : "gray"} size="xs" onClick={() => setOpened((o) => !o)}>
                             <IconSettings size={12} />
@@ -152,12 +154,13 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
                         </Group>
                         {properties.map((prop, index) => (
                             <Group key={index} gap="xs" align="flex-start">
-                                <TextInput
+                                <DebouncedTextInput
                                     placeholder="Key"
                                     value={prop.key}
-                                    onChange={(e) => handlePropertyChange(index, 'key', e.target.value)}
+                                    onChange={(val) => handlePropertyChange(index, 'key', val)}
                                     size="xs"
                                     style={{ flex: 1 }}
+                                    debounceMs={800}
                                 />
                                 <Select
                                     data={OPERATORS}
@@ -180,12 +183,13 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
                                         leftSection={null}
                                     />
                                 ) : (
-                                    <TextInput
+                                    <DebouncedTextInput
                                         placeholder="Value"
                                         value={prop.value}
-                                        onChange={(e) => handlePropertyChange(index, 'value', e.target.value)}
+                                        onChange={(val) => handlePropertyChange(index, 'value', val)}
                                         size="xs"
                                         style={{ flex: 1 }}
+                                        debounceMs={800}
                                     />
                                 )}
                                 <ActionIcon color="red" variant="subtle" size="xs" onClick={() => handleRemoveProperty(index)} mt={4}>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useProjectStore } from '../../../store/useProjectStore';
+import { useProjectStore } from '@/store/useProjectStore';
 
 export const useGlobalIdCheck = (currentFileId?: string) => {
     // 只订阅 conversationFiles

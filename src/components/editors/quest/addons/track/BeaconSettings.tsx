@@ -1,6 +1,6 @@
 import { Stack, Group } from '@mantine/core';
-import { FormInput, FormSelect, FormCheckbox } from '../../../../ui';
-import { PARTICLE_TYPES } from '../../../../../utils/particle-types';
+import { FormInput, FormSelect, FormCheckbox } from '@/components/ui';
+import { PARTICLE_TYPES } from '@/utils/particle-types';
 
 interface BeaconSettingsProps {
     data: any;

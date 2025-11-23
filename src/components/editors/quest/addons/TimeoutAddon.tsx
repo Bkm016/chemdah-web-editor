@@ -1,4 +1,4 @@
-import { FormAddon, FormInput } from '../../../ui';
+import { FormAddon, FormInput } from '@/components/ui';
 
 interface TimeoutAddonProps {
     addon: any;

@@ -1,9 +1,9 @@
 import { Tabs, ScrollArea, Box, Stack, Title } from '@mantine/core';
 import { IconInfoCircle, IconAdjustments, IconScript, IconPuzzle } from '@tabler/icons-react';
 import { useMemo } from 'react';
-import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '../../ui';
-import { useProjectStore } from '../../../store/useProjectStore';
-import { parseYaml } from '../../../utils/yaml-utils';
+import { FormInput, FormCheckbox, FormSection, FormTagsInput } from '@/components/ui';
+import { useProjectStore } from '@/store/useProjectStore';
+import { parseYaml } from '@/utils/yaml-utils';
 import { AgentEditor } from './AgentEditor';
 import { MetaAddonList } from './meta/MetaAddonList';
 import { TrackAddon } from './addons/TrackAddon';

@@ -11,6 +11,7 @@ export interface ComponentField {
     pattern: string;
     description?: string;
     default?: any;
+    options?: string[];  // 选项列表，如 ["kether", "script"] 用于指定特殊输入类型
 }
 
 // 自定义组件定义（Meta/Addon 的新结构）
@@ -75,6 +76,20 @@ export interface AddonDefinition {
     _sourceColor?: string;  // 来源的颜色配置（内部使用）
 }
 
+// ==================== 对话组件定义 ====================
+
+// 对话组件定义（与 Meta/Addon 对齐）
+export interface ConversationComponentDefinition {
+    name: string;              // 中文名称
+    description: string[];     // 描述数组
+    alias: string[];           // 别名数组
+    scope: 'node' | 'player-option' | 'both';  // 作用域
+    class?: string;            // 可选的类名
+    params: ParamDefinition[]; // 参数列表
+    _source?: string;          // 来源插件
+    _sourceColor?: string;     // 来源颜色
+}
+
 // 插件 API 定义
 export interface PluginApiDefinition {
     objective?: {
@@ -86,8 +101,10 @@ export interface PluginApiDefinition {
     addon?: {
         [addonId: string]: AddonDefinition;
     };
-    conversationNodeComponents?: ComponentDefinition[];
-    conversationPlayerOptionComponents?: ComponentDefinition[];
+    // 对话系统 - 使用统一的对象格式
+    conversation?: {
+        [componentId: string]: ConversationComponentDefinition;
+    };
 }
 
 // 完整 API 数据（按插件分组）
@@ -310,14 +327,17 @@ export const useApiStore = create<ApiState>()(
             // 加载 API 数据
             loadApiData: async () => {
                 const apiCenterData = useApiCenterStore.getState().getMergedApiData();
+                // console.log('[useApiStore] loadApiData - 从 ApiCenter 获取数据:', apiCenterData);
                 if (apiCenterData) {
                     set({ apiData: apiCenterData });
+                    // console.log('[useApiStore] loadApiData - 已设置 apiData');
                     get().buildSearchIndex();
                 }
             },
 
             // 设置 API 数据
             setApiData: (data) => {
+                // console.log('[useApiStore] setApiData - 设置新数据:', data);
                 set({ apiData: data });
                 get().buildSearchIndex();
             },
@@ -325,6 +345,7 @@ export const useApiStore = create<ApiState>()(
             // 从 API Center 同步数据
             syncFromApiCenter: () => {
                 const apiCenterData = useApiCenterStore.getState().getMergedApiData();
+                // console.log('[useApiStore] syncFromApiCenter - 同步数据:', apiCenterData);
                 if (apiCenterData) {
                     set({ apiData: apiCenterData });
                     get().buildSearchIndex();

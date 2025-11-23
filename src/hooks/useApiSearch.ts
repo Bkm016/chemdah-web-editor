@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useApiStore, SearchResultItem, SearchItemType } from '../store/useApiStore';
+import { useApiStore, SearchResultItem, SearchItemType } from '@/store/useApiStore';
 
 export interface UseApiSearchOptions {
   type?: SearchItemType | 'all'; // 搜索类型

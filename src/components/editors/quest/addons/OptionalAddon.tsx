@@ -1,4 +1,4 @@
-import { FormAddon } from '../../../ui';
+import { FormAddon } from '@/components/ui';
 
 interface OptionalAddonProps {
     addon: any;
