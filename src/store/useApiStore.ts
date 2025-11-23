@@ -11,6 +11,7 @@ export interface ComponentField {
     pattern: string;
     description?: string;
     default?: any;
+    options?: string[];  // 选项列表，如 ["kether", "script"] 用于指定特殊输入类型
 }
 
 // 自定义组件定义（Meta/Addon 的新结构）
@@ -326,14 +327,17 @@ export const useApiStore = create<ApiState>()(
             // 加载 API 数据
             loadApiData: async () => {
                 const apiCenterData = useApiCenterStore.getState().getMergedApiData();
+                // console.log('[useApiStore] loadApiData - 从 ApiCenter 获取数据:', apiCenterData);
                 if (apiCenterData) {
                     set({ apiData: apiCenterData });
+                    // console.log('[useApiStore] loadApiData - 已设置 apiData');
                     get().buildSearchIndex();
                 }
             },
 
             // 设置 API 数据
             setApiData: (data) => {
+                // console.log('[useApiStore] setApiData - 设置新数据:', data);
                 set({ apiData: data });
                 get().buildSearchIndex();
             },
@@ -341,6 +345,7 @@ export const useApiStore = create<ApiState>()(
             // 从 API Center 同步数据
             syncFromApiCenter: () => {
                 const apiCenterData = useApiCenterStore.getState().getMergedApiData();
+                // console.log('[useApiStore] syncFromApiCenter - 同步数据:', apiCenterData);
                 if (apiCenterData) {
                     set({ apiData: apiCenterData });
                     get().buildSearchIndex();

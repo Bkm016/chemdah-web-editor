@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, { Background, Controls, MiniMap, useNodesState, useEdgesState, addEdge, Connection, Edge, Panel, Node, reconnectEdge, SelectionMode } from 'reactflow';
-import { Paper, Button, Group, Tooltip, ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { Paper, Button, Group, Tooltip, ActionIcon, useMantineColorScheme, Text, Stack } from '@mantine/core';
 import { useProjectStore } from '@/store/useProjectStore';
 import { IconPlus, IconLayoutDashboard, IconGitBranch, IconHandMove, IconBoxMultiple, IconTrash, IconSettings } from '@tabler/icons-react';
 import AgentNode, { AgentNodeData } from './nodes/AgentNode';
@@ -11,13 +11,14 @@ import { ConversationSettings, ConversationOptions } from './ConversationSetting
 
 import 'reactflow/dist/style.css';
 
+// Define nodeTypes outside component to avoid re-creation
+const nodeTypes = { agent: AgentNode, switch: SwitchNode };
+
 export default function FlowCanvas({ fileId }: { fileId: string }) {
   // 只订阅当前文件和更新函数
   const file = useProjectStore((state) => state.conversationFiles[fileId]);
   const updateFileContent = useProjectStore((state) => state.updateFileContent);
   const { colorScheme } = useMantineColorScheme();
-
-  const nodeTypes = useMemo(() => ({ agent: AgentNode, switch: SwitchNode }), []);
 
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -143,6 +144,19 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
 
   return (
     <Paper h="100%" radius={0} style={{ overflow: 'hidden', position: 'relative', display: 'flex', flexDirection: 'row' }}>
+        <style>{`
+            /* Override ReactFlow Controls button colors based on theme */
+            .react-flow__controls button {
+                background-color: ${colorScheme === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)'} !important;
+                border-color: ${colorScheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} !important;
+            }
+            .react-flow__controls button:hover {
+                background-color: ${colorScheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'} !important;
+            }
+            .react-flow__controls button path {
+                fill: ${colorScheme === 'dark' ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)'} !important;
+            }
+        `}</style>
         <div style={{ flex: 1, height: '100%', position: 'relative' }}>
             <ReactFlow
                 nodes={nodes}
@@ -165,7 +179,19 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
                 selectionMode={SelectionMode.Partial}
             >
                 <Background color="#333" gap={16} />
-                <Controls />
+                <Controls
+                    style={{
+                        backgroundColor: colorScheme === 'dark' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.85)',
+                        backdropFilter: 'blur(8px)',
+                        border: colorScheme === 'dark'
+                            ? '1px solid rgba(255,255,255,0.1)'
+                            : '1px solid rgba(0,0,0,0.1)',
+                        borderRadius: '8px',
+                        boxShadow: colorScheme === 'dark'
+                            ? '0 4px 12px rgba(0,0,0,0.5)'
+                            : '0 4px 12px rgba(0,0,0,0.15)'
+                    }}
+                />
                 <MiniMap
                     style={{
                         backgroundColor: colorScheme === 'dark' ? '#1a1b1e' : '#ffffff'
@@ -246,6 +272,35 @@ export default function FlowCanvas({ fileId }: { fileId: string }) {
                         )}
                     </Group>
                 </Panel>
+
+                {/* Keyboard Shortcuts Help - Custom positioned to avoid Controls */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        left: '70px',
+                        bottom: '10px',
+                        backgroundColor: 'transparent',
+                        pointerEvents: 'none',
+                        userSelect: 'none',
+                        padding: '8px',
+                        zIndex: 5
+                    }}
+                >
+                    <Stack gap={4}>
+                        <Text size="xs" c="dimmed" style={{ opacity: 0.6 }}>
+                            双击节点 - 编辑内容
+                        </Text>
+                        <Text size="xs" c="dimmed" style={{ opacity: 0.6 }}>
+                            双击连线 - 删除连接
+                        </Text>
+                        <Text size="xs" c="dimmed" style={{ opacity: 0.6 }}>
+                            Shift/Ctrl - 多选节点
+                        </Text>
+                        <Text size="xs" c="dimmed" style={{ opacity: 0.6 }}>
+                            Del/Backspace - 删除选中
+                        </Text>
+                    </Stack>
+                </div>
             </ReactFlow>
         </div>
 

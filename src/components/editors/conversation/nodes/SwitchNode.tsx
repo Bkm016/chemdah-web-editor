@@ -140,34 +140,38 @@ export default function SwitchNode({ id, data, selected }: NodeProps<SwitchNodeD
 
                         {/* Output Handle - Only if actionType is 'open' (link) */}
                         {branch.actionType === 'open' && (
-                            <Handle
-                                type="source"
-                                position={Position.Right}
-                                id={branch.id}
-                                style={{
-                                    right: -12,
-                                    width: 10,
-                                    height: 20,
-                                    borderRadius: '0 4px 4px 0',
-                                    background: 'var(--mantine-color-violet-5)',
-                                    border: 'none',
+                            <>
+                                <Handle
+                                    type="source"
+                                    position={Position.Right}
+                                    id={branch.id}
+                                    style={{
+                                        right: -12,
+                                        width: 10,
+                                        height: 20,
+                                        borderRadius: '0 4px 4px 0',
+                                        background: 'var(--mantine-color-violet-5)',
+                                        border: 'none',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        zIndex: 100
+                                    }}
+                                />
+                                {/* Visual arrow indicator - Outside Handle to avoid blocking interaction */}
+                                <div style={{
+                                    position: 'absolute',
+                                    right: -16,
                                     top: '50%',
                                     transform: 'translateY(-50%)',
-                                    zIndex: 100
-                                }}
-                            >
-                                <div style={{ 
-                                    position: 'absolute', 
-                                    right: -4, 
-                                    top: '50%', 
-                                    transform: 'translateY(-50%)',
-                                    width: 0, 
-                                    height: 0, 
+                                    width: 0,
+                                    height: 0,
                                     borderTop: '6px solid transparent',
                                     borderBottom: '6px solid transparent',
-                                    borderLeft: '8px solid var(--mantine-color-violet-5)'
+                                    borderLeft: '8px solid var(--mantine-color-violet-5)',
+                                    zIndex: 99,
+                                    pointerEvents: 'none'
                                 }} />
-                            </Handle>
+                            </>
                         )}
                     </Box>
                 ))

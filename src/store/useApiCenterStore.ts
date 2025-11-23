@@ -322,11 +322,33 @@ export const useApiCenterStore = create<ApiCenterState>()(
                 };
               }
             }
+
+            // 合并 conversation（对话组件）
+            if (pluginApi.conversation) {
+              if (!merged[pluginName].conversation) {
+                merged[pluginName].conversation = {};
+              }
+
+              // 为每个 conversation 组件添加 _source 和 _sourceColor 字段标记来源
+              const conversationDataWithSource: Record<string, any> = {};
+              for (const [key, value] of Object.entries(pluginApi.conversation)) {
+                conversationDataWithSource[key] = {
+                  ...(value as Record<string, any>),
+                  _source: pluginName,      // 记录原始插件来源
+                  _sourceColor: sourceColor // 记录源的颜色配置
+                };
+              }
+
+              merged[pluginName].conversation = {
+                ...merged[pluginName].conversation,
+                ...conversationDataWithSource
+              };
+            }
           }
         });
 
         // 统计信息
-        let objCount = 0, metaCount = 0, addonCount = 0;
+        let objCount = 0, metaCount = 0, addonCount = 0, conversationCount = 0;
         for (const plugin of Object.values(merged)) {
           if (plugin.objective) {
             objCount += Object.keys(plugin.objective).length;
@@ -337,7 +359,18 @@ export const useApiCenterStore = create<ApiCenterState>()(
           if (plugin.addon) {
             addonCount += Object.keys(plugin.addon).length;
           }
+          if (plugin.conversation) {
+            conversationCount += Object.keys(plugin.conversation).length;
+          }
         }
+
+        // console.log('[ApiCenterStore] 合并完成:', {
+        //   objectives: objCount,
+        //   metas: metaCount,
+        //   addons: addonCount,
+        //   conversations: conversationCount
+        // });
+        // console.log('[ApiCenterStore] 完整数据:', merged);
 
         return merged;
       }

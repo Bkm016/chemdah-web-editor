@@ -12,8 +12,29 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
     const currentValue = value ?? field.default;
 
     const renderField = () => {
-        switch (field.pattern) {
-            case 'Boolean':
+        // 检查 options 中是否包含 script 相关标记
+        const hasScriptOption = field.options?.some(opt =>
+            opt === 'kether' || opt === 'script' || opt === 'javascript'
+        );
+
+        // 如果有 script 选项，优先使用脚本编辑器
+        if (hasScriptOption) {
+            return (
+                <FormScript
+                    label={field.label}
+                    description={field.description}
+                    value={currentValue || ''}
+                    onChange={onChange}
+                    height="150px"
+                />
+            );
+        }
+
+        // 标准化 pattern（支持大小写）
+        const normalizedPattern = field.pattern.toLowerCase();
+
+        switch (normalizedPattern) {
+            case 'boolean':
                 return (
                     <Group justify="space-between">
                         <div>
@@ -27,7 +48,7 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
                     </Group>
                 );
 
-            case 'Number':
+            case 'number':
                 return (
                     <NumberInput
                         label={field.label}
@@ -37,7 +58,7 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
                     />
                 );
 
-            case 'String':
+            case 'string':
                 return (
                     <TextInput
                         label={field.label}
@@ -47,7 +68,7 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
                     />
                 );
 
-            case 'Array<String>':
+            case 'array<string>':
                 return (
                     <Stack gap="xs">
                         <Text size="sm" fw={500}>{field.label}</Text>
@@ -60,7 +81,7 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
                     </Stack>
                 );
 
-            case 'Script':
+            case 'script':
                 return (
                     <FormScript
                         label={field.label}
@@ -71,7 +92,7 @@ export function DynamicComponentField({ field, value, onChange }: DynamicCompone
                     />
                 );
 
-            case 'RichTextArray':
+            case 'richtextarray':
                 // 富文本数组，暂时用简单文本数组代替
                 return (
                     <Stack gap="xs">

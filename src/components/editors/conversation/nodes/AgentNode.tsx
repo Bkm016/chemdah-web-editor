@@ -63,20 +63,21 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
             border: 'none',
             zIndex: 100
         }}
-      >
-        {/* Visual arrow indicator */}
-        <div style={{ 
-            position: 'absolute', 
-            left: -4, 
-            top: '50%', 
-            transform: 'translateY(-50%)',
-            width: 0, 
-            height: 0, 
-            borderTop: '6px solid transparent',
-            borderBottom: '6px solid transparent',
-            borderLeft: '8px solid var(--mantine-color-blue-5)'
-        }} />
-      </Handle>
+      />
+      {/* Visual arrow indicator - Outside Handle to avoid blocking interaction */}
+      <div style={{
+          position: 'absolute',
+          left: -16,
+          top: 24,
+          transform: 'translateY(-50%)',
+          width: 0,
+          height: 0,
+          borderTop: '6px solid transparent',
+          borderBottom: '6px solid transparent',
+          borderLeft: '8px solid var(--mantine-color-blue-5)',
+          zIndex: 99,
+          pointerEvents: 'none'
+      }} />
 
       {/* Header */}
       <Box
@@ -163,19 +164,21 @@ export default function AgentNode({ data, selected }: NodeProps<AgentNodeData>) 
                                     transform: 'translateY(-50%)',
                                     zIndex: 100
                                 }}
-                            >
-                                <div style={{ 
-                                    position: 'absolute', 
-                                    right: -4, 
-                                    top: '50%', 
-                                    transform: 'translateY(-50%)',
-                                    width: 0, 
-                                    height: 0, 
-                                    borderTop: '6px solid transparent',
-                                    borderBottom: '6px solid transparent',
-                                    borderLeft: '8px solid var(--mantine-color-green-6)'
-                                }} />
-                            </Handle>
+                            />
+                            {/* Visual arrow indicator - Outside Handle to avoid blocking interaction */}
+                            <div style={{
+                                position: 'absolute',
+                                right: -16,
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                width: 0,
+                                height: 0,
+                                borderTop: '6px solid transparent',
+                                borderBottom: '6px solid transparent',
+                                borderLeft: '8px solid var(--mantine-color-green-6)',
+                                zIndex: 99,
+                                pointerEvents: 'none'
+                            }} />
                         </Box>
                     ))
                 ) : (
