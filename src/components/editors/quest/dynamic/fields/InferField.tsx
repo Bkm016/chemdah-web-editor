@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Group, ActionIcon, Stack, Text, Button, Popover, Badge, Select } from '@mantine/core';
+import { Group, ActionIcon, Stack, Text, Button, Badge, Select } from '@mantine/core';
 import { IconPlus, IconTrash, IconSettings } from '@tabler/icons-react';
 import { FormTagsInput } from '@/components/ui/FormTagsInput';
 import { DebouncedTextInput } from '@/components/ui/DebouncedInput';
@@ -126,82 +126,80 @@ export const InferField: React.FC<InferFieldProps> = ({ value, onChange, placeho
     };
 
     return (
-        <Popover opened={opened} onChange={setOpened} width={450} position="bottom-end" withArrow trapFocus>
-            <Popover.Target>
-                <DebouncedTextInput
-                    placeholder={placeholder || "Value"}
-                    value={mainValue}
-                    onChange={(val) => {
-                        setMainValue(val);
-                        updateValue(val, properties);
-                    }}
-                    style={{ flex: 1 }}
-                    size="xs"
-                    variant="filled"
-                    debounceMs={800}
-                    rightSection={
-                        <ActionIcon variant={properties.length > 0 ? "light" : "subtle"} color={properties.length > 0 ? "blue" : "gray"} size="xs" onClick={() => setOpened((o) => !o)}>
-                            <IconSettings size={12} />
-                        </ActionIcon>
-                    }
-                />
-            </Popover.Target>
-            <Popover.Dropdown>
-                <Stack gap="xs">
-                        <Group gap="xs">
-                            <Text size="xs" fw={500}>属性</Text>
-                            <Badge size="xs" variant="light">Properties</Badge>
-                        </Group>
-                        {properties.map((prop, index) => (
-                            <Group key={index} gap="xs" align="flex-start">
+        <Stack gap={0}>
+            <DebouncedTextInput
+                placeholder={placeholder || "Value"}
+                value={mainValue}
+                onChange={(val) => {
+                    setMainValue(val);
+                    updateValue(val, properties);
+                }}
+                style={{ flex: 1 }}
+                size="xs"
+                variant="filled"
+                debounceMs={800}
+                rightSection={
+                    <ActionIcon variant={properties.length > 0 ? "light" : "subtle"} color={properties.length > 0 ? "blue" : "gray"} size="xs" onClick={() => setOpened((o) => !o)}>
+                        <IconSettings size={12} />
+                    </ActionIcon>
+                }
+            />
+            {opened && (
+                <Stack gap="xs" p="xs" style={{ backgroundColor: 'var(--mantine-color-dark-6)', borderTop: '1px solid var(--mantine-color-dark-4)' }}>
+                    <Group gap="xs">
+                        <Text size="xs" fw={500}>属性</Text>
+                        <Badge size="xs" variant="light">Properties</Badge>
+                    </Group>
+                    {properties.map((prop, index) => (
+                        <Group key={index} gap="xs" align="flex-start">
+                            <DebouncedTextInput
+                                placeholder="Key"
+                                value={prop.key}
+                                onChange={(val) => handlePropertyChange(index, 'key', val)}
+                                size="xs"
+                                style={{ flex: 1 }}
+                                debounceMs={800}
+                            />
+                            <Select
+                                data={OPERATORS}
+                                value={prop.operator}
+                                onChange={(val) => handlePropertyChange(index, 'operator', val || '=')}
+                                size="xs"
+                                style={{ width: 100 }}
+                                allowDeselect={false}
+                                comboboxProps={{ withinPortal: false }}
+                            />
+                            {prop.operator === 'in' ? (
+                                <FormTagsInput
+                                    placeholder="Values"
+                                    value={prop.value ? prop.value.split('|') : []}
+                                    onChange={(tags) => handlePropertyChange(index, 'value', tags.join('|'))}
+                                    size="xs"
+                                    style={{ flex: 1 }}
+                                    comboboxProps={{ withinPortal: false }}
+                                    splitChars={['|', ',', '/']}
+                                    leftSection={null}
+                                />
+                            ) : (
                                 <DebouncedTextInput
-                                    placeholder="Key"
-                                    value={prop.key}
-                                    onChange={(val) => handlePropertyChange(index, 'key', val)}
+                                    placeholder="Value"
+                                    value={prop.value}
+                                    onChange={(val) => handlePropertyChange(index, 'value', val)}
                                     size="xs"
                                     style={{ flex: 1 }}
                                     debounceMs={800}
                                 />
-                                <Select
-                                    data={OPERATORS}
-                                    value={prop.operator}
-                                    onChange={(val) => handlePropertyChange(index, 'operator', val || '=')}
-                                    size="xs"
-                                    style={{ width: 100 }}
-                                    allowDeselect={false}
-                                    comboboxProps={{ withinPortal: false }}
-                                />
-                                {prop.operator === 'in' ? (
-                                    <FormTagsInput
-                                        placeholder="Values"
-                                        value={prop.value ? prop.value.split('|') : []}
-                                        onChange={(tags) => handlePropertyChange(index, 'value', tags.join('|'))}
-                                        size="xs"
-                                        style={{ flex: 1 }}
-                                        comboboxProps={{ withinPortal: false }}
-                                        splitChars={['|', ',', '/']}
-                                        leftSection={null}
-                                    />
-                                ) : (
-                                    <DebouncedTextInput
-                                        placeholder="Value"
-                                        value={prop.value}
-                                        onChange={(val) => handlePropertyChange(index, 'value', val)}
-                                        size="xs"
-                                        style={{ flex: 1 }}
-                                        debounceMs={800}
-                                    />
-                                )}
-                                <ActionIcon color="red" variant="subtle" size="xs" onClick={() => handleRemoveProperty(index)} mt={4}>
-                                    <IconTrash size={12} />
-                                </ActionIcon>
-                            </Group>
-                        ))}
-                        <Button size="xs" variant="light" leftSection={<IconPlus size={12} />} onClick={handleAddProperty}>
-                            添加属性
-                        </Button>
-                    </Stack>
-                </Popover.Dropdown>
-        </Popover>
+                            )}
+                            <ActionIcon color="red" variant="subtle" size="xs" onClick={() => handleRemoveProperty(index)} mt={4}>
+                                <IconTrash size={12} />
+                            </ActionIcon>
+                        </Group>
+                    ))}
+                    <Button size="xs" variant="light" leftSection={<IconPlus size={12} />} onClick={handleAddProperty}>
+                        添加属性
+                    </Button>
+                </Stack>
+            )}
+        </Stack>
     );
 };
