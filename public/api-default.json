@@ -1,314 +1,11 @@
 {
 	"minecraft": {
 		"objective": {
-			"player fish": {
+			"pose change": {
 				"condition": [
 					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "state",
-						"pattern": "String"
-					}, 
-					{
-						"name": "entity:hook",
-						"pattern": "Entity"
-					}, 
-					{
-						"name": "exp",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "entity",
-						"pattern": "Entity"
-					}
-				],
-				"condition-vars": [
-					"exp"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家钓鱼目标",
-				"description": [
-					"玩家钓鱼", 
-					"支持钓鱼状态、物品类型、经验等条件判断", 
-					"可统计钓鱼次数"
-				],
-				"alias": [
-					"钓鱼", 
-					"捕鱼", 
-					"垂钓"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家的位置"
-					}, 
-					{
-						"name": "entity",
-						"type": "Entity",
-						"required": false,
-						"options": [],
-						"description": "钓上来的实体"
-					}, 
-					{
-						"name": "entity:hook",
-						"type": "Entity",
-						"required": false,
-						"options": [],
-						"description": "鱼钩实体"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "钓上来的物品"
-					}, 
-					{
-						"name": "state",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "钓鱼状态（如CAUGHT_FISH）"
-					}, 
-					{
-						"name": "exp",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "获得的经验值"
-					}
-				]
-			},
-			"player chat": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "message",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [
-					"message"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家聊天目标",
-				"description": [
-					"玩家发送聊天消息", 
-					"支持消息内容、位置等条件判断", 
-					"可统计聊天次数"
-				],
-				"alias": [
-					"聊天", 
-					"发言", 
-					"说话"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家的位置"
-					}, 
-					{
-						"name": "message",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "聊天消息内容"
-					}
-				]
-			},
-			"change world": {
-				"condition": [
-					{
-						"name": "world",
-						"pattern": "String"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "world:to",
-						"pattern": "String"
-					}, 
-					{
-						"name": "world:from",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家切换世界目标",
-				"description": [
-					"玩家切换世界", 
-					"支持源世界、目标世界、位置等条件判断", 
-					"可统计切换次数"
-				],
-				"alias": [
-					"换世界", 
-					"跨世界", 
-					"世界转移"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "切换后的位置"
-					}, 
-					{
-						"name": "world",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "目标世界名称（与world:to相同）"
-					}, 
-					{
-						"name": "world:to",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "目标世界名称"
-					}, 
-					{
-						"name": "world:from",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "源世界名称"
-					}
-				]
-			},
-			"player kill": {
-				"condition": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "weapon",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "drops",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "cause",
-						"pattern": "String"
-					}, 
-					{
-						"name": "victim",
-						"pattern": "Entity"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "exp",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "revive-health",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "damage:final",
-						"pattern": "Number"
-					}
-				],
-				"condition-vars": [
-					"damage", 
-					"exp", 
-					"revive-health", 
-					"damage:final"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家击杀目标",
-				"description": [
-					"玩家击杀实体", 
-					"支持武器、受害者类型等条件判断", 
-					"可统计击杀数量"
-				],
-				"alias": [
-					"击杀", 
-					"杀怪", 
-					"战斗"
-				],
-				"params": [
-					{
-						"name": "weapon",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "使用的武器"
-					}, 
-					{
-						"name": "victim",
-						"type": "Entity",
-						"required": false,
-						"options": [],
-						"description": "被击杀的实体"
-					}
-				]
-			},
-			"food change": {
-				"condition": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "item",
-						"pattern": "ItemStack"
+						"name": "pose",
+						"pattern": "Enum"
 					}, 
 					{
 						"name": "position",
@@ -316,7 +13,7 @@
 					}
 				],
 				"condition-vars": [
-					"amount"
+					"pose"
 				],
 				"goal": [
 					{
@@ -327,16 +24,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "饥饿值变化目标",
+				"name": "玩家姿态变化目标",
 				"description": [
-					"玩家饥饿值变化时触发", 
-					"支持饥饿值、食物类型等条件判断", 
-					"可统计累计饥饿值变化"
+					"玩家实体姿态变化时触发", 
+					"支持玩家位置和新的姿态条件"
 				],
 				"alias": [
-					"饥饿值", 
-					"进食", 
-					"食物"
+					"姿态变化", 
+					"玩家姿势", 
+					"实体姿态"
 				],
 				"params": [
 					{
@@ -344,30 +40,19 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家位置"
+						"description": "玩家所在位置"
 					}, 
 					{
-						"name": "amount",
-						"type": "Number",
+						"name": "pose",
+						"type": "String",
 						"required": false,
 						"options": [],
-						"description": "饥饿值"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "食物物品"
+						"description": "玩家变化后的实体姿态"
 					}
 				]
 			},
-			"item break": {
+			"tnt prime": {
 				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
@@ -383,16 +68,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "物品损坏目标",
+				"name": "玩家点燃 TNT 目标",
 				"description": [
-					"玩家工具或装备耐久耗尽时触发", 
-					"支持物品类型、位置等条件判断", 
-					"可统计损坏数量"
+					"玩家使 TNT 进入点燃状态时触发", 
+					"支持点燃玩家的位置条件"
 				],
 				"alias": [
-					"损坏", 
-					"工具损坏", 
-					"耐久耗尽"
+					"TNT", 
+					"点燃炸药", 
+					"引爆"
 				],
 				"params": [
 					{
@@ -400,75 +84,7 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家的位置"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "损坏的物品"
-					}
-				]
-			},
-			"custom level": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "level",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "id",
-						"pattern": "String"
-					}
-				],
-				"goal-vars": [
-					"amount", 
-					"level"
-				],
-				"name": "自定义等级目标",
-				"description": [
-					"检查玩家自定义等级是否达到要求", 
-					"支持位置、等级ID、等级数值等条件判断", 
-					"适用于 Chemdah 等级系统"
-				],
-				"alias": [
-					"自定义等级", 
-					"等级检查", 
-					"customlevel"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "location",
-						"required": false,
-						"options": [],
-						"description": "检测位置条件"
-					}, 
-					{
-						"name": "id",
-						"type": "string",
-						"required": true,
-						"options": [],
-						"description": "等级系统ID"
-					}, 
-					{
-						"name": "level",
-						"type": "number",
-						"required": true,
-						"options": [],
-						"description": "目标等级数值"
+						"description": "点燃 TNT 的玩家位置"
 					}
 				]
 			},
@@ -529,99 +145,6 @@
 						"required": false,
 						"options": [],
 						"description": "移动的起始位置"
-					}
-				]
-			},
-			"block interact": {
-				"condition": [
-					{
-						"name": "face",
-						"pattern": "String"
-					}, 
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "material",
-						"pattern": "Block"
-					}, 
-					{
-						"name": "action",
-						"pattern": "String"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "hand",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "方块交互目标",
-				"description": [
-					"玩家与方块交互", 
-					"支持材质、交互类型、方向、手持物品等条件判断", 
-					"可统计交互次数"
-				],
-				"alias": [
-					"点击方块", 
-					"右键方块", 
-					"交互方块"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "被交互方块的位置"
-					}, 
-					{
-						"name": "material",
-						"type": "Block",
-						"required": false,
-						"options": [],
-						"description": "被交互的方块材质"
-					}, 
-					{
-						"name": "action",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "交互类型（如RIGHT_CLICK_BLOCK）"
-					}, 
-					{
-						"name": "face",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "点击的方块面"
-					}, 
-					{
-						"name": "hand",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "使用的手"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "手持的物品"
 					}
 				]
 			},
@@ -831,35 +354,19 @@
 					}
 				]
 			},
-			"bucket fill": {
+			"vehicle exit": {
 				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "face",
-						"pattern": "String"
-					}, 
-					{
-						"name": "material",
-						"pattern": "Block"
-					}, 
-					{
-						"name": "item:bucket",
-						"pattern": "ItemStack"
-					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "material:clicked",
-						"pattern": "Block"
+						"name": "position:vehicle",
+						"pattern": "Location"
 					}, 
 					{
-						"name": "hand",
-						"pattern": "String"
+						"name": "vehicle",
+						"pattern": "Entity"
 					}
 				],
 				"condition-vars": [],
@@ -872,230 +379,37 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "玩家填充桶目标",
+				"name": "玩家离开载具目标",
 				"description": [
-					"玩家使用桶填充流体", 
-					"支持位置、材质、物品等条件判断", 
-					"可统计填充次数"
+					"玩家离开载具时触发", 
+					"支持玩家位置、载具实体和载具位置条件"
 				],
 				"alias": [
-					"填桶", 
-					"取水", 
-					"填充"
+					"离开载具", 
+					"下船", 
+					"下矿车"
 				],
 				"params": [
+					{
+						"name": "vehicle",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "离开的载具实体"
+					}, 
+					{
+						"name": "position:vehicle",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "载具位置"
+					}, 
 					{
 						"name": "position",
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "点击的方块位置"
-					}, 
-					{
-						"name": "material",
-						"type": "Block",
-						"required": false,
-						"options": [],
-						"description": "填充后的方块"
-					}, 
-					{
-						"name": "material:clicked",
-						"type": "Block",
-						"required": false,
-						"options": [],
-						"description": "点击的方块"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "手持物品"
-					}, 
-					{
-						"name": "item:bucket",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "填充后的桶"
-					}, 
-					{
-						"name": "face",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "点击的方块面"
-					}, 
-					{
-						"name": "hand",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "使用的手（HAND/OFF_HAND）"
-					}
-				]
-			},
-			"bucket empty": {
-				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "face",
-						"pattern": "String"
-					}, 
-					{
-						"name": "material",
-						"pattern": "Block"
-					}, 
-					{
-						"name": "item:bucket",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "material:clicked",
-						"pattern": "Block"
-					}, 
-					{
-						"name": "hand",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家倾倒桶目标",
-				"description": [
-					"玩家倾倒桶中的流体", 
-					"支持位置、材质、物品等条件判断", 
-					"可统计倾倒次数"
-				],
-				"alias": [
-					"倒桶", 
-					"放水", 
-					"倾倒"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "点击的方块位置"
-					}, 
-					{
-						"name": "material",
-						"type": "Block",
-						"required": false,
-						"options": [],
-						"description": "倾倒后的方块"
-					}, 
-					{
-						"name": "material:clicked",
-						"type": "Block",
-						"required": false,
-						"options": [],
-						"description": "点击的方块"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "手持物品"
-					}, 
-					{
-						"name": "item:bucket",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "倾倒的桶"
-					}, 
-					{
-						"name": "face",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "点击的方块面"
-					}, 
-					{
-						"name": "hand",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "使用的手（HAND/OFF_HAND）"
-					}
-				]
-			},
-			"item consume": {
-				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "item:replacement",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "物品消耗目标",
-				"description": [
-					"玩家消耗物品时触发", 
-					"支持食物、药水等消耗性物品", 
-					"可统计消耗数量"
-				],
-				"alias": [
-					"消耗", 
-					"食用", 
-					"使用物品"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家的位置"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "消耗的物品"
-					}, 
-					{
-						"name": "item:replacement",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "消耗后替换的物品（如碗）"
+						"description": "离开载具的玩家位置"
 					}
 				]
 			},
@@ -1243,151 +557,6 @@
 					}
 				]
 			},
-			"always": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "持续检测目标",
-				"description": [
-					"每个游戏刻持续检测条件", 
-					"用于需要持续满足条件的场景", 
-					"不依赖事件触发，自动定时检测"
-				],
-				"alias": [
-					"always", 
-					"持续", 
-					"定时检测"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "location",
-						"required": false,
-						"options": [],
-						"description": "检测位置条件"
-					}
-				]
-			},
-			"shoot bow": {
-				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "arrow",
-						"pattern": "Entity"
-					}, 
-					{
-						"name": "consumable",
-						"pattern": "Boolean"
-					}, 
-					{
-						"name": "item:consumed",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "force",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "hand",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [
-					"consumable", 
-					"force"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家射箭目标",
-				"description": [
-					"玩家射箭", 
-					"支持弓类型、拉弓力度、消耗物品等条件判断", 
-					"可统计射箭次数"
-				],
-				"alias": [
-					"射箭", 
-					"射击", 
-					"发射弓箭"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "射箭位置"
-					}, 
-					{
-						"name": "arrow",
-						"type": "Entity",
-						"required": false,
-						"options": [],
-						"description": "发射的箭矢实体"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "使用的弓"
-					}, 
-					{
-						"name": "item:consumed",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "消耗的物品（如箭矢）"
-					}, 
-					{
-						"name": "hand",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "使用的手（HAND/OFF_HAND）"
-					}, 
-					{
-						"name": "force",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "拉弓力度（0.0-1.0）"
-					}, 
-					{
-						"name": "consumable",
-						"type": "Boolean",
-						"required": false,
-						"options": [],
-						"description": "是否消耗物品"
-					}
-				]
-			},
 			"player animation": {
 				"condition": [
 					{
@@ -1437,166 +606,114 @@
 					}
 				]
 			},
-			"player attack": {
+			"vehicle destroy": {
 				"condition": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "weapon",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "cause",
-						"pattern": "String"
-					}, 
-					{
-						"name": "victim",
-						"pattern": "Entity"
-					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "damage:final",
-						"pattern": "Number"
+						"name": "position:vehicle",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "vehicle",
+						"pattern": "Entity"
 					}
 				],
-				"condition-vars": [
-					"damage", 
-					"damage:final"
-				],
+				"condition-vars": [],
 				"goal": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
 					{
 						"name": "amount",
 						"pattern": "Number"
 					}
 				],
 				"goal-vars": [
-					"damage", 
 					"amount"
 				],
-				"name": "玩家攻击目标",
+				"name": "玩家破坏载具目标",
 				"description": [
-					"玩家攻击实体", 
-					"支持目标实体、武器、伤害值等条件判断", 
-					"可统计攻击次数"
+					"玩家破坏载具时触发", 
+					"支持玩家位置、被破坏载具、载具实体和载具位置条件"
 				],
 				"alias": [
-					"攻击", 
-					"玩家攻击", 
-					"打击"
+					"破坏载具", 
+					"拆船", 
+					"拆矿车"
 				],
 				"params": [
+					{
+						"name": "vehicle",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被破坏的载具实体"
+					}, 
+					{
+						"name": "position:vehicle",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "载具位置"
+					}, 
 					{
 						"name": "position",
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "攻击位置（目标位置）"
+						"description": "破坏载具的玩家位置"
 					}, 
 					{
-						"name": "victim",
+						"name": "entity",
 						"type": "Entity",
 						"required": false,
 						"options": [],
-						"description": "被攻击的实体"
-					}, 
-					{
-						"name": "damage",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "伤害值"
-					}, 
-					{
-						"name": "damage:final",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "最终伤害值"
-					}, 
-					{
-						"name": "cause",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "伤害类型"
-					}, 
-					{
-						"name": "weapon",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "使用的武器"
+						"description": "被破坏的载具实体"
 					}
 				]
 			},
-			"player damage by entity": {
+			"player leash": {
 				"condition": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "weapon",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "cause",
-						"pattern": "String"
-					}, 
-					{
-						"name": "attacker",
-						"pattern": "Entity"
-					}, 
-					{
-						"name": "victim",
-						"pattern": "Entity"
-					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "damage:final",
-						"pattern": "Number"
+						"name": "leash",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "String"
 					}
 				],
-				"condition-vars": [
-					"damage", 
-					"damage:final"
-				],
+				"condition-vars": [],
 				"goal": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
 					{
 						"name": "amount",
 						"pattern": "Number"
 					}
 				],
 				"goal-vars": [
-					"damage", 
 					"amount"
 				],
-				"name": "玩家被实体攻击受伤目标",
+				"name": "玩家拴绳目标",
 				"description": [
-					"玩家被实体攻击受到伤害", 
-					"支持攻击者实体、武器、伤害值等条件判断", 
-					"可统计被攻击次数"
+					"玩家用拴绳拴住实体时触发", 
+					"支持玩家位置、目标实体、使用手和拴绳持有者条件"
 				],
 				"alias": [
-					"被实体伤害", 
-					"实体攻击", 
-					"被攻击受伤"
+					"拴绳", 
+					"牵引", 
+					"牵住实体"
 				],
 				"params": [
 					{
@@ -1604,49 +721,28 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "受伤位置"
+						"description": "玩家位置"
 					}, 
 					{
-						"name": "victim",
+						"name": "entity",
 						"type": "Entity",
 						"required": false,
 						"options": [],
-						"description": "受伤的玩家"
+						"description": "被拴住的实体"
 					}, 
 					{
-						"name": "damage",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "伤害值"
-					}, 
-					{
-						"name": "damage:final",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "最终伤害值"
-					}, 
-					{
-						"name": "cause",
+						"name": "hand",
 						"type": "String",
 						"required": false,
 						"options": [],
-						"description": "伤害类型"
+						"description": "使用的手"
 					}, 
 					{
-						"name": "attacker",
+						"name": "leash",
 						"type": "Entity",
 						"required": false,
 						"options": [],
-						"description": "攻击者实体"
-					}, 
-					{
-						"name": "weapon",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "攻击者使用的武器"
+						"description": "拴绳持有者实体"
 					}
 				]
 			},
@@ -1877,15 +973,105 @@
 					}
 				]
 			},
-			"portal exit": {
+			"bucket entity": {
 				"condition": [
 					{
-						"name": "position:to",
+						"name": "bucket",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position:entity",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "position:from",
+						"name": "original",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
 						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Enum"
+					}
+				],
+				"condition-vars": [
+					"hand"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家桶装实体目标",
+				"description": [
+					"玩家使用桶捕获实体时触发", 
+					"支持玩家位置、实体位置、被捕获实体、使用手和桶物品条件"
+				],
+				"alias": [
+					"桶装实体", 
+					"捕获实体", 
+					"桶装鱼"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家所在位置"
+					}, 
+					{
+						"name": "position:entity",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被捕获实体所在位置"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被捕获进桶的实体"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "玩家使用的手"
+					}, 
+					{
+						"name": "bucket",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "捕获后得到的实体桶物品"
+					}, 
+					{
+						"name": "original",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "捕获前使用的桶物品"
+					}
+				]
+			},
+			"player fertilize": {
+				"condition": [
+					{
+						"name": "block",
+						"pattern": "Block"
 					}, 
 					{
 						"name": "position",
@@ -1902,16 +1088,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "传送门离开目标",
+				"name": "玩家催熟方块目标",
 				"description": [
-					"玩家离开传送门时触发", 
-					"支持目标位置和起始位置等条件判断", 
-					"可统计离开次数"
+					"玩家使方块被催熟时触发", 
+					"支持玩家位置和被催熟方块条件"
 				],
 				"alias": [
-					"离开传送门", 
-					"传送完成", 
-					"传送到达"
+					"催熟", 
+					"骨粉", 
+					"施肥"
 				],
 				"params": [
 					{
@@ -1919,47 +1104,14 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "目标位置（与position:to相同）"
+						"description": "玩家位置"
 					}, 
 					{
-						"name": "position:to",
-						"type": "Location",
+						"name": "block",
+						"type": "Block",
 						"required": false,
 						"options": [],
-						"description": "目标位置"
-					}, 
-					{
-						"name": "position:from",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "起始位置"
-					}
-				]
-			},
-			"never": {
-				"condition": [],
-				"condition-vars": [],
-				"goal": [],
-				"goal-vars": [],
-				"name": "永不完成目标",
-				"description": [
-					"永远无法完成的目标", 
-					"用于占位或特殊逻辑", 
-					"目标始终返回 false"
-				],
-				"alias": [
-					"never", 
-					"永不", 
-					"占位目标"
-				],
-				"params": [
-					{
-						"name": "null",
-						"type": "string",
-						"required": false,
-						"options": [],
-						"description": "占位参数，无实际作用"
+						"description": "被催熟的方块"
 					}
 				]
 			},
@@ -2120,44 +1272,6 @@
 					}
 				]
 			},
-			"player jump": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家跳跃目标",
-				"description": [
-					"玩家跳跃", 
-					"支持位置等条件判断", 
-					"可统计跳跃次数"
-				],
-				"alias": [
-					"跳跃", 
-					"起跳", 
-					"蹦跳"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家的位置"
-					}
-				]
-			},
 			"player permission": {
 				"condition": [
 					{
@@ -2204,114 +1318,6 @@
 						"required": true,
 						"options": [],
 						"description": "检测权限节点，如 'chemdah.admin'"
-					}
-				]
-			},
-			"player statistic": {
-				"condition": [
-					{
-						"name": "statistic",
-						"pattern": "String"
-					}, 
-					{
-						"name": "type:entity",
-						"pattern": "String"
-					}, 
-					{
-						"name": "type:material",
-						"pattern": "String"
-					}, 
-					{
-						"name": "value:previous",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "value:new",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "value",
-						"pattern": "Number"
-					}
-				],
-				"condition-vars": [
-					"value:previous", 
-					"value:new", 
-					"value"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家统计数据目标",
-				"description": [
-					"玩家统计数据变化时触发", 
-					"支持统计类型、实体类型、材料类型、数值等条件判断", 
-					"可统计增量变化"
-				],
-				"alias": [
-					"统计", 
-					"数据统计", 
-					"成就统计"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家位置"
-					}, 
-					{
-						"name": "statistic",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "统计类型"
-					}, 
-					{
-						"name": "type:entity",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "实体类型"
-					}, 
-					{
-						"name": "type:material",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "材料类型"
-					}, 
-					{
-						"name": "value",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "新值"
-					}, 
-					{
-						"name": "value:new",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "新值"
-					}, 
-					{
-						"name": "value:previous",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "旧值"
 					}
 				]
 			},
@@ -2833,6 +1839,3960 @@
 					}
 				]
 			},
+			"bell ring": {
+				"condition": [
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "敲钟目标",
+				"description": [
+					"玩家敲响钟时触发", 
+					"支持玩家位置和钟方块条件", 
+					"Bukkit 事件 BellRingEvent 在 1.14.2+ 可用"
+				],
+				"alias": [
+					"钟", 
+					"敲钟", 
+					"响钟"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "敲钟玩家的位置"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "被敲响的钟方块"
+					}
+				]
+			},
+			"vehicle collision": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position:vehicle",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "vehicle",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "载具碰撞玩家目标",
+				"description": [
+					"载具与玩家发生碰撞时触发", 
+					"支持玩家位置、载具实体和载具位置条件"
+				],
+				"alias": [
+					"载具碰撞", 
+					"撞车", 
+					"碰撞"
+				],
+				"params": [
+					{
+						"name": "vehicle",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "发生碰撞的载具实体"
+					}, 
+					{
+						"name": "position:vehicle",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "载具位置"
+					}, 
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被碰撞玩家的位置"
+					}
+				]
+			},
+			"player projectile": {
+				"condition": [
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家投射物命中目标",
+				"description": [
+					"玩家发射的投射物命中方块或实体时触发", 
+					"支持玩家位置、命中方块和命中实体条件"
+				],
+				"alias": [
+					"投射物", 
+					"射中", 
+					"弹射物命中"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "发射投射物的玩家位置"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "被命中的方块"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被命中的实体"
+					}
+				]
+			},
+			"player grow": {
+				"condition": [
+					{
+						"name": "species",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "position:spawn",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"isFromBonemeal"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家促成结构生长目标",
+				"description": [
+					"玩家促成树木等结构生长时触发", 
+					"支持玩家位置、生长位置和树种条件"
+				],
+				"alias": [
+					"树木生长", 
+					"结构生长", 
+					"种植生长"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "position:spawn",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "结构生长位置"
+					}, 
+					{
+						"name": "species",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "生长结构的树种"
+					}
+				]
+			},
+			"drop item": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "物品丢弃目标",
+				"description": [
+					"玩家丢弃物品时触发", 
+					"支持物品、数量、位置等条件判断", 
+					"可统计丢弃数量"
+				],
+				"alias": [
+					"丢弃", 
+					"扔物品", 
+					"抛出物品"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "丢弃时玩家的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "丢弃的物品"
+					}, 
+					{
+						"name": "amount",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "丢弃物品的数量"
+					}
+				]
+			},
+			"armor change": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "slot",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "盔甲更换目标",
+				"description": [
+					"玩家更换盔甲装备（需要 Paper 服务端）", 
+					"支持装备位置、物品等条件判断", 
+					"可统计更换次数"
+				],
+				"alias": [
+					"装备盔甲", 
+					"更换装备", 
+					"穿戴盔甲"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "更换后的盔甲物品"
+					}, 
+					{
+						"name": "slot",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "装备的槽位（如HEAD、CHEST、LEGS、FEET）"
+					}
+				]
+			},
+			"portal enter": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "传送门进入目标",
+				"description": [
+					"玩家进入传送门时触发", 
+					"支持传送门位置等条件判断", 
+					"可统计进入次数"
+				],
+				"alias": [
+					"进入传送门", 
+					"传送门", 
+					"下界门"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "传送门位置"
+					}
+				]
+			},
+			"player damage": {
+				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "cause",
+						"pattern": "String"
+					}, 
+					{
+						"name": "victim",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "damage:final",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"damage", 
+					"damage:final"
+				],
+				"goal": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"damage", 
+					"amount"
+				],
+				"name": "玩家受伤目标",
+				"description": [
+					"玩家受到伤害", 
+					"支持伤害类型、伤害值、位置等条件判断", 
+					"可统计受伤次数"
+				],
+				"alias": [
+					"受伤", 
+					"玩家伤害", 
+					"受到伤害"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "受伤位置"
+					}, 
+					{
+						"name": "victim",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "受伤的玩家"
+					}, 
+					{
+						"name": "damage",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "伤害值"
+					}, 
+					{
+						"name": "damage:final",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "最终伤害值"
+					}, 
+					{
+						"name": "cause",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "伤害类型（ENTITY_ATTACK/FALL/FIRE/DROWNING等）"
+					}
+				]
+			},
+			"break hanging": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position:hanging",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家破坏悬挂实体目标",
+				"description": [
+					"玩家破坏画、物品展示框等悬挂实体时触发", 
+					"支持悬挂实体、悬挂位置和玩家位置条件"
+				],
+				"alias": [
+					"破坏画", 
+					"破坏展示框", 
+					"拆除悬挂实体"
+				],
+				"params": [
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被破坏的悬挂实体"
+					}, 
+					{
+						"name": "position:hanging",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "悬挂实体所在位置"
+					}, 
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "破坏悬挂实体的玩家位置"
+					}
+				]
+			},
+			"player respawn": {
+				"condition": [
+					{
+						"name": "spawn:anchor",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "spawn:bed",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家重生目标",
+				"description": [
+					"玩家重生", 
+					"支持重生位置、重生类型（床/重生锚）等条件判断", 
+					"可统计重生次数"
+				],
+				"alias": [
+					"重生", 
+					"复活", 
+					"复生"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "重生位置"
+					}, 
+					{
+						"name": "spawn:bed",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否在床上重生"
+					}, 
+					{
+						"name": "spawn:anchor",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否在重生锚上重生"
+					}
+				]
+			},
+			"player conversation": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "id",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"id"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "对话回复目标",
+				"description": [
+					"玩家通过回复选项结束对话", 
+					"支持位置、对话ID等条件判断", 
+					"适用于 Chemdah 内部对话系统"
+				],
+				"alias": [
+					"对话回复", 
+					"回复对话", 
+					"conversation回复"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "location",
+						"required": false,
+						"options": [],
+						"description": "检测对话回复位置"
+					}, 
+					{
+						"name": "id",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "对话ID，用于过滤特定对话"
+					}
+				]
+			},
+			"player toggle flight": {
+				"condition": [
+					{
+						"name": "flying",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "飞行状态切换目标",
+				"description": [
+					"玩家切换飞行状态时触发", 
+					"支持飞行状态等条件判断", 
+					"可统计切换次数"
+				],
+				"alias": [
+					"飞行", 
+					"切换飞行", 
+					"起飞"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "flying",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否开始飞行"
+					}
+				]
+			},
+			"egg throw": {
+				"condition": [
+					{
+						"name": "hatches",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "type",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "hatching",
+						"pattern": "Boolean"
+					}
+				],
+				"condition-vars": [
+					"type"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家投掷鸡蛋目标",
+				"description": [
+					"玩家投掷鸡蛋时触发", 
+					"支持位置、鸡蛋物品、孵化状态、孵化数量和孵化实体类型条件"
+				],
+				"alias": [
+					"丢鸡蛋", 
+					"鸡蛋", 
+					"孵化"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "投出的鸡蛋物品"
+					}, 
+					{
+						"name": "hatching",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否会孵化"
+					}, 
+					{
+						"name": "hatches",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "孵化数量"
+					}, 
+					{
+						"name": "type",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "孵化实体类型"
+					}
+				]
+			},
+			"cauldron change": {
+				"condition": [
+					{
+						"name": "position:block",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "level:change",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "cauldron",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"oldlevel", 
+					"newlevel"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "炼药锅水位变化目标",
+				"description": [
+					"玩家导致炼药锅水位变化时触发", 
+					"支持炼药锅方块、玩家位置、方块位置和水位变化量条件"
+				],
+				"alias": [
+					"炼药锅", 
+					"水位变化", 
+					"锅水变化"
+				],
+				"params": [
+					{
+						"name": "cauldron",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "发生水位变化的炼药锅方块"
+					}, 
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "触发变化的玩家位置"
+					}, 
+					{
+						"name": "position:block",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "炼药锅方块位置"
+					}, 
+					{
+						"name": "level:change",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新旧水位差的绝对值"
+					}
+				]
+			},
+			"entity love": {
+				"condition": [
+					{
+						"name": "position:entity",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [
+					"ticksInLove"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家喂养动物求爱目标",
+				"description": [
+					"玩家使动物进入求爱模式时触发", 
+					"支持玩家位置、动物位置和动物实体条件"
+				],
+				"alias": [
+					"繁殖喂食", 
+					"动物求爱", 
+					"喂动物"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "触发求爱模式的玩家位置"
+					}, 
+					{
+						"name": "position:entity",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "进入求爱模式的动物位置"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "进入求爱模式的动物实体"
+					}
+				]
+			},
+			"furnace extract": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "exp",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"exp"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "熔炉提取目标",
+				"description": [
+					"玩家从熔炉提取物品时触发", 
+					"自动计算提取物品的数量", 
+					"支持物品、经验、位置等条件判断"
+				],
+				"alias": [
+					"熔炉", 
+					"烧炼", 
+					"提取物品"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "熔炉的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "提取的物品"
+					}, 
+					{
+						"name": "exp",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "获得的经验值"
+					}
+				]
+			},
+			"player conversation closed": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "id",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"id"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "对话结束目标",
+				"description": [
+					"玩家正常结束对话", 
+					"支持位置、对话ID等条件判断", 
+					"适用于 Chemdah 内部对话系统"
+				],
+				"alias": [
+					"对话结束", 
+					"对话完成", 
+					"conversation结束"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "location",
+						"required": false,
+						"options": [],
+						"description": "检测对话结束位置"
+					}, 
+					{
+						"name": "id",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "对话ID，用于过滤特定对话"
+					}
+				]
+			},
+			"lectern book": {
+				"condition": [
+					{
+						"name": "book",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家取走讲台书本目标",
+				"description": [
+					"玩家从讲台取走书本时触发", 
+					"支持玩家位置和书本物品条件"
+				],
+				"alias": [
+					"讲台", 
+					"取书", 
+					"讲台书"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "book",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "被取走的书本"
+					}
+				]
+			},
+			"player arrow change": {
+				"condition": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"oldAmount", 
+					"newAmount"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家身上箭矢数量变化目标",
+				"description": [
+					"玩家身上可见箭矢数量变化时触发", 
+					"支持玩家位置和新箭矢数量条件"
+				],
+				"alias": [
+					"中箭", 
+					"箭矢数量", 
+					"插箭"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "amount",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新的箭矢数量"
+					}
+				]
+			},
+			"trigger": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "触发器目标",
+				"description": [
+					"通过外部命令或脚本手动触发", 
+					"支持自定义触发值匹配", 
+					"用于与其他系统联动"
+				],
+				"alias": [
+					"trigger", 
+					"触发", 
+					"手动触发"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "location",
+						"required": false,
+						"options": [],
+						"description": "检测位置条件"
+					}, 
+					{
+						"name": "value",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "触发值，支持多个值用逗号分隔"
+					}
+				]
+			},
+			"block drop item": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "List<ItemStack>"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "方块掉落物品目标",
+				"description": [
+					"玩家破坏方块产生掉落物时触发", 
+					"支持玩家位置、方块和掉落物品条件"
+				],
+				"alias": [
+					"方块掉落", 
+					"掉落物", 
+					"采集掉落"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "破坏方块的玩家位置"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "产生掉落物的方块"
+					}, 
+					{
+						"name": "item",
+						"type": "List<ItemStack>",
+						"required": false,
+						"options": [],
+						"description": "掉落物品列表"
+					}
+				]
+			},
+			"level change": {
+				"condition": [
+					{
+						"name": "level",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "level:new",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "level:old",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"level", 
+					"level:new", 
+					"level:old"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家等级变化目标",
+				"description": [
+					"玩家等级变化", 
+					"支持等级差、新等级、旧等级等条件判断", 
+					"可统计等级提升量"
+				],
+				"alias": [
+					"等级变化", 
+					"升级", 
+					"等级提升"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "level",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "等级变化量（新等级-旧等级）"
+					}, 
+					{
+						"name": "level:new",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "变化后的等级"
+					}, 
+					{
+						"name": "level:old",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "变化前的等级"
+					}
+				]
+			},
+			"player swap hand": {
+				"condition": [
+					{
+						"name": "item:main",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "item:offhand",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "切换主副手目标",
+				"description": [
+					"玩家按F键切换主副手物品时触发", 
+					"支持主手和副手物品等条件判断", 
+					"可统计切换次数"
+				],
+				"alias": [
+					"切换手", 
+					"主副手", 
+					"交换物品"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "item:main",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "主手物品"
+					}, 
+					{
+						"name": "item:offhand",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "副手物品"
+					}
+				]
+			},
+			" anger zombie": {
+				"condition": [
+					{
+						"name": "anger",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [
+					"anger"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "僵尸猪灵愤怒目标",
+				"description": [
+					"僵尸猪灵对玩家产生愤怒时触发", 
+					"支持实体和愤怒值条件"
+				],
+				"alias": [
+					"猪人愤怒", 
+					"僵尸猪人", 
+					"愤怒值"
+				],
+				"params": [
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "产生愤怒的实体"
+					}, 
+					{
+						"name": "anger",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新的愤怒值"
+					}
+				]
+			},
+			"player riptide": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "激流冲刺目标",
+				"description": [
+					"玩家使用激流三叉戟冲刺时触发", 
+					"支持三叉戟类型、位置等条件判断", 
+					"可统计使用次数"
+				],
+				"alias": [
+					"激流", 
+					"三叉戟冲刺", 
+					"riptide"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用物品"
+					}
+				]
+			},
+			"elytra boost": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "firework",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "consume",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "鞘翅加速目标",
+				"description": [
+					"玩家使用烟花火箭加速鞘翅（需要 Paper 服务端）", 
+					"支持物品、消耗状态、烟花实体等条件判断", 
+					"可统计加速次数"
+				],
+				"alias": [
+					"烟花加速", 
+					"鞘翅飞行", 
+					"火箭推进"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用的烟花火箭物品"
+					}, 
+					{
+						"name": "consume",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否消耗了烟花（使用了一个）"
+					}, 
+					{
+						"name": "firework",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "触发加速的烟花实体"
+					}
+				]
+			},
+			"player resurrect": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家复活目标",
+				"description": [
+					"玩家使用不死图腾复活时触发", 
+					"支持使用物品类型等条件判断", 
+					"可统计复活次数"
+				],
+				"alias": [
+					"复活", 
+					"不死图腾", 
+					"重生"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用物品"
+					}
+				]
+			},
+			"player advancement": {
+				"condition": [
+					{
+						"name": "advancement",
+						"pattern": "String"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家完成进度目标",
+				"description": [
+					"玩家完成进度", 
+					"支持进度ID、位置等条件判断", 
+					"可统计完成进度次数"
+				],
+				"alias": [
+					"完成进度", 
+					"成就", 
+					"进度达成"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "advancement",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "进度ID（如minecraft:story/mine_stone）"
+					}
+				]
+			},
+			"edit book": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "page",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "title",
+						"pattern": "String"
+					}, 
+					{
+						"name": "signing",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "content",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"page", 
+					"title", 
+					"content"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "编辑书籍目标",
+				"description": [
+					"玩家编辑或签署书籍时触发", 
+					"支持签署状态、页数、标题、内容等条件判断", 
+					"可统计编辑次数"
+				],
+				"alias": [
+					"写书", 
+					"编辑书", 
+					"签署书籍"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "signing",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否签署"
+					}, 
+					{
+						"name": "page",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "页数"
+					}, 
+					{
+						"name": "title",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "书籍标题"
+					}, 
+					{
+						"name": "content",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "书籍内容"
+					}
+				]
+			},
+			"player unleash": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Enum"
+					}
+				],
+				"condition-vars": [
+					"hand"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家解除拴绳目标",
+				"description": [
+					"玩家解除实体拴绳时触发", 
+					"支持玩家位置、使用手和目标实体条件"
+				],
+				"alias": [
+					"解绑", 
+					"解开拴绳", 
+					"放开实体"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被解除拴绳的实体"
+					}
+				]
+			},
+			"dispense armor": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "发射器装备盔甲目标",
+				"description": [
+					"方块向玩家发射并装备盔甲时触发", 
+					"支持装备物品和目标玩家位置条件"
+				],
+				"alias": [
+					"发射盔甲", 
+					"装备盔甲", 
+					"发射器装备"
+				],
+				"params": [
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "被发射并装备的物品"
+					}, 
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "目标玩家位置"
+					}
+				]
+			},
+			"player death": {
+				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "weapon",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "drops",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "cause",
+						"pattern": "String"
+					}, 
+					{
+						"name": "attacker",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "exp",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "revive-health",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "message",
+						"pattern": "String"
+					}, 
+					{
+						"name": "damage:final",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"damage", 
+					"exp", 
+					"revive-health", 
+					"message", 
+					"damage:final"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家死亡目标",
+				"description": [
+					"玩家死亡", 
+					"支持攻击者、武器、死亡消息等条件判断", 
+					"可统计死亡次数"
+				],
+				"alias": [
+					"死亡", 
+					"阵亡", 
+					"被击杀"
+				],
+				"params": [
+					{
+						"name": "weapon",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "攻击者使用的武器"
+					}, 
+					{
+						"name": "attacker",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "攻击者实体"
+					}, 
+					{
+						"name": "message",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "死亡消息"
+					}
+				]
+			},
+			"player fish": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "state",
+						"pattern": "String"
+					}, 
+					{
+						"name": "entity:hook",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "exp",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [
+					"exp"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家钓鱼目标",
+				"description": [
+					"玩家钓鱼", 
+					"支持钓鱼状态、物品类型、经验等条件判断", 
+					"可统计钓鱼次数"
+				],
+				"alias": [
+					"钓鱼", 
+					"捕鱼", 
+					"垂钓"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "钓上来的实体"
+					}, 
+					{
+						"name": "entity:hook",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "鱼钩实体"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "钓上来的物品"
+					}, 
+					{
+						"name": "state",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "钓鱼状态（如CAUGHT_FISH）"
+					}, 
+					{
+						"name": "exp",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "获得的经验值"
+					}
+				]
+			},
+			"combust block": {
+				"condition": [
+					{
+						"name": "position:block",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "duration",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"duration"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家被方块引燃目标",
+				"description": [
+					"玩家因方块开始燃烧时触发", 
+					"支持玩家位置、引燃方块位置、引燃方块和燃烧持续时间条件"
+				],
+				"alias": [
+					"方块引燃", 
+					"踩火", 
+					"岩浆引燃"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被引燃玩家所在位置"
+					}, 
+					{
+						"name": "position:block",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "引燃玩家的方块位置"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "引燃玩家的方块，例如火焰或岩浆"
+					}, 
+					{
+						"name": "duration",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "燃烧持续时间"
+					}
+				]
+			},
+			"player chat": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "message",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"message"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家聊天目标",
+				"description": [
+					"玩家发送聊天消息", 
+					"支持消息内容、位置等条件判断", 
+					"可统计聊天次数"
+				],
+				"alias": [
+					"聊天", 
+					"发言", 
+					"说话"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "message",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "聊天消息内容"
+					}
+				]
+			},
+			"change world": {
+				"condition": [
+					{
+						"name": "world",
+						"pattern": "String"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "world:to",
+						"pattern": "String"
+					}, 
+					{
+						"name": "world:from",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家切换世界目标",
+				"description": [
+					"玩家切换世界", 
+					"支持源世界、目标世界、位置等条件判断", 
+					"可统计切换次数"
+				],
+				"alias": [
+					"换世界", 
+					"跨世界", 
+					"世界转移"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "切换后的位置"
+					}, 
+					{
+						"name": "world",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "目标世界名称（与world:to相同）"
+					}, 
+					{
+						"name": "world:to",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "目标世界名称"
+					}, 
+					{
+						"name": "world:from",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "源世界名称"
+					}
+				]
+			},
+			"player kill": {
+				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "weapon",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "drops",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "cause",
+						"pattern": "String"
+					}, 
+					{
+						"name": "victim",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "exp",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "revive-health",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "damage:final",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"damage", 
+					"exp", 
+					"revive-health", 
+					"damage:final"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家击杀目标",
+				"description": [
+					"玩家击杀实体", 
+					"支持武器、受害者类型等条件判断", 
+					"可统计击杀数量"
+				],
+				"alias": [
+					"击杀", 
+					"杀怪", 
+					"战斗"
+				],
+				"params": [
+					{
+						"name": "weapon",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用的武器"
+					}, 
+					{
+						"name": "victim",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被击杀的实体"
+					}
+				]
+			},
+			"food change": {
+				"condition": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"amount"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "饥饿值变化目标",
+				"description": [
+					"玩家饥饿值变化时触发", 
+					"支持饥饿值、食物类型等条件判断", 
+					"可统计累计饥饿值变化"
+				],
+				"alias": [
+					"饥饿值", 
+					"进食", 
+					"食物"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "amount",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "饥饿值"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "食物物品"
+					}
+				]
+			},
+			"item break": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "物品损坏目标",
+				"description": [
+					"玩家工具或装备耐久耗尽时触发", 
+					"支持物品类型、位置等条件判断", 
+					"可统计损坏数量"
+				],
+				"alias": [
+					"损坏", 
+					"工具损坏", 
+					"耐久耗尽"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "损坏的物品"
+					}
+				]
+			},
+			"player armor change": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "standItem",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position:stand",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "slot",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Enum"
+					}
+				],
+				"condition-vars": [
+					"slot", 
+					"hand"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家操作盔甲架目标",
+				"description": [
+					"玩家操作盔甲架装备时触发", 
+					"支持玩家位置、盔甲架位置、物品、手和槽位条件"
+				],
+				"alias": [
+					"盔甲架", 
+					"盔甲架装备", 
+					"装备交互"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "position:stand",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "盔甲架位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "玩家手中的物品"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手"
+					}, 
+					{
+						"name": "slot",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "被操作的装备槽位"
+					}, 
+					{
+						"name": "standItem",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "盔甲架原有物品"
+					}
+				]
+			},
+			"custom level": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "level",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "id",
+						"pattern": "String"
+					}
+				],
+				"goal-vars": [
+					"amount", 
+					"level"
+				],
+				"name": "自定义等级目标",
+				"description": [
+					"检查玩家自定义等级是否达到要求", 
+					"支持位置、等级ID、等级数值等条件判断", 
+					"适用于 Chemdah 等级系统"
+				],
+				"alias": [
+					"自定义等级", 
+					"等级检查", 
+					"customlevel"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "location",
+						"required": false,
+						"options": [],
+						"description": "检测位置条件"
+					}, 
+					{
+						"name": "id",
+						"type": "string",
+						"required": true,
+						"options": [],
+						"description": "等级系统ID"
+					}, 
+					{
+						"name": "level",
+						"type": "number",
+						"required": true,
+						"options": [],
+						"description": "目标等级数值"
+					}
+				]
+			},
+			"sheep dye": {
+				"condition": [
+					{
+						"name": "position:entity",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "color",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家给羊染色目标",
+				"description": [
+					"玩家给羊染色时触发", 
+					"支持玩家位置、羊位置、羊实体和颜色条件"
+				],
+				"alias": [
+					"染羊", 
+					"羊毛染色", 
+					"染色"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "position:entity",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "羊实体位置"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被染色的羊"
+					}, 
+					{
+						"name": "color",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "染色后的颜色"
+					}
+				]
+			},
+			"block interact": {
+				"condition": [
+					{
+						"name": "face",
+						"pattern": "String"
+					}, 
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "material",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "action",
+						"pattern": "String"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "方块交互目标",
+				"description": [
+					"玩家与方块交互", 
+					"支持材质、交互类型、方向、手持物品等条件判断", 
+					"可统计交互次数"
+				],
+				"alias": [
+					"点击方块", 
+					"右键方块", 
+					"交互方块"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被交互方块的位置"
+					}, 
+					{
+						"name": "material",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "被交互的方块材质"
+					}, 
+					{
+						"name": "action",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "交互类型（如RIGHT_CLICK_BLOCK）"
+					}, 
+					{
+						"name": "face",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "点击的方块面"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "手持的物品"
+					}
+				]
+			},
+			"air change": {
+				"condition": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"amount"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家氧气变化目标",
+				"description": [
+					"玩家剩余氧气值变化时触发", 
+					"支持位置和氧气数量条件"
+				],
+				"alias": [
+					"氧气", 
+					"呼吸", 
+					"溺水"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "amount",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新的剩余氧气值"
+					}
+				]
+			},
+			"bucket fill": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "face",
+						"pattern": "String"
+					}, 
+					{
+						"name": "material",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "item:bucket",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "material:clicked",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家填充桶目标",
+				"description": [
+					"玩家使用桶填充流体", 
+					"支持位置、材质、物品等条件判断", 
+					"可统计填充次数"
+				],
+				"alias": [
+					"填桶", 
+					"取水", 
+					"填充"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "点击的方块位置"
+					}, 
+					{
+						"name": "material",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "填充后的方块"
+					}, 
+					{
+						"name": "material:clicked",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "点击的方块"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "手持物品"
+					}, 
+					{
+						"name": "item:bucket",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "填充后的桶"
+					}, 
+					{
+						"name": "face",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "点击的方块面"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手（HAND/OFF_HAND）"
+					}
+				]
+			},
+			"bucket empty": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "face",
+						"pattern": "String"
+					}, 
+					{
+						"name": "material",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "item:bucket",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "material:clicked",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家倾倒桶目标",
+				"description": [
+					"玩家倾倒桶中的流体", 
+					"支持位置、材质、物品等条件判断", 
+					"可统计倾倒次数"
+				],
+				"alias": [
+					"倒桶", 
+					"放水", 
+					"倾倒"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "点击的方块位置"
+					}, 
+					{
+						"name": "material",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "倾倒后的方块"
+					}, 
+					{
+						"name": "material:clicked",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "点击的方块"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "手持物品"
+					}, 
+					{
+						"name": "item:bucket",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "倾倒的桶"
+					}, 
+					{
+						"name": "face",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "点击的方块面"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手（HAND/OFF_HAND）"
+					}
+				]
+			},
+			"item consume": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "item:replacement",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "物品消耗目标",
+				"description": [
+					"玩家消耗物品时触发", 
+					"支持食物、药水等消耗性物品", 
+					"可统计消耗数量"
+				],
+				"alias": [
+					"消耗", 
+					"食用", 
+					"使用物品"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "消耗的物品"
+					}, 
+					{
+						"name": "item:replacement",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "消耗后替换的物品（如碗）"
+					}
+				]
+			},
+			"always": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "持续检测目标",
+				"description": [
+					"每个游戏刻持续检测条件", 
+					"用于需要持续满足条件的场景", 
+					"不依赖事件触发，自动定时检测"
+				],
+				"alias": [
+					"always", 
+					"持续", 
+					"定时检测"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "location",
+						"required": false,
+						"options": [],
+						"description": "检测位置条件"
+					}
+				]
+			},
+			"shoot bow": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "arrow",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "consumable",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "item:consumed",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "force",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "String"
+					}
+				],
+				"condition-vars": [
+					"consumable", 
+					"force"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家射箭目标",
+				"description": [
+					"玩家射箭", 
+					"支持弓类型、拉弓力度、消耗物品等条件判断", 
+					"可统计射箭次数"
+				],
+				"alias": [
+					"射箭", 
+					"射击", 
+					"发射弓箭"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "射箭位置"
+					}, 
+					{
+						"name": "arrow",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "发射的箭矢实体"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用的弓"
+					}, 
+					{
+						"name": "item:consumed",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "消耗的物品（如箭矢）"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "使用的手（HAND/OFF_HAND）"
+					}, 
+					{
+						"name": "force",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "拉弓力度（0.0-1.0）"
+					}, 
+					{
+						"name": "consumable",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否消耗物品"
+					}
+				]
+			},
+			"place entity": {
+				"condition": [
+					{
+						"name": "position:entity",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "face",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Enum"
+					}
+				],
+				"condition-vars": [
+					"face", 
+					"hand"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家放置实体目标",
+				"description": [
+					"玩家通过物品放置实体时触发", 
+					"适用于盔甲架、船、矿车和末地水晶等实体放置结果"
+				],
+				"alias": [
+					"放置实体", 
+					"放置盔甲架", 
+					"放置矿车"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "放置实体的玩家位置"
+					}, 
+					{
+						"name": "position:entity",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被放置实体所在位置"
+					}, 
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被放置到世界的实体"
+					}, 
+					{
+						"name": "hand",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "玩家使用的手"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "实体放置依附的方块"
+					}, 
+					{
+						"name": "face",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "实体放置依附的方块面"
+					}
+				]
+			},
+			"recipe discover": {
+				"condition": [
+					{
+						"name": "recipe",
+						"pattern": "String"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "配方发现目标",
+				"description": [
+					"玩家解锁新配方时触发", 
+					"支持配方类型等条件判断", 
+					"可统计解锁数量"
+				],
+				"alias": [
+					"解锁配方", 
+					"发现配方", 
+					"学习配方"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "recipe",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "配方ID"
+					}
+				]
+			},
+			"player attack": {
+				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "weapon",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "cause",
+						"pattern": "String"
+					}, 
+					{
+						"name": "victim",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "damage:final",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"damage", 
+					"damage:final"
+				],
+				"goal": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"damage", 
+					"amount"
+				],
+				"name": "玩家攻击目标",
+				"description": [
+					"玩家攻击实体", 
+					"支持目标实体、武器、伤害值等条件判断", 
+					"可统计攻击次数"
+				],
+				"alias": [
+					"攻击", 
+					"玩家攻击", 
+					"打击"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "攻击位置（目标位置）"
+					}, 
+					{
+						"name": "victim",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被攻击的实体"
+					}, 
+					{
+						"name": "damage",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "伤害值"
+					}, 
+					{
+						"name": "damage:final",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "最终伤害值"
+					}, 
+					{
+						"name": "cause",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "伤害类型"
+					}, 
+					{
+						"name": "weapon",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用的武器"
+					}
+				]
+			},
+			"player damage by entity": {
+				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "weapon",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "cause",
+						"pattern": "String"
+					}, 
+					{
+						"name": "attacker",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "victim",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "damage:final",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"damage", 
+					"damage:final"
+				],
+				"goal": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"damage", 
+					"amount"
+				],
+				"name": "玩家被实体攻击受伤目标",
+				"description": [
+					"玩家被实体攻击受到伤害", 
+					"支持攻击者实体、武器、伤害值等条件判断", 
+					"可统计被攻击次数"
+				],
+				"alias": [
+					"被实体伤害", 
+					"实体攻击", 
+					"被攻击受伤"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "受伤位置"
+					}, 
+					{
+						"name": "victim",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "受伤的玩家"
+					}, 
+					{
+						"name": "damage",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "伤害值"
+					}, 
+					{
+						"name": "damage:final",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "最终伤害值"
+					}, 
+					{
+						"name": "cause",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "伤害类型"
+					}, 
+					{
+						"name": "attacker",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "攻击者实体"
+					}, 
+					{
+						"name": "weapon",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "攻击者使用的武器"
+					}
+				]
+			},
+			"portal exit": {
+				"condition": [
+					{
+						"name": "position:to",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position:from",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "传送门离开目标",
+				"description": [
+					"玩家离开传送门时触发", 
+					"支持目标位置和起始位置等条件判断", 
+					"可统计离开次数"
+				],
+				"alias": [
+					"离开传送门", 
+					"传送完成", 
+					"传送到达"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "目标位置（与position:to相同）"
+					}, 
+					{
+						"name": "position:to",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "目标位置"
+					}, 
+					{
+						"name": "position:from",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "起始位置"
+					}
+				]
+			},
+			"never": {
+				"condition": [],
+				"condition-vars": [],
+				"goal": [],
+				"goal-vars": [],
+				"name": "永不完成目标",
+				"description": [
+					"永远无法完成的目标", 
+					"用于占位或特殊逻辑", 
+					"目标始终返回 false"
+				],
+				"alias": [
+					"never", 
+					"永不", 
+					"占位目标"
+				],
+				"params": [
+					{
+						"name": "null",
+						"type": "string",
+						"required": false,
+						"options": [],
+						"description": "占位参数，无实际作用"
+					}
+				]
+			},
+			"entity target change": {
+				"condition": [
+					{
+						"name": "reason",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "position:entity",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"reason"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "实体锁定玩家目标",
+				"description": [
+					"实体选择或改变目标为玩家时触发", 
+					"支持目标玩家位置、发起锁定的实体位置和锁定原因条件"
+				],
+				"alias": [
+					"实体仇恨", 
+					"怪物锁定", 
+					"目标变更"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "被锁定玩家的位置"
+					}, 
+					{
+						"name": "position:entity",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "发起锁定的实体位置"
+					}, 
+					{
+						"name": "reason",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "实体锁定目标的原因"
+					}
+				]
+			},
+			"player jump": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家跳跃目标",
+				"description": [
+					"玩家跳跃", 
+					"支持位置等条件判断", 
+					"可统计跳跃次数"
+				],
+				"alias": [
+					"跳跃", 
+					"起跳", 
+					"蹦跳"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}
+				]
+			},
+			"raid trigger": {
+				"condition": [
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "status",
+						"pattern": "Enum"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家触发袭击目标",
+				"description": [
+					"玩家触发村庄袭击时触发", 
+					"支持玩家位置和袭击状态条件"
+				],
+				"alias": [
+					"袭击", 
+					"掠夺者袭击", 
+					"触发袭击"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "触发袭击的玩家位置"
+					}, 
+					{
+						"name": "status",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "袭击状态"
+					}
+				]
+			},
+			"player statistic": {
+				"condition": [
+					{
+						"name": "statistic",
+						"pattern": "String"
+					}, 
+					{
+						"name": "type:entity",
+						"pattern": "String"
+					}, 
+					{
+						"name": "type:material",
+						"pattern": "String"
+					}, 
+					{
+						"name": "value:previous",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "value:new",
+						"pattern": "Number"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "value",
+						"pattern": "Number"
+					}
+				],
+				"condition-vars": [
+					"value:previous", 
+					"value:new", 
+					"value"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家统计数据目标",
+				"description": [
+					"玩家统计数据变化时触发", 
+					"支持统计类型、实体类型、材料类型、数值等条件判断", 
+					"可统计增量变化"
+				],
+				"alias": [
+					"统计", 
+					"数据统计", 
+					"成就统计"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "statistic",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "统计类型"
+					}, 
+					{
+						"name": "type:entity",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "实体类型"
+					}, 
+					{
+						"name": "type:material",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "材料类型"
+					}, 
+					{
+						"name": "value",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新值"
+					}, 
+					{
+						"name": "value:new",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "新值"
+					}, 
+					{
+						"name": "value:previous",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "旧值"
+					}
+				]
+			},
+			"sign change": {
+				"condition": [
+					{
+						"name": "side",
+						"pattern": "String"
+					}, 
+					{
+						"name": "line",
+						"pattern": "List<String>"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"side"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家修改告示牌目标",
+				"description": [
+					"玩家修改告示牌文本时触发", 
+					"支持玩家位置、文本行、告示牌面和方块条件"
+				],
+				"alias": [
+					"告示牌", 
+					"牌子文本", 
+					"改牌子"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "line",
+						"type": "List<String>",
+						"required": false,
+						"options": [],
+						"description": "告示牌文本行"
+					}, 
+					{
+						"name": "side",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "被编辑的告示牌面"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "告示牌方块"
+					}
+				]
+			},
 			"block ignite": {
 				"condition": [
 					{
@@ -3035,6 +5995,77 @@
 					}
 				]
 			},
+			"shoot projectile": {
+				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "consume",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "projectile",
+						"pattern": "Entity"
+					}
+				],
+				"condition-vars": [],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "发射抛射物目标",
+				"description": [
+					"玩家发射抛射物（需要 Paper 服务端）", 
+					"支持抛射物类型、使用物品、消耗状态等条件判断", 
+					"可统计发射次数"
+				],
+				"alias": [
+					"发射", 
+					"射击", 
+					"投掷抛射物"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家的位置"
+					}, 
+					{
+						"name": "projectile",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "发射的抛射物实体"
+					}, 
+					{
+						"name": "item",
+						"type": "ItemStack",
+						"required": false,
+						"options": [],
+						"description": "使用的物品（如弓）"
+					}, 
+					{
+						"name": "consume",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否消耗了物品"
+					}
+				]
+			},
 			"craft item": {
 				"condition": [
 					{
@@ -3095,19 +6126,19 @@
 					}
 				]
 			},
-			"drop item": {
+			"vehicle enter": {
 				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
+					}, 
+					{
+						"name": "position:vehicle",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "vehicle",
+						"pattern": "Entity"
 					}
 				],
 				"condition-vars": [],
@@ -3120,136 +6151,37 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "物品丢弃目标",
+				"name": "玩家进入载具目标",
 				"description": [
-					"玩家丢弃物品时触发", 
-					"支持物品、数量、位置等条件判断", 
-					"可统计丢弃数量"
+					"玩家进入载具时触发", 
+					"支持玩家位置、载具实体和载具位置条件"
 				],
 				"alias": [
-					"丢弃", 
-					"扔物品", 
-					"抛出物品"
+					"进入载具", 
+					"上船", 
+					"上矿车"
 				],
 				"params": [
+					{
+						"name": "vehicle",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "进入的载具实体"
+					}, 
+					{
+						"name": "position:vehicle",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "载具位置"
+					}, 
 					{
 						"name": "position",
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "丢弃时玩家的位置"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "丢弃的物品"
-					}, 
-					{
-						"name": "amount",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "丢弃物品的数量"
-					}
-				]
-			},
-			"armor change": {
-				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "slot",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "盔甲更换目标",
-				"description": [
-					"玩家更换盔甲装备（需要 Paper 服务端）", 
-					"支持装备位置、物品等条件判断", 
-					"可统计更换次数"
-				],
-				"alias": [
-					"装备盔甲", 
-					"更换装备", 
-					"穿戴盔甲"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家的位置"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "更换后的盔甲物品"
-					}, 
-					{
-						"name": "slot",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "装备的槽位（如HEAD、CHEST、LEGS、FEET）"
-					}
-				]
-			},
-			"portal enter": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "传送门进入目标",
-				"description": [
-					"玩家进入传送门时触发", 
-					"支持传送门位置等条件判断", 
-					"可统计进入次数"
-				],
-				"alias": [
-					"进入传送门", 
-					"传送门", 
-					"下界门"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "传送门位置"
+						"description": "进入载具的玩家位置"
 					}
 				]
 			},
@@ -3269,7 +6201,7 @@
 					}, 
 					{
 						"name": "type",
-						"pattern": "String"
+						"pattern": "List<String>"
 					}
 				],
 				"condition-vars": [
@@ -3312,7 +6244,7 @@
 					}, 
 					{
 						"name": "type",
-						"type": "String",
+						"type": "List<String>",
 						"required": false,
 						"options": [],
 						"description": "附魔类型"
@@ -3408,57 +6340,58 @@
 					}
 				]
 			},
-			"player damage": {
+			"exp bottle": {
 				"condition": [
 					{
-						"name": "damage",
-						"pattern": "Number"
+						"name": "showEffect",
+						"pattern": "Boolean"
 					}, 
 					{
-						"name": "cause",
-						"pattern": "String"
+						"name": "face",
+						"pattern": "Enum"
 					}, 
 					{
-						"name": "victim",
+						"name": "hitEntity",
 						"pattern": "Entity"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
 					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "damage:final",
+						"name": "exp",
 						"pattern": "Number"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
 					}
 				],
 				"condition-vars": [
-					"damage", 
-					"damage:final"
+					"exp"
 				],
 				"goal": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
 					{
 						"name": "amount",
 						"pattern": "Number"
 					}
 				],
 				"goal-vars": [
-					"damage", 
 					"amount"
 				],
-				"name": "玩家受伤目标",
+				"name": "玩家经验瓶命中目标",
 				"description": [
-					"玩家受到伤害", 
-					"支持伤害类型、伤害值、位置等条件判断", 
-					"可统计受伤次数"
+					"玩家投掷的经验瓶命中并生成经验时触发", 
+					"支持玩家位置、经验瓶实体、经验值、命中方块、命中面、命中实体和粒子效果条件"
 				],
 				"alias": [
-					"受伤", 
-					"玩家伤害", 
-					"受到伤害"
+					"经验瓶", 
+					"投掷经验瓶", 
+					"经验瓶命中"
 				],
 				"params": [
 					{
@@ -3466,51 +6399,81 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "受伤位置"
+						"description": "投掷经验瓶的玩家位置"
 					}, 
 					{
-						"name": "victim",
+						"name": "entity",
 						"type": "Entity",
 						"required": false,
 						"options": [],
-						"description": "受伤的玩家"
+						"description": "命中的经验瓶实体"
 					}, 
 					{
-						"name": "damage",
+						"name": "exp",
 						"type": "Number",
 						"required": false,
 						"options": [],
-						"description": "伤害值"
+						"description": "经验瓶生成的经验总量"
 					}, 
 					{
-						"name": "damage:final",
-						"type": "Number",
+						"name": "block",
+						"type": "Block",
 						"required": false,
 						"options": [],
-						"description": "最终伤害值"
+						"description": "经验瓶命中的方块"
 					}, 
 					{
-						"name": "cause",
+						"name": "face",
 						"type": "String",
 						"required": false,
 						"options": [],
-						"description": "伤害类型（ENTITY_ATTACK/FALL/FIRE/DROWNING等）"
+						"description": "经验瓶命中的方块面"
+					}, 
+					{
+						"name": "hitEntity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "经验瓶命中的实体"
+					}, 
+					{
+						"name": "showEffect",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "是否显示经验瓶破裂粒子效果"
 					}
 				]
 			},
-			"player respawn": {
+			"place hanging": {
 				"condition": [
 					{
-						"name": "spawn:anchor",
-						"pattern": "Boolean"
+						"name": "item",
+						"pattern": "ItemStack"
 					}, 
 					{
-						"name": "spawn:bed",
-						"pattern": "Boolean"
+						"name": "face",
+						"pattern": "Enum"
+					}, 
+					{
+						"name": "block",
+						"pattern": "Block"
 					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
+					}, 
+					{
+						"name": "entity",
+						"pattern": "Entity"
+					}, 
+					{
+						"name": "position:hanging",
+						"pattern": "Location"
+					}, 
+					{
+						"name": "hand",
+						"pattern": "Enum"
 					}
 				],
 				"condition-vars": [],
@@ -3523,38 +6486,65 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "玩家重生目标",
+				"name": "玩家放置悬挂实体目标",
 				"description": [
-					"玩家重生", 
-					"支持重生位置、重生类型（床/重生锚）等条件判断", 
-					"可统计重生次数"
+					"玩家放置画、物品展示框等悬挂实体时触发", 
+					"支持悬挂实体、玩家位置、使用手、物品、依附方块和方块面条件"
 				],
 				"alias": [
-					"重生", 
-					"复活", 
-					"复生"
+					"放置画", 
+					"放置展示框", 
+					"悬挂放置"
 				],
 				"params": [
+					{
+						"name": "entity",
+						"type": "Entity",
+						"required": false,
+						"options": [],
+						"description": "被放置的悬挂实体"
+					}, 
+					{
+						"name": "position:hanging",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "悬挂实体所在位置"
+					}, 
 					{
 						"name": "position",
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "重生位置"
+						"description": "放置悬挂实体的玩家位置"
 					}, 
 					{
-						"name": "spawn:bed",
-						"type": "Boolean",
+						"name": "hand",
+						"type": "String",
 						"required": false,
 						"options": [],
-						"description": "是否在床上重生"
+						"description": "使用的手"
 					}, 
 					{
-						"name": "spawn:anchor",
-						"type": "Boolean",
+						"name": "item",
+						"type": "ItemStack",
 						"required": false,
 						"options": [],
-						"description": "是否在重生锚上重生"
+						"description": "用于放置悬挂实体的物品"
+					}, 
+					{
+						"name": "block",
+						"type": "Block",
+						"required": false,
+						"options": [],
+						"description": "悬挂实体依附的方块"
+					}, 
+					{
+						"name": "face",
+						"type": "String",
+						"required": false,
+						"options": [],
+						"description": "悬挂实体依附的方块面"
 					}
 				]
 			},
@@ -3782,57 +6772,6 @@
 					}
 				]
 			},
-			"player conversation": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "id",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [
-					"id"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "对话回复目标",
-				"description": [
-					"玩家通过回复选项结束对话", 
-					"支持位置、对话ID等条件判断", 
-					"适用于 Chemdah 内部对话系统"
-				],
-				"alias": [
-					"对话回复", 
-					"回复对话", 
-					"conversation回复"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "location",
-						"required": false,
-						"options": [],
-						"description": "检测对话回复位置"
-					}, 
-					{
-						"name": "id",
-						"type": "string",
-						"required": false,
-						"options": [],
-						"description": "对话ID，用于过滤特定对话"
-					}
-				]
-			},
 			"item mend": {
 				"condition": [
 					{
@@ -3946,168 +6885,6 @@
 					}
 				]
 			},
-			"player toggle flight": {
-				"condition": [
-					{
-						"name": "flying",
-						"pattern": "Boolean"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "飞行状态切换目标",
-				"description": [
-					"玩家切换飞行状态时触发", 
-					"支持飞行状态等条件判断", 
-					"可统计切换次数"
-				],
-				"alias": [
-					"飞行", 
-					"切换飞行", 
-					"起飞"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家位置"
-					}, 
-					{
-						"name": "flying",
-						"type": "Boolean",
-						"required": false,
-						"options": [],
-						"description": "是否开始飞行"
-					}
-				]
-			},
-			"furnace extract": {
-				"condition": [
-					{
-						"name": "item",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "exp",
-						"pattern": "Number"
-					}
-				],
-				"condition-vars": [
-					"exp"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "熔炉提取目标",
-				"description": [
-					"玩家从熔炉提取物品时触发", 
-					"自动计算提取物品的数量", 
-					"支持物品、经验、位置等条件判断"
-				],
-				"alias": [
-					"熔炉", 
-					"烧炼", 
-					"提取物品"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "熔炉的位置"
-					}, 
-					{
-						"name": "item",
-						"type": "ItemStack",
-						"required": false,
-						"options": [],
-						"description": "提取的物品"
-					}, 
-					{
-						"name": "exp",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "获得的经验值"
-					}
-				]
-			},
-			"player conversation closed": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "id",
-						"pattern": "String"
-					}
-				],
-				"condition-vars": [
-					"id"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "对话结束目标",
-				"description": [
-					"玩家正常结束对话", 
-					"支持位置、对话ID等条件判断", 
-					"适用于 Chemdah 内部对话系统"
-				],
-				"alias": [
-					"对话结束", 
-					"对话完成", 
-					"conversation结束"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "location",
-						"required": false,
-						"options": [],
-						"description": "检测对话结束位置"
-					}, 
-					{
-						"name": "id",
-						"type": "string",
-						"required": false,
-						"options": [],
-						"description": "对话ID，用于过滤特定对话"
-					}
-				]
-			},
 			"item interact": {
 				"condition": [
 					{
@@ -4179,51 +6956,6 @@
 					}
 				]
 			},
-			"trigger": {
-				"condition": [
-					{
-						"name": "position",
-						"pattern": "Location"
-					}
-				],
-				"condition-vars": [],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "触发器目标",
-				"description": [
-					"通过外部命令或脚本手动触发", 
-					"支持自定义触发值匹配", 
-					"用于与其他系统联动"
-				],
-				"alias": [
-					"trigger", 
-					"触发", 
-					"手动触发"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "location",
-						"required": false,
-						"options": [],
-						"description": "检测位置条件"
-					}, 
-					{
-						"name": "value",
-						"type": "string",
-						"required": false,
-						"options": [],
-						"description": "触发值，支持多个值用逗号分隔"
-					}
-				]
-			},
 			"bed leave": {
 				"condition": [
 					{
@@ -4273,94 +7005,19 @@
 					}
 				]
 			},
-			"level change": {
+			"dispense loot": {
 				"condition": [
 					{
-						"name": "level",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "level:new",
-						"pattern": "Number"
+						"name": "block",
+						"pattern": "Block"
 					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
 					}, 
 					{
-						"name": "level:old",
-						"pattern": "Number"
-					}
-				],
-				"condition-vars": [
-					"level", 
-					"level:new", 
-					"level:old"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家等级变化目标",
-				"description": [
-					"玩家等级变化", 
-					"支持等级差、新等级、旧等级等条件判断", 
-					"可统计等级提升量"
-				],
-				"alias": [
-					"等级变化", 
-					"升级", 
-					"等级提升"
-				],
-				"params": [
-					{
-						"name": "position",
-						"type": "Location",
-						"required": false,
-						"options": [],
-						"description": "玩家位置"
-					}, 
-					{
-						"name": "level",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "等级变化量（新等级-旧等级）"
-					}, 
-					{
-						"name": "level:new",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "变化后的等级"
-					}, 
-					{
-						"name": "level:old",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "变化前的等级"
-					}
-				]
-			},
-			"player swap hand": {
-				"condition": [
-					{
-						"name": "item:main",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "item:offhand",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
+						"name": "items",
+						"pattern": "List<ItemStack>"
 					}
 				],
 				"condition-vars": [],
@@ -4373,16 +7030,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "切换主副手目标",
+				"name": "方块生成战利品目标",
 				"description": [
-					"玩家按F键切换主副手物品时触发", 
-					"支持主手和副手物品等条件判断", 
-					"可统计切换次数"
+					"方块向玩家发放战利品时触发", 
+					"支持玩家位置、方块和发放物品条件"
 				],
 				"alias": [
-					"切换手", 
-					"主副手", 
-					"交换物品"
+					"战利品", 
+					"发放掉落", 
+					"容器补给"
 				],
 				"params": [
 					{
@@ -4390,21 +7046,21 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家位置"
+						"description": "接收战利品的玩家位置"
 					}, 
 					{
-						"name": "item:main",
-						"type": "ItemStack",
+						"name": "block",
+						"type": "Block",
 						"required": false,
 						"options": [],
-						"description": "主手物品"
+						"description": "发放战利品的方块"
 					}, 
 					{
-						"name": "item:offhand",
-						"type": "ItemStack",
+						"name": "items",
+						"type": "List<ItemStack>",
 						"required": false,
 						"options": [],
-						"description": "副手物品"
+						"description": "发放的物品列表"
 					}
 				]
 			},
@@ -4528,6 +7184,56 @@
 					}
 				]
 			},
+			"player sneak": {
+				"condition": [
+					{
+						"name": "isSneaking",
+						"pattern": "Boolean"
+					}, 
+					{
+						"name": "position",
+						"pattern": "Location"
+					}
+				],
+				"condition-vars": [
+					"isSneaking"
+				],
+				"goal": [
+					{
+						"name": "amount",
+						"pattern": "Number"
+					}
+				],
+				"goal-vars": [
+					"amount"
+				],
+				"name": "玩家切换潜行目标",
+				"description": [
+					"玩家切换潜行状态时触发", 
+					"支持玩家位置和潜行状态条件"
+				],
+				"alias": [
+					"潜行", 
+					"蹲下", 
+					"切换潜行"
+				],
+				"params": [
+					{
+						"name": "position",
+						"type": "Location",
+						"required": false,
+						"options": [],
+						"description": "玩家位置"
+					}, 
+					{
+						"name": "isSneaking",
+						"type": "Boolean",
+						"required": false,
+						"options": [],
+						"description": "切换后的潜行状态"
+					}
+				]
+			},
 			"health regain": {
 				"condition": [
 					{
@@ -4601,8 +7307,12 @@
 					}
 				]
 			},
-			"player resurrect": {
+			"item damage": {
 				"condition": [
+					{
+						"name": "damage",
+						"pattern": "Number"
+					}, 
 					{
 						"name": "item",
 						"pattern": "ItemStack"
@@ -4612,7 +7322,9 @@
 						"pattern": "Location"
 					}
 				],
-				"condition-vars": [],
+				"condition-vars": [
+					"damage"
+				],
 				"goal": [
 					{
 						"name": "amount",
@@ -4622,16 +7334,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "玩家复活目标",
+				"name": "玩家物品耐久损耗目标",
 				"description": [
-					"玩家使用不死图腾复活时触发", 
-					"支持使用物品类型等条件判断", 
-					"可统计复活次数"
+					"玩家使用物品导致耐久损耗时触发", 
+					"支持玩家位置、损耗物品和耐久损耗值条件"
 				],
 				"alias": [
-					"复活", 
-					"不死图腾", 
-					"重生"
+					"物品损耗", 
+					"耐久减少", 
+					"工具耐久"
 				],
 				"params": [
 					{
@@ -4639,29 +7350,43 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家位置"
+						"description": "玩家所在位置"
 					}, 
 					{
 						"name": "item",
 						"type": "ItemStack",
 						"required": false,
 						"options": [],
-						"description": "使用物品"
+						"description": "正在损耗耐久的物品"
+					}, 
+					{
+						"name": "damage",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "本次物品耐久损耗值"
 					}
 				]
 			},
-			"player advancement": {
+			"food exhaustion": {
 				"condition": [
 					{
-						"name": "advancement",
-						"pattern": "String"
+						"name": "reason",
+						"pattern": "Enum"
 					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
+					}, 
+					{
+						"name": "value",
+						"pattern": "Number"
 					}
 				],
-				"condition-vars": [],
+				"condition-vars": [
+					"reason", 
+					"value"
+				],
 				"goal": [
 					{
 						"name": "amount",
@@ -4671,16 +7396,15 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "玩家完成进度目标",
+				"name": "玩家饥饿消耗目标",
 				"description": [
-					"玩家完成进度", 
-					"支持进度ID、位置等条件判断", 
-					"可统计完成进度次数"
+					"玩家产生饥饿消耗时触发", 
+					"支持玩家位置、消耗值和消耗原因条件"
 				],
 				"alias": [
-					"完成进度", 
-					"成就", 
-					"进度达成"
+					"饥饿消耗", 
+					"体力消耗", 
+					"exhaustion"
 				],
 				"params": [
 					{
@@ -4688,14 +7412,21 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家位置"
+						"description": "玩家所在位置"
 					}, 
 					{
-						"name": "advancement",
+						"name": "value",
+						"type": "Number",
+						"required": false,
+						"options": [],
+						"description": "本次增加的饥饿消耗值"
+					}, 
+					{
+						"name": "reason",
 						"type": "String",
 						"required": false,
 						"options": [],
-						"description": "进度ID（如minecraft:story/mine_stone）"
+						"description": "饥饿消耗原因"
 					}
 				]
 			},
@@ -4750,34 +7481,22 @@
 					}
 				]
 			},
-			"edit book": {
+			"harvest block": {
 				"condition": [
+					{
+						"name": "item",
+						"pattern": "ItemStack"
+					}, 
+					{
+						"name": "material",
+						"pattern": "Block"
+					}, 
 					{
 						"name": "position",
 						"pattern": "Location"
-					}, 
-					{
-						"name": "page",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "title",
-						"pattern": "String"
-					}, 
-					{
-						"name": "signing",
-						"pattern": "Boolean"
-					}, 
-					{
-						"name": "content",
-						"pattern": "String"
 					}
 				],
-				"condition-vars": [
-					"page", 
-					"title", 
-					"content"
-				],
+				"condition-vars": [],
 				"goal": [
 					{
 						"name": "amount",
@@ -4787,16 +7506,16 @@
 				"goal-vars": [
 					"amount"
 				],
-				"name": "编辑书籍目标",
+				"name": "方块收获目标",
 				"description": [
-					"玩家编辑或签署书籍时触发", 
-					"支持签署状态、页数、标题、内容等条件判断", 
-					"可统计编辑次数"
+					"玩家收获农作物", 
+					"支持材质、位置、收获物等条件判断", 
+					"可统计收获次数"
 				],
 				"alias": [
-					"写书", 
-					"编辑书", 
-					"签署书籍"
+					"收割", 
+					"采收", 
+					"收获农作物"
 				],
 				"params": [
 					{
@@ -4804,129 +7523,21 @@
 						"type": "Location",
 						"required": false,
 						"options": [],
-						"description": "玩家位置"
+						"description": "收获方块的位置"
 					}, 
 					{
-						"name": "signing",
-						"type": "Boolean",
+						"name": "material",
+						"type": "Block",
 						"required": false,
 						"options": [],
-						"description": "是否签署"
+						"description": "收获的作物类型"
 					}, 
 					{
-						"name": "page",
-						"type": "Number",
-						"required": false,
-						"options": [],
-						"description": "页数"
-					}, 
-					{
-						"name": "title",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "书籍标题"
-					}, 
-					{
-						"name": "content",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "书籍内容"
-					}
-				]
-			},
-			"player death": {
-				"condition": [
-					{
-						"name": "damage",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "weapon",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "drops",
-						"pattern": "ItemStack"
-					}, 
-					{
-						"name": "cause",
-						"pattern": "String"
-					}, 
-					{
-						"name": "attacker",
-						"pattern": "Entity"
-					}, 
-					{
-						"name": "position",
-						"pattern": "Location"
-					}, 
-					{
-						"name": "exp",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "revive-health",
-						"pattern": "Number"
-					}, 
-					{
-						"name": "message",
-						"pattern": "String"
-					}, 
-					{
-						"name": "damage:final",
-						"pattern": "Number"
-					}
-				],
-				"condition-vars": [
-					"damage", 
-					"exp", 
-					"revive-health", 
-					"message", 
-					"damage:final"
-				],
-				"goal": [
-					{
-						"name": "amount",
-						"pattern": "Number"
-					}
-				],
-				"goal-vars": [
-					"amount"
-				],
-				"name": "玩家死亡目标",
-				"description": [
-					"玩家死亡", 
-					"支持攻击者、武器、死亡消息等条件判断", 
-					"可统计死亡次数"
-				],
-				"alias": [
-					"死亡", 
-					"阵亡", 
-					"被击杀"
-				],
-				"params": [
-					{
-						"name": "weapon",
+						"name": "item",
 						"type": "ItemStack",
 						"required": false,
 						"options": [],
-						"description": "攻击者使用的武器"
-					}, 
-					{
-						"name": "attacker",
-						"type": "Entity",
-						"required": false,
-						"options": [],
-						"description": "攻击者实体"
-					}, 
-					{
-						"name": "message",
-						"type": "String",
-						"required": false,
-						"options": [],
-						"description": "死亡消息"
+						"description": "收获得到的物品"
 					}
 				]
 			}
