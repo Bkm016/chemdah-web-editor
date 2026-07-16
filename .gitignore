@@ -4,3 +4,4 @@ node_modules
 /.idea/
 /ex-api.json
 /.claude/
+.ace-tool/

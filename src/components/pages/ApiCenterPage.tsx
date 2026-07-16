@@ -70,30 +70,50 @@ export function ApiCenterPage() {
     setNewUrl('');
   };
 
-  const handleFileUpload = async (file: File | null) => {
-    if (!file) return;
+  const handleFileUpload = async (files: File[] | null) => {
+    if (!files || files.length === 0) return;
 
-    try {
-      const text = await file.text();
-      const data = JSON.parse(text);
+    let successCount = 0;
+    let failCount = 0;
+    const errors: string[] = [];
 
-      // Use filename without extension as name
-      const name = file.name.replace(/\.[^/.]+$/, '');
-      addLocalSource(name, data);
+    for (const file of files) {
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
 
-      // Sync to API Store
+        const name = file.name.replace(/\.[^/.]+$/, '');
+        addLocalSource(name, data);
+        successCount++;
+      } catch (error: any) {
+        failCount++;
+        errors.push(`${file.name} (${error?.message || '解析失败'})`);
+      }
+    }
+
+    if (successCount > 0) {
       syncFromApiCenter();
+    }
 
+    if (failCount === 0) {
       notifications.show({
         title: '上传成功',
-        message: `API 文件 "${name}" 已添加`,
+        message: `成功上传 ${successCount} 个 API 文件`,
         color: 'green'
       });
-    } catch (error: any) {
+    } else if (successCount > 0) {
+      notifications.show({
+        title: '部分上传成功',
+        message: `成功 ${successCount} 个，失败 ${failCount} 个: ${errors.join(', ')}`,
+        color: 'yellow',
+        autoClose: 8000
+      });
+    } else {
       notifications.show({
         title: '上传失败',
-        message: error.message || '无法解析 JSON 文件',
-        color: 'red'
+        message: `全部 ${failCount} 个文件上传失败: ${errors.join(', ')}`,
+        color: 'red',
+        autoClose: 8000
       });
     }
   };
@@ -331,10 +351,10 @@ export function ApiCenterPage() {
                   <Text size="sm" c="dimmed">
                     上传本地 JSON 格式的 API 定义文件。文件名将作为源名称。上传后的数据会持久化保存在本地浏览器中。
                   </Text>
-                  <FileButton onChange={handleFileUpload} accept=".json">
+                  <FileButton onChange={handleFileUpload} accept=".json" multiple>
                     {(props) => (
                       <Button {...props} leftSection={<IconUpload size={16} />} size="lg">
-                        选择文件上传
+                        选择文件上传（支持多选）
                       </Button>
                     )}
                   </FileButton>

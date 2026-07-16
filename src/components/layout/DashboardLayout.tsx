@@ -233,69 +233,90 @@ export default function DashboardLayout() {
     }
   };
 
-  const handleImport = async (file: File | null) => {
-    if (!file) return;
-    
-    try {
+  const handleImport = async (files: File[] | null) => {
+    if (!files || files.length === 0) return;
+
+    const allNewFiles: VirtualFile[] = [];
+    let successCount = 0;
+    let failCount = 0;
+    const errors: string[] = [];
+
+    for (const file of files) {
+      try {
         if (file.name.endsWith('.zip')) {
-            const zip = await JSZip.loadAsync(file);
-            const newFiles: VirtualFile[] = [];
-            
-            for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
-                if (!zipEntry.dir) {
-                    const content = await zipEntry.async('string');
-                    const name = relativePath.split('/').pop() || 'unknown';
-                    const type = relativePath.includes('quest') ? 'quest' : 'conversation'; // Simple heuristic
-                    const path = relativePath.substring(0, relativePath.lastIndexOf('/')) || '';
-                    
-                    newFiles.push({
-                        id: uuidv4(),
-                        name,
-                        type: type as FileType,
-                        content,
-                        path
-                    });
-                }
-            }
-            importFiles(newFiles);
-            notifications.show({
-                title: '导入成功',
-                message: `成功导入 ${newFiles.length} 个文件`,
-                color: 'green'
-            });
-        } else if (file.name.endsWith('.yml') || file.name.endsWith('.yaml')) {
-            const content = await file.text();
-            const data = parseYaml(content);
-            let type: FileType = activeTab as FileType;
+          const zip = await JSZip.loadAsync(file);
+          for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
+            if (!zipEntry.dir) {
+              const content = await zipEntry.async('string');
+              const name = relativePath.split('/').pop() || 'unknown';
+              const type = relativePath.includes('quest') ? 'quest' : 'conversation';
+              const path = relativePath.substring(0, relativePath.lastIndexOf('/')) || '';
 
-            if (data && typeof data === 'object') {
-                const hasConversationFeatures = Object.values(data).some((node: any) => node && (node.npc || node.player));
-                const hasQuestFeatures = Object.values(data).some((node: any) => node && (node.meta || node.task));
-
-                if (hasConversationFeatures) type = 'conversation';
-                else if (hasQuestFeatures) type = 'quest';
-            }
-
-            importFiles([{
+              allNewFiles.push({
                 id: uuidv4(),
-                name: file.name,
-                type,
+                name,
+                type: type as FileType,
                 content,
-                path: ''
-            }]);
+                path
+              });
+              successCount++;
+            }
+          }
+        } else if (file.name.endsWith('.yml') || file.name.endsWith('.yaml')) {
+          const content = await file.text();
+          const data = parseYaml(content);
+          let type: FileType = activeTab as FileType;
 
-            notifications.show({
-                title: '导入成功',
-                message: `成功导入文件 ${file.name} (${type === 'quest' ? '任务' : '对话'})`,
-                color: 'green'
-            });
+          if (data && typeof data === 'object') {
+            const hasConversationFeatures = Object.values(data).some((node: any) => node && (node.npc || node.player));
+            const hasQuestFeatures = Object.values(data).some((node: any) => node && (node.meta || node.task));
+
+            if (hasConversationFeatures) type = 'conversation';
+            else if (hasQuestFeatures) type = 'quest';
+          }
+
+          allNewFiles.push({
+            id: uuidv4(),
+            name: file.name,
+            type,
+            content,
+            path: ''
+          });
+          successCount++;
+        } else {
+          failCount++;
+          errors.push(`${file.name} (不支持的格式)`);
         }
-    } catch (error) {
-        notifications.show({
-            title: '导入失败',
-            message: '无法导入项目文件',
-            color: 'red'
-        });
+      } catch (error: any) {
+        failCount++;
+        errors.push(`${file.name} (${error?.message || '解析失败'})`);
+      }
+    }
+
+    if (allNewFiles.length > 0) {
+      importFiles(allNewFiles);
+    }
+
+    if (failCount === 0) {
+      notifications.show({
+        title: '导入成功',
+        message: `成功导入 ${successCount} 个文件`,
+        color: 'green'
+      });
+    } else if (successCount > 0) {
+      notifications.show({
+        title: '部分导入成功',
+        message: `成功 ${successCount} 个，失败 ${failCount} 个: ${errors.join(', ')}`,
+        color: 'yellow',
+        autoClose: 8000
+      });
+    } else {
+      notifications.show({
+        title: '导入失败',
+        message: `全部 ${failCount} 个文件导入失败: ${errors.join(', ')}`,
+        color: 'red',
+        autoClose: 8000
+      });
     }
   };
 
@@ -341,7 +362,7 @@ export default function DashboardLayout() {
                 >
                     API 中心
                 </Button>
-                <FileButton onChange={handleImport} accept=".zip,.yml,.yaml">
+                <FileButton onChange={handleImport} accept=".zip,.yml,.yaml" multiple>
                     {(props) => <Button {...props} variant="subtle" size="xs" leftSection={<IconUpload size={16} />}>导入</Button>}
                 </FileButton>
                 <Menu shadow="md" width={200}>
