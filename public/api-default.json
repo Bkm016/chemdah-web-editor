@@ -1842,8 +1842,8 @@
 			"bell ring": {
 				"condition": [
 					{
-						"name": "block",
-						"pattern": "Block"
+						"name": "position:block",
+						"pattern": "Location"
 					}, 
 					{
 						"name": "position",
@@ -1880,8 +1880,8 @@
 						"description": "敲钟玩家的位置"
 					}, 
 					{
-						"name": "block",
-						"type": "Block",
+						"name": "position:block",
+						"type": "Location",
 						"required": false,
 						"options": [],
 						"description": "被敲响的钟方块"
