@@ -6,152 +6,158 @@ import { SwitchNodeData } from './nodes/SwitchNode';
 export interface ConversationOptions {
     theme?: string;
     title?: string;
-    'global-flags'?: string[];  // 使用正确的字段名
+    'global-flags'?: string[];
 }
-
 export const autoLayout = (nodes: Node[], edges: Edge[]) => {
+    if (nodes.length === 0) return { nodes, edges };
+
     const nodeWidth = 320;
-    const rankSep = 100; // Horizontal gap between ranks
-    const nodeSep = 50; // Vertical gap between nodes in same rank
+    const rankSep = 150; 
+    const nodeSep = 60;  
+    const branchGap = 150; // 加大分支间的垂直间距
 
-    // 1. Build graph structure
-    const outEdges = new Map<string, string[]>();
-    const inEdges = new Map<string, string[]>();
-    const inDegree = new Map<string, number>();
-
-    nodes.forEach(n => {
-        outEdges.set(n.id, []);
-        inEdges.set(n.id, []);
-        inDegree.set(n.id, 0);
-    });
-
-    edges.forEach(e => {
-        if (outEdges.has(e.source)) outEdges.get(e.source)?.push(e.target);
-        if (inEdges.has(e.target)) inEdges.get(e.target)?.push(e.source);
-        inDegree.set(e.target, (inDegree.get(e.target) || 0) + 1);
-    });
-
-    // 2. Assign ranks (levels) using Longest Path Layering
-    const levels = new Map<string, number>();
-    const queue: string[] = [];
-
-    // Find roots (in-degree 0)
-    nodes.forEach(n => {
-        if ((inDegree.get(n.id) || 0) === 0) {
-            queue.push(n.id);
-            levels.set(n.id, 0);
-        }
-    });
-
-    // If no roots (cycle), pick the first one
-    if (queue.length === 0 && nodes.length > 0) {
-        queue.push(nodes[0].id);
-        levels.set(nodes[0].id, 0);
-    }
-
-    const visited = new Set<string>();
-
-    // Simple BFS for layering
-    while (queue.length > 0) {
-        const currId = queue.shift()!;
-        if (visited.has(currId)) continue;
-        visited.add(currId);
-
-        const currLevel = levels.get(currId)!;
-        const neighbors = outEdges.get(currId) || [];
-
-        neighbors.forEach(nextId => {
-            // Update level if we found a longer path, but prevent infinite growth in cycles
-            const currentNextLevel = levels.get(nextId) || 0;
-            if (currLevel + 1 > currentNextLevel && currLevel < 50) { // Limit depth to prevent cycle issues
-                levels.set(nextId, currLevel + 1);
-                queue.push(nextId);
-                // If we updated the level, we might need to re-visit to update its children
-                visited.delete(nextId);
-            }
-        });
-    }
-
-    // Handle disconnected components
-    nodes.forEach(n => {
-        if (!levels.has(n.id)) {
-            levels.set(n.id, 0);
-        }
-    });
-
-    // 3. Group by level
-    const rows = new Map<number, Node[]>();
-    let maxLevel = 0;
-    nodes.forEach(n => {
-        const level = levels.get(n.id) || 0;
-        if (level > maxLevel) maxLevel = level;
-        if (!rows.has(level)) rows.set(level, []);
-        rows.get(level)?.push(n);
-    });
-
-    // 3.5 Reorder within rows to minimize crossings (Barycenter Heuristic)
-    for (let i = 1; i <= maxLevel; i++) {
-        const currentNodes = rows.get(i) || [];
-        const prevNodes = rows.get(i - 1) || [];
-
-        const prevNodePos = new Map<string, number>();
-        prevNodes.forEach((n, idx) => prevNodePos.set(n.id, idx));
-
-        const nodeWeights = currentNodes.map(n => {
-            const parents = inEdges.get(n.id) || [];
-            if (parents.length === 0) return { id: n.id, weight: 9999 };
-
-            let sum = 0;
-            let count = 0;
-            parents.forEach(pId => {
-                if (prevNodePos.has(pId)) {
-                    sum += prevNodePos.get(pId)!;
-                    count++;
-                }
-            });
-
-            return { id: n.id, weight: count > 0 ? sum / count : 9999 };
-        });
-
-        currentNodes.sort((a, b) => {
-            const wA = nodeWeights.find(w => w.id === a.id)?.weight || 0;
-            const wB = nodeWeights.find(w => w.id === b.id)?.weight || 0;
-            return wA - wB;
-        });
-
-        rows.set(i, currentNodes);
-    }
-
-    // 4. Assign positions (Horizontal Layout)
-    // Calculate dynamic height for each node to stack them properly
+    // 1. 统一高度计算
     const getNodeHeight = (node: Node) => {
+        let contentHeight = 70;
+        // 兼容 branches 和 playerOptions
+        const items = (node.data as any)?.branches || (node.data as any)?.playerOptions;
+        
         if (node.type === 'switch') {
-            const branches = (node.data as SwitchNodeData).branches?.length || 0;
-            // Header ~50, Branches ~40 each, Padding ~20
-            return 50 + (branches * 40) + 20;
+            contentHeight += (items?.length || 0) * 42;
+        } else {
+            const npcLines = (node.data as any)?.npcLines?.length || 1;
+            contentHeight += (npcLines * 30) + ((items?.length || 0) * 45);
         }
-        const npcLines = (node.data as AgentNodeData).npcLines?.length || 0;
-        const options = (node.data as AgentNodeData).playerOptions?.length || 0;
-        // Header ~50, NPC lines ~30 each, Options ~40 each, Padding ~20
-        return 50 + (Math.max(1, npcLines) * 30) + (options * 40) + 20;
+        return contentHeight + 20;
     };
 
+    // 2. 统一获取子节点顺序
+    const getChildrenOrder = (nodeId: string): string[] => {
+        const node = nodes.find(n => n.id === nodeId);
+        if (!node) return [];
+        const items = (node.data as any)?.branches || (node.data as any)?.playerOptions;
+        return items?.map((i: any) => i.next).filter(Boolean) || [];
+    };
+
+    // 3. 构建邻接关系
+    const adj = new Map<string, string[]>();
+    const revAdj = new Map<string, string[]>();
+    nodes.forEach(n => { adj.set(n.id, []); revAdj.set(n.id, []); });
+    edges.forEach(e => {
+        if (adj.has(e.source) && adj.has(e.target)) {
+            adj.get(e.source)!.push(e.target);
+            revAdj.get(e.target)!.push(e.source);
+        }
+    });
+
+    // 4. 稳定的层级分配
+    const levels = new Map<string, number>();
+    nodes.forEach(n => levels.set(n.id, 0));
+    const sortedNodeIds = nodes.map(n => n.id).sort();
+    for (let i = 0; i < nodes.length; i++) {
+        let changed = false;
+        sortedNodeIds.forEach(id => {
+            const parents = revAdj.get(id) || [];
+            let maxPLevel = -1;
+            parents.forEach(pId => {
+                const pl = levels.get(pId) ?? 0;
+                if (pl > maxPLevel) maxPLevel = pl;
+            });
+            if (maxPLevel !== -1 && levels.get(id) !== maxPLevel + 1) {
+                levels.set(id, maxPLevel + 1);
+                changed = true;
+            }
+        });
+        if (!changed) break;
+    }
+
+    // X轴压缩 (解决层级跳跃导致的水平空隙)
+    const usedLevels = Array.from(new Set(levels.values())).sort((a, b) => a - b);
+    const compactLevelMap = new Map<number, number>();
+    usedLevels.forEach((lv, idx) => compactLevelMap.set(lv, idx));
+    nodes.forEach(n => levels.set(n.id, compactLevelMap.get(levels.get(n.id)!)!));
+
+    // 5. 按层级分组并排序
+    const rows = new Map<number, Node[]>();
+    nodes.forEach(n => {
+        const lv = levels.get(n.id)!;
+        if (!rows.has(lv)) rows.set(lv, []);
+        rows.get(lv)!.push(n);
+    });
+
+    const sortedLevelKeys = Array.from(rows.keys()).sort((a, b) => a - b);
+    sortedLevelKeys.forEach(lv => {
+        const currentRow = rows.get(lv)!;
+        if (lv === 0) {
+            currentRow.sort((a, b) => a.id.localeCompare(b.id));
+        } else {
+            const prevRow = rows.get(lv - 1) || [];
+            const prevPos = new Map(prevRow.map((n, idx) => [n.id, idx]));
+            currentRow.sort((a, b) => {
+                const pA = revAdj.get(a.id)?.[0];
+                const pB = revAdj.get(b.id)?.[0];
+                const posA = pA ? (prevPos.get(pA) ?? 999) : 999;
+                const posB = pB ? (prevPos.get(pB) ?? 999) : 999;
+                if (posA !== posB) return posA - posB;
+                if (pA && pA === pB) {
+                    const order = getChildrenOrder(pA);
+                    return order.indexOf(a.id) - order.indexOf(b.id);
+                }
+                return a.id.localeCompare(b.id);
+            });
+        }
+    });
+
+    // 6. 最终坐标计算 (核心改进：多父节点下的 Y 轴分支避让)
     const newNodes: Node[] = [];
+    const nodePositions = new Map<string, { x: number; y: number }>();
+    const levelNextY = new Map<number, number>();
+    sortedLevelKeys.forEach(lv => levelNextY.set(lv, 0));
 
-    rows.forEach((rowNodes, level) => {
-        let currentY = 0;
+    sortedLevelKeys.forEach(lv => {
+        const currentRow = rows.get(lv)!;
 
-        // Calculate total height of this column
-        const totalHeight = rowNodes.reduce((sum, node) => sum + getNodeHeight(node) + nodeSep, 0) - nodeSep;
-        let startY = -(totalHeight / 2) + 100; // Center around Y=100
+        currentRow.forEach(node => {
+            const nextAvailableY = levelNextY.get(lv) || 0;
+            const parents = revAdj.get(node.id) || [];
+            
+            // 计算建议的 Y 坐标
+            let suggestedY = nextAvailableY;
 
-        rowNodes.forEach(node => {
-            const h = getNodeHeight(node);
-            const x = level * (nodeWidth + rankSep) + 100;
-            const y = startY + currentY;
+            if (parents.length > 0) {
+                // 遍历所有父节点，寻找最合适的垂直位置
+                let maxBranchOffset = 0;
+                let bestParentY = -1;
 
-            newNodes.push({ ...node, position: { x, y } });
-            currentY += h + nodeSep;
+                parents.forEach(pId => {
+                    const pPos = nodePositions.get(pId);
+                    if (pPos) {
+                        const pChildren = getChildrenOrder(pId);
+                        const optionIdx = pChildren.indexOf(node.id);
+                        
+                        // 如果是父节点的非首个选项，必须增加垂直偏移
+                        if (optionIdx > 0) {
+                            maxBranchOffset = Math.max(maxBranchOffset, optionIdx * branchGap);
+                        }
+                        
+                        // 记录层级最近的父节点 Y 轴，尝试对齐
+                        if (bestParentY === -1 || levels.get(pId) === lv - 1) {
+                            bestParentY = pPos.y;
+                        }
+                    }
+                });
+
+                // 目标 Y = 父节点对齐位置 + 分支偏移量
+                // 同时不能覆盖已经排好的节点
+                suggestedY = Math.max(nextAvailableY, bestParentY + maxBranchOffset);
+            }
+
+            const position = { x: lv * (nodeWidth + rankSep), y: suggestedY };
+            nodePositions.set(node.id, position);
+            newNodes.push({ ...node, position });
+            
+            // 更新该列的下一个可用起始高度
+            levelNextY.set(lv, suggestedY + getNodeHeight(node) + nodeSep);
         });
     });
 
